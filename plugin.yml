@@ -1,0 +1,6 @@
+name: MobHealth
+main: me.sablednah.MobHealth.MobHealth
+version: 1.0
+description: >
+             Displays Mob health in chat.
+commands:
