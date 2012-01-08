@@ -1,5 +1,7 @@
 package me.sablednah.MobHealth;
 
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
@@ -8,7 +10,9 @@ import org.bukkit.event.entity.EntityListener;
 
 public class ServerDamageEntityListener extends EntityListener  {
 	public MobHealth plugin;
-	
+
+	public final Logger logger = Logger.getLogger("Minecraft");
+
 	public ServerDamageEntityListener(MobHealth instance) {
 		this.plugin=instance;
 	}
@@ -21,7 +25,9 @@ public class ServerDamageEntityListener extends EntityListener  {
 		
 		ChatColor BLUE = ChatColor.BLUE;
 		ChatColor WHITE = ChatColor.WHITE;
-		
+
+		this.logger.info("[" + pdfFile.getName() + "] " + event.getDamage() + " damage.");
+
 		if(sourceMob instanceof Player){
 			
 		//If the entity is being damaged by a player...
