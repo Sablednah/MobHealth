@@ -12,21 +12,21 @@ public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
 	protected FileConfiguration config;
-	public final Logger logger = Logger.getLogger("Minecraft");
 	public final ServerChatPlayerListener playerListener = new ServerChatPlayerListener(this);
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
-	public final PluginDescriptionFile pdfFile = this.getDescription();
-	
+	public final Logger logger = Logger.getLogger("Minecraft");
+
 	@Override
 	public void onDisable() {
-
-		this.logger.info("["+pdfFile.getName() + "] --- END OF LINE ---");
+		PluginDescriptionFile pdfFile = this.getDescription();
+		this.logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
 		saveConfig();
 	}
 	
 	@Override
 	public void onEnable() {
-		this.logger.info("["+pdfFile.getName() + "] Version " + pdfFile.getVersion()+" starting.");
+		PluginDescriptionFile pdfFile = this.getDescription();
+		this.logger.info("[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " starting.");
 		
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		

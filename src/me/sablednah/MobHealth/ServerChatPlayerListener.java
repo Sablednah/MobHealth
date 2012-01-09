@@ -27,7 +27,7 @@ public class ServerChatPlayerListener extends PlayerListener  {
 			    }
 			}, 2L);
 		}
-		if(message_lower.contains("fuck") || message_lower.contains("cunt") || message_lower.contains("piss")) {
+		if(message_lower.contains("shit") || message_lower.contains("fuck") || message_lower.contains("cunt") || message_lower.contains("piss")) {
 			Player p = chat.getPlayer();
 			p.sendMessage(BLUE + "[MobHealth] " + WHITE + "Oi " + p.getName() + "!!  Mind your language!");
 			chat.setCancelled(true);

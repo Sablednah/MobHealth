@@ -2,58 +2,52 @@ package me.sablednah.MobHealth;
 
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
 public class ServerDamageEntityListener extends EntityListener  {
 	public MobHealth plugin;
-
-	public final Logger logger = Logger.getLogger("Minecraft");
-
+	
 	public ServerDamageEntityListener(MobHealth instance) {
 		this.plugin=instance;
 	}
 	
-	public void onEntityDamage(EntityDamageByEntityEvent event){
-		Entity targetMob = event.getEntity();
-		Entity sourceMob = event.getDamager();
-		
-		int mobsHealth = 0;
-		
-		ChatColor BLUE = ChatColor.BLUE;
-		ChatColor WHITE = ChatColor.WHITE;
+	public final Logger logger = Logger.getLogger("Minecraft");
 
-		this.logger.info("[" + pdfFile.getName() + "] " + event.getDamage() + " damage.");
-
-		if(sourceMob instanceof Player){
-			
-		//If the entity is being damaged by a player...
-			Player p = (Player) event.getDamager();
-			p.sendMessage(BLUE + "[MobHealth] " + WHITE + event.getDamage() + " damage.");
-
-			mobsHealth = targetMob.getHealth();
-			p.sendMessage(BLUE + "[MobHealth] " + WHITE + mobsHealth + " health.");
-			
-		}
-	}
-
-
+    public void onEntityDamage(EntityDamageEvent event){
+        
+    	//System.out.print("Entity Defender: " + event.getEntity().getEntityId());
+        
+        if(event instanceof EntityDamageByEntityEvent) 
+        {
+            EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            //System.out.print("Entity Damager " + damageEvent.getDamager().getEntityId());
+            if (damageEvent.getDamager() instanceof Player)
+            {
+                Player attacker = (Player) damageEvent.getDamager();
+                LivingEntity targetMob = (LivingEntity) event.getEntity();
+                
+                int mobsHealth=0; 
+                int mobsMaxHealth=0;
+                int thisDamange=0;
+                thisDamange=event.getDamage();
+                
+//              attacker.sendMessage(thisDamange + " dammage.");
+                
+                mobsMaxHealth = targetMob.getMaxHealth();
+                mobsHealth = targetMob.getHealth();
+                attacker.sendMessage(thisDamange + " damage." + (mobsHealth - thisDamange) + " / "+mobsMaxHealth+" " + "health.");
+               
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(attacker,thisDamange), 2L);
+                
+                
+            }
+        }
+        
+    }	
 	
-//		Player p = chat.getPlayer();
-//		p.getName() 
-//		p.sendMessage(BLUE + "[MobHealth] " + WHITE + "That's ridiculous, it's not even funny.");
 
-//		String message = chat.getMessage();
-//		String message_lower = message.toLowerCase();
-
-//		if(message_lower.contains("11") || message_lower.contains("eleven")) {
-//			ChatColor BLUE = ChatColor.BLUE;
-//			ChatColor WHITE = ChatColor.WHITE;
-//			plugin.getServer().broadcastMessage(WHITE + "That's rediculous, it's not even funny.");
-//			chat.setCancelled(true);
-//		}
-		
 }
