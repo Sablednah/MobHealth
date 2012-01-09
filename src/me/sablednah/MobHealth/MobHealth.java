@@ -15,18 +15,20 @@ public class MobHealth extends JavaPlugin {
 	public final ServerChatPlayerListener playerListener = new ServerChatPlayerListener(this);
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
 	public final Logger logger = Logger.getLogger("Minecraft");
-
+	
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
+		
+		logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
 		saveConfig();
 	}
 	
 	@Override
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info("[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " starting.");
+		
+		logger.info("[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " starting.");
 		
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		
@@ -34,7 +36,7 @@ public class MobHealth extends JavaPlugin {
 		
 		config = getConfig();
 		
-		this.logger.info("[" + pdfFile.getName() + "] Online.");
+		logger.info("[" + pdfFile.getName() + "] Online.");
 	}
 	
 }
