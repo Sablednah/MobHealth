@@ -1,9 +1,13 @@
 package me.sablednah.MobHealth;
 
+import org.bukkit.Material;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import org.getspout.spoutapi.SpoutManager;
 
 public class MessageScheduler implements Runnable {
 	private Player player;
@@ -35,17 +39,47 @@ public class MessageScheduler implements Runnable {
         } else {
         	mobtype=mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
         }
+
+        Boolean spoutUsed=false;
         
-        if (targetMob.isDead()) {
-        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + "Killed.");
-//        	targetMob.remove();
-        } else {
-	        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-	        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + " / "+mobsMaxHealth + " health.");
+
+		if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
+			if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
+				String title = "" + (ChatColor.WHITE) + thisDamange + " damage.";
+				String message = "";
+		        if (targetMob.isDead()) {
+		        	message = (ChatColor.WHITE) + mobtype + ": "+(ChatColor.RED)+"Killed";
+		        } else {
+			        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
+			        	message = (ChatColor.WHITE) + mobtype + ": "+ (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + "/"+mobsMaxHealth;
+			        } else {
+			        	message = (ChatColor.WHITE) + mobtype+ ": " + mobsHealth + "/"+mobsMaxHealth;
+			        }
+		        }
+				try {
+					spoutUsed=true;
+					SpoutManager.getPlayer(player).sendNotification(title, message, Material.getMaterial(276));
+				}
+				catch (UnsupportedOperationException e) {
+					System.err.println(e.getMessage());
+					spoutUsed=false;
+				}
+			}
+		}
+
+
+        
+		if (!spoutUsed) {
+	        if (targetMob.isDead()) {
+	        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + "Killed.");
 	        } else {
-	        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + mobsHealth + " / "+mobsMaxHealth + " health.");
+		        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
+		        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + " / "+mobsMaxHealth + " health.");
+		        } else {
+		        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + mobsHealth + " / "+mobsMaxHealth + " health.");
+		        }
 	        }
-        }
+		}
 	}
 	
 	// Optional, if you need it
