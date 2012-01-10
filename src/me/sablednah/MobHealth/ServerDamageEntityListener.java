@@ -17,14 +17,19 @@ public class ServerDamageEntityListener extends EntityListener  {
         
     	//System.out.print("Entity Defender: " + event.getEntity().getEntityId());
         
-        if(event instanceof EntityDamageByEntityEvent) 
-        {
+        if(event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             //System.out.print("Entity Damager " + damageEvent.getDamager().getEntityId());
-            if (damageEvent.getDamager() instanceof Player)
-            {
-                LivingEntity targetMob = (LivingEntity) event.getEntity();
-                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(damageEvent, targetMob), 1L);
+
+            if (damageEvent.getDamager() instanceof Player) {
+            	Player playa = (Player) damageEvent.getDamager();
+
+            	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+                    LivingEntity targetMob = (LivingEntity) event.getEntity();
+                   	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(damageEvent, targetMob), 1L);
+            	} else {
+            		System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
+            	}
              }
         }
     }	

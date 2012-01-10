@@ -1,0 +1,7 @@
+#Default Config file
+
+#disableSpout: [true|false] - force messages to display in chat even if spout is present.
+disableSpout: false
+
+#usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
+usePermissions: false

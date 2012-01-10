@@ -41,32 +41,32 @@ public class MessageScheduler implements Runnable {
         }
 
         Boolean spoutUsed=false;
-        
 
-		if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
-			if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
-				String title = "" + (ChatColor.WHITE) + thisDamange + " damage.";
-				String message = "";
-		        if (targetMob.isDead()) {
-		        	message = (ChatColor.WHITE) + mobtype + ": "+(ChatColor.RED)+"Killed";
-		        } else {
-			        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-			        	message = (ChatColor.WHITE) + mobtype + ": "+ (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + "/"+mobsMaxHealth;
+        if (!MobHealth.disableSpout) {
+			if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
+				if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
+					String title = "" + (ChatColor.WHITE) + thisDamange + " damage.";
+					String message = "";
+			        if (targetMob.isDead()) {
+			        	message = (ChatColor.WHITE) + mobtype + ": "+(ChatColor.RED)+"Killed";
 			        } else {
-			        	message = (ChatColor.WHITE) + mobtype+ ": " + mobsHealth + "/"+mobsMaxHealth;
+				        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
+				        	message = (ChatColor.WHITE) + mobtype + ": "+ (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + "/"+mobsMaxHealth;
+				        } else {
+				        	message = (ChatColor.WHITE) + mobtype+ ": " + mobsHealth + "/"+mobsMaxHealth;
+				        }
 			        }
-		        }
-				try {
-					spoutUsed=true;
-					SpoutManager.getPlayer(player).sendNotification(title, message, Material.getMaterial(276));
-				}
-				catch (UnsupportedOperationException e) {
-					System.err.println(e.getMessage());
-					spoutUsed=false;
+					try {
+						spoutUsed=true;
+						SpoutManager.getPlayer(player).sendNotification(title, message, Material.getMaterial(276));
+					}
+					catch (UnsupportedOperationException e) {
+						System.err.println(e.getMessage());
+						spoutUsed=false;
+					}
 				}
 			}
-		}
-
+        }
 
         
 		if (!spoutUsed) {
