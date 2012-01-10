@@ -25,6 +25,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
             		FileConfiguration config = plugin.getConfig();
             		MobHealth.usePermissions=config.getBoolean("usePermissions",false);
             		MobHealth.disableSpout=config.getBoolean("disableSpout",false);
+            		MobHealth.enableEasterEggs=config.getBoolean("enableEasterEggs",false);
             		if (MobHealth.usePermissions) {
             			MobHealth.logger.info("[" + myName + "] Using Permissions.");
             		} else {
@@ -34,6 +35,9 @@ public class MobHealthCommandExecutor implements CommandExecutor {
             			MobHealth.logger.info("[" + myName + "] Spout Disabled.");
             		} else {
             			MobHealth.logger.info("[" + myName + "] Spout Enabled.");
+            		}
+            		if (MobHealth.enableEasterEggs) {
+            			MobHealth.logger.info("[" + myName + "] Chat Features Enabled.");
             		}
     				return true;
 				}

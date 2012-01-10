@@ -19,20 +19,21 @@ public class ServerChatPlayerListener extends PlayerListener  {
 		ChatColor BLUE = ChatColor.BLUE;
 		ChatColor WHITE = ChatColor.WHITE;
 		
-		if(message_lower.contains("11") || message_lower.contains("eleven")) {
-			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-			    public void run() {
-					ChatColor WHITE = ChatColor.WHITE;
-			    	plugin.getServer().broadcastMessage(WHITE + "That's rediculous, it's not even funny.");
-			    }
-			}, 2L);
-		}
-		if(message_lower.contains("shit") || message_lower.contains("fuck") || message_lower.contains("cunt") || message_lower.contains("piss")) {
-			Player p = chat.getPlayer();
-			p.sendMessage(BLUE + "[MobHealth] " + WHITE + "Oi " + p.getName() + "!!  Mind your language!");
-			chat.setCancelled(true);
+		if (MobHealth.enableEasterEggs) {	
+			if(message_lower.contains("11") || message_lower.contains("eleven")) {
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				    public void run() {
+						ChatColor WHITE = ChatColor.WHITE;
+				    	plugin.getServer().broadcastMessage(WHITE + "That's rediculous, it's not even funny.");
+				    }
+				}, 2L);
+			}
+			if(message_lower.contains("shit") || message_lower.contains("fuck") || message_lower.contains("cunt") || message_lower.contains("piss")) {
+				Player p = chat.getPlayer();
+				p.sendMessage(BLUE + "[MobHealth] " + WHITE + "Oi " + p.getName() + "!!  Mind your language!");
+				chat.setCancelled(true);
+			}
 		}
 	}
-	
 }
 

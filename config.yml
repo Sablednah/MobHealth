@@ -5,3 +5,6 @@ disableSpout: false
 
 #usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
 usePermissions: false
+
+#enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)
+enableEasterEggs: false

@@ -17,6 +17,7 @@ public class MobHealth extends JavaPlugin {
 	
 	public static Boolean usePermissions;
 	public static Boolean disableSpout;
+	public static Boolean enableEasterEggs;
 	
 	private MobHealthCommandExecutor myExecutor;
 	
@@ -46,6 +47,7 @@ public class MobHealth extends JavaPlugin {
 
 		usePermissions=config.getBoolean("usePermissions",false);
 		disableSpout=config.getBoolean("disableSpout",false);
+		enableEasterEggs=config.getBoolean("enableEasterEggs",false);
 		
 //		System.out.print("usePermissions "+usePermissions);
 //		System.out.print("disableSpout "+disableSpout);
@@ -59,7 +61,9 @@ public class MobHealth extends JavaPlugin {
 		} else {
 			logger.info("[" + myName + "] Spout Enabled.");
 		}
-		
+		if (enableEasterEggs) {
+			logger.info("[" + myName + "] Chat Features Enabled.");
+		}		
 		config.options().copyDefaults(true);
 		saveConfig();
 		config.options().copyDefaults(false);
@@ -83,5 +87,6 @@ public class MobHealth extends JavaPlugin {
 		MobHealth.disableSpout = disableSpout;
 		this.getConfig().set("disableSpout", disableSpout);
 		saveConfig();
-	}	
+	}
+	
 }

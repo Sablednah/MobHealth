@@ -7,10 +7,13 @@ Now supports Spout! (Optional)
 
 ### Configuration
 
-Configuration has just two settings at the moment
+Configuration now has three settings.
 
 	usePermissions: false
 If true then the permission node MobHealth.show is needed to enable for a player.
+
+	disableSpout: false
+Force messages to display in chat even if spout is detected.
 
 	disableSpout: false
 Force messages to display in chat even if spout is detected.
@@ -32,4 +35,16 @@ Only players with this can use the reload command.
 	
 	MobHealth.* 
 Wildcard for all ModHealth permissions.
-	
+
+### Changelog
+1.5:  Fixed:  Displays Player name instead of 'unknOwn' when attacking other players.
+
+1.4:  Disabled bonus chat features. Added config option to re-enable them.
+
+1.3:  Added config option to disable spout notification.
+
+1.2:  Added Permissions to optionally control who sees damage notifications.
+
+1.1:  Added Spout notification.
+
+1.0:  First release.
