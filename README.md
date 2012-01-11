@@ -37,6 +37,8 @@ Only players with this can use the reload command.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+1.6:  Now works for Projectiles!
+
 1.5:  Fixed:  Displays Player name instead of 'unknOwn' when attacking other players.
 
 1.4:  Disabled bonus chat features. Added config option to re-enable them.

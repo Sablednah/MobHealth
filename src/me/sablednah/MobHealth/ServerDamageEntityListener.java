@@ -2,6 +2,7 @@ package me.sablednah.MobHealth;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -26,11 +27,23 @@ public class ServerDamageEntityListener extends EntityListener  {
 
             	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
                     LivingEntity targetMob = (LivingEntity) event.getEntity();
-                   	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(damageEvent, targetMob), 1L);
+                   	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob), 1L);
             	} else {
             		System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
             	}
              }
+            if (damageEvent.getDamager() instanceof Projectile) {
+            	Projectile bullit = (Projectile) damageEvent.getDamager();
+            	if (bullit.getShooter() instanceof Player) {
+            		Player playa = (Player) bullit.getShooter();
+                	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+                        LivingEntity targetMob = (LivingEntity) event.getEntity();
+                       	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob), 1L);
+                	} else {
+                		System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
+                	}           		
+            	}
+            }
         }
     }	
 }

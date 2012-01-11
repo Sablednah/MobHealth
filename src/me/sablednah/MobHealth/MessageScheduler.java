@@ -13,11 +13,11 @@ public class MessageScheduler implements Runnable {
 	private Player player;
 	private EntityDamageByEntityEvent damageEvent;
 	private LivingEntity targetMob;
-	public MessageScheduler(EntityDamageByEntityEvent damageEvent, LivingEntity targetMob) {
+	public MessageScheduler(Player shooter, EntityDamageByEntityEvent damageEvent, LivingEntity targetMob) {
 		//this.player = player;
 		
-		this.damageEvent=damageEvent;
-		this.player = (Player) damageEvent.getDamager();
+		this.damageEvent = damageEvent;
+		this.player = shooter;
 		this.setTargetMob(targetMob);
 	}
 	public void run() {
