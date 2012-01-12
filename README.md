@@ -1,7 +1,7 @@
 Mob Health
 ==========
 
-This is just a simple plugin to let you know the damage you just caused to a mob, and how much health it has left.
+This is just a simple plugin to let you know the damage you just caused to a mob (including other players), and how much health it has left.
 
 Now supports Spout! (Optional)
 
