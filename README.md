@@ -37,6 +37,10 @@ Only players with this can use the reload command.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+1.8:  Changed spout notification icon to bow for projectile hits.
+
+1.7:  Version Checker.
+
 1.6:  Now works for Projectiles!
 
 1.5:  Fixed:  Displays Player name instead of 'unknOwn' when attacking other players.

@@ -1,5 +1,9 @@
 package me.sablednah.MobHealth;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +24,9 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean enableEasterEggs;
 	
 	private MobHealthCommandExecutor myExecutor;
-	
+    private String VersionNew;
+    private String VersionCurrent;
+    
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -33,6 +39,7 @@ public class MobHealth extends JavaPlugin {
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		String myName=pdfFile.getName();
+		VersionCurrent = getDescription().getVersion().substring(0, 3);
 		
 		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
 		
@@ -67,6 +74,24 @@ public class MobHealth extends JavaPlugin {
 		config.options().copyDefaults(true);
 		saveConfig();
 		config.options().copyDefaults(false);
+
+		
+        // Schedule a version check every 6 hours for update notification .
+        this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                	VersionNew = getNewVersion(VersionCurrent);
+                    String VersionOld = getDescription().getVersion().substring(0, 3);
+                    if (!VersionNew.contains(VersionOld)) {
+                    	logger.warning(VersionNew + " is available. You're using " + VersionOld);
+                    	logger.warning("http://dev.bukkit.org/server-mods/mobhealth/");
+                    }
+                } catch (Exception e) {
+                    // ignore exceptions
+                }
+            }
+        }, 0, 5184000);
 		
 		logger.info("[" + myName + "] Online.");
 	}
@@ -88,5 +113,25 @@ public class MobHealth extends JavaPlugin {
 		this.getConfig().set("disableSpout", disableSpout);
 		saveConfig();
 	}
+
 	
+	public String getNewVersion(String VersionCurrent) throws Exception {
+		String urlStr = "http://sablekisska.co.uk/asp/version.asp";
+		try {
+			
+			URL url = new URL(urlStr);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			HttpURLConnection.setFollowRedirects(true);
+			conn.setRequestProperty ( "User-agent", "[MobHealth Plugin] "+VersionCurrent);
+			String inStr = null;
+			inStr = convertStreamToString(conn.getInputStream());
+			return inStr;
+			
+		}
+		catch (Exception localException) {}
+		return VersionCurrent;
+	}
+	public String convertStreamToString(InputStream is) { 
+	    return new Scanner(is).useDelimiter("\\A").next();
+	}
 }

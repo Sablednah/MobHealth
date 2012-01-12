@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
@@ -64,7 +65,13 @@ public class MessageScheduler implements Runnable {
 			        }
 					try {
 						spoutUsed=true;
-						SpoutManager.getPlayer(player).sendNotification(title, message, Material.getMaterial(276));
+						Material icon;
+						if (damageEvent.getDamager() instanceof Projectile) {
+							icon = Material.getMaterial(261);
+						} else {
+							icon = Material.getMaterial(276);
+						}
+						SpoutManager.getPlayer(player).sendNotification(title, message, icon);
 					}
 					catch (UnsupportedOperationException e) {
 						System.err.println(e.getMessage());
