@@ -1,0 +1,23 @@
+# Language file
+# Please note the spout title and message must be < 26 characters. So keep them short :)
+# %D is the amount of damage caused.
+# %N is the type of mob or playername.
+# %H is the mobs health 
+# %M is the mobs maxhealth
+
+spoutDamageTitle: "&f%D damage."
+spoutDamageMessage: "%N: %H/%M."
+spoutKilledMessage: "%N: &4Killed."
+
+chatMessage:  "&f%N took %D damage.  %H/%M health."
+chatKilledMessage:  "&f%N took %D damage.  &4Killed."
+
+eleven: "That's ridiculous, it's not even funny."
+
+profanity:
+- shit
+- fuck
+- piss
+- cunt
+
+profanityMessage: "Oi %N! Mind your language!"

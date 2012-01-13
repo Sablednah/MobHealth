@@ -14,9 +14,11 @@ public class MessageScheduler implements Runnable {
 	private Player player;
 	private EntityDamageByEntityEvent damageEvent;
 	private LivingEntity targetMob;
-	public MessageScheduler(Player shooter, EntityDamageByEntityEvent damageEvent, LivingEntity targetMob) {
+	public MobHealth plugin;
+	
+	public MessageScheduler(Player shooter, EntityDamageByEntityEvent damageEvent, LivingEntity targetMob, MobHealth plugin) {
 		//this.player = player;
-		
+		this.plugin = plugin;
 		this.damageEvent = damageEvent;
 		this.player = shooter;
 		this.setTargetMob(targetMob);
@@ -48,21 +50,39 @@ public class MessageScheduler implements Runnable {
         }
 
         Boolean spoutUsed=false;
-
+        
         if (!MobHealth.disableSpout) {
 			if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 				if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
-					String title = "" + (ChatColor.WHITE) + thisDamange + " damage.";
+					String title =  plugin.getLangConfig().getString("spoutDamageTitle");
+					title=title.replaceAll("%D",Integer.toString(thisDamange));
+					title=title.replaceAll("%N",mobtype);
+					title=title.replaceAll("%M",Integer.toString(mobsMaxHealth));
+					
+
+					for (int chatcntr = 0;chatcntr<16;chatcntr++){
+						title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByCode(chatcntr))+"");
+					}
+
+					
 					String message = "";
+					
 			        if (targetMob.isDead()) {
-			        	message = (ChatColor.WHITE) + mobtype + ": "+(ChatColor.RED)+"Killed";
+			        	message =  plugin.getLangConfig().getString("spoutKilledMessage");
 			        } else {
+			        	message =  plugin.getLangConfig().getString("spoutDamageMessage");
 				        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-				        	message = (ChatColor.WHITE) + mobtype + ": "+ (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + "/"+mobsMaxHealth;
+				        	message=message.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
 				        } else {
-				        	message = (ChatColor.WHITE) + mobtype+ ": " + mobsHealth + "/"+mobsMaxHealth;
+				        	message=message.replaceAll("%H",Integer.toString(mobsHealth));
 				        }
 			        }
+					for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
+						message=message.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByCode(chatcntr2))+"");
+					}
+			        message=message.replaceAll("%D",Integer.toString(thisDamange));
+					message=message.replaceAll("%N",mobtype);
+					message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
 					try {
 						spoutUsed=true;
 						Material icon;
@@ -83,15 +103,23 @@ public class MessageScheduler implements Runnable {
 
         
 		if (!spoutUsed) {
+			String ChatMessage;
 	        if (targetMob.isDead()) {
-	        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + "Killed.");
+				ChatMessage = plugin.getLangConfig().getString("chatKilledMessage");
 	        } else {
+	        	ChatMessage = plugin.getLangConfig().getString("chatMessage");
+				
 		        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-		        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + (ChatColor.RED) + mobsHealth + (ChatColor.WHITE) + " / "+mobsMaxHealth + " health.");
+		        	ChatMessage=ChatMessage.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
 		        } else {
-		        	player.sendMessage((ChatColor.WHITE) + mobtype+" took " + thisDamange + " damage. " + mobsHealth + " / "+mobsMaxHealth + " health.");
+		        	ChatMessage=ChatMessage.replaceAll("%H",Integer.toString(mobsHealth));
 		        }
 	        }
+			ChatMessage=ChatMessage.replaceAll("%D",Integer.toString(thisDamange));
+			ChatMessage=ChatMessage.replaceAll("%N",mobtype);
+			ChatMessage=ChatMessage.replaceAll("%M",Integer.toString(mobsMaxHealth));
+	        player.sendMessage(ChatMessage);
+	        
 		}
 	}
 	

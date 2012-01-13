@@ -1,5 +1,7 @@
 package me.sablednah.MobHealth;
 
+import java.util.Iterator;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -24,15 +26,27 @@ public class ServerChatPlayerListener extends PlayerListener  {
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				    public void run() {
 						ChatColor WHITE = ChatColor.WHITE;
-				    	plugin.getServer().broadcastMessage(WHITE + "That's rediculous, it's not even funny.");
+				    	plugin.getServer().broadcastMessage(WHITE + MobHealth.eleven);
 				    }
 				}, 2L);
 			}
-			if(message_lower.contains("shit") || message_lower.contains("fuck") || message_lower.contains("cunt") || message_lower.contains("piss")) {
-				Player p = chat.getPlayer();
-				p.sendMessage(BLUE + "[MobHealth] " + WHITE + "Oi " + p.getName() + "!!  Mind your language!");
-				chat.setCancelled(true);
-			}
+
+			Iterator<String> iter = MobHealth.langProfanity.iterator();
+            while (iter.hasNext()) {
+                String swear;
+                swear = (iter.next());
+    			if(message_lower.contains(swear)) {
+    				Player p = chat.getPlayer();
+    				String outMessage;
+    				outMessage=MobHealth.profanityMessage.replaceAll("%N", p.getName());
+    				
+    				p.sendMessage(BLUE + "[MobHealth] " + WHITE + outMessage);
+    				chat.setCancelled(true);
+    				break;
+    			}               
+            }
+			
+
 		}
 	}
 }

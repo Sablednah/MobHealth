@@ -37,6 +37,8 @@ Only players with this can use the reload command.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+1.9:  As requested, text for notification/messages is now stored in a config file - lang.yml
+
 1.8:  Changed spout notification icon to bow for projectile hits.
 
 1.7:  Version Checker.
