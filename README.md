@@ -15,8 +15,9 @@ If true then the permission node MobHealth.show is needed to enable for a player
 	disableSpout: false
 Force messages to display in chat even if spout is detected.
 
-	disableSpout: false
-Force messages to display in chat even if spout is detected.
+	enableEasterEggs: false
+Turns on 'extra chat features'.  (A Basic profanity filter - and message when people mention 11/eleven.)
+
 
 ### Commands
 
