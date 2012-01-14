@@ -37,6 +37,16 @@ public class MobHealthCommandExecutor implements CommandExecutor {
                 	MobHealth.chatKilledMessage = plugin.getLangConfig().getString("chatKilledMessage");
                 	MobHealth.spoutKilledMessage = plugin.getLangConfig().getString("spoutKilledMessage");
 
+                	String entityName;
+                	
+                	for(String thisEntity : plugin.entityList) {
+                		entityName=plugin.getLangConfig().getString("entity"+thisEntity);
+                		if (entityName == null ) { 
+                			entityName=thisEntity;
+                		}
+                		MobHealth.entityLookup.put((thisEntity), entityName);
+                		MobHealth.logger.info(thisEntity+" - "+entityName);
+                	}
                 	
             		if (MobHealth.usePermissions) {
             			MobHealth.logger.info("[" + myName + "] Using Permissions.");

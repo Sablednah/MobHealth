@@ -21,3 +21,29 @@ profanity:
 - cunt
 
 profanityMessage: "Oi %N! Mind your language!"
+
+entityPig: Piggy
+entitySheep: Sheep
+entityCow: Cow
+entityMushroomCow: MooShroom
+entityChicken: Chicken
+entitySquid: Squid
+entityVillager: Villager
+entitySnowman: Snowman
+entityWolf: Wolf
+
+entityZombie: Zombie
+entityCreeper: Creeper
+entitySkeleton: Skeleton
+entitySlime: Slime
+entitySpider: Spider
+entityCaveSpider: Cave Spider
+entityEnderDragon: Ender Dragon
+entityEnderman: Enderman
+entityGiant: Giant
+
+entityPigZombie: Zombie Pigman
+entitySilverFish: silverFish
+entityBlaze: Blaze
+entityMagmaCube: MagmaCube
+entityGhast: Ghast

@@ -44,9 +44,11 @@ public class MessageScheduler implements Runnable {
             	System.out.print("[MobHealth] " + mobtype +" unknown.");
             	mobtype="unKn0wn";
         	}
-        	
         } else {
         	mobtype=mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
+        	if (MobHealth.entityLookup.get(mobtype) != null) {
+        		mobtype=MobHealth.entityLookup.get(mobtype);
+        	}
         }
 
         Boolean spoutUsed=false;

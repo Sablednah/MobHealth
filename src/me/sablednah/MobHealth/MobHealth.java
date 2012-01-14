@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +19,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
+
+
 
 public class MobHealth extends JavaPlugin {
 
@@ -48,6 +49,11 @@ public class MobHealth extends JavaPlugin {
 	private FileConfiguration LangConfig = null;
 	private File LangConfigurationFile = null;
     
+	public static Map<String, String> entityLookup = new HashMap<String, String>();
+	
+	public String[] entityList={ "Blaze","Pig","Sheep","Cow","Chicken","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","MushroomCow","PigZombie","SilverFish","Snowman","Spider","Squid","Villager","Wolf" };
+
+
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -144,6 +150,17 @@ public class MobHealth extends JavaPlugin {
     	spoutDamageMessage = getLangConfig().getString("spoutDamageMessage");
     	spoutDamageTitle = getLangConfig().getString("spoutDamageTitle");
 
+    	String entityName;
+    	
+    	for(String thisEntity : entityList) {
+    		entityName=getLangConfig().getString("entity"+thisEntity);
+    		if (entityName == null ) { 
+    			entityName=thisEntity;
+    		}
+    		entityLookup.put((thisEntity), entityName);
+//    		logger.info(thisEntity+" - "+entityName);
+    	}
+
         saveLangConfig();
     }
 
@@ -218,5 +235,4 @@ public class MobHealth extends JavaPlugin {
 	    	logger.severe("Could not save Lang config to " + LangConfigurationFile + " " + ex);
 	    }
 	}
-
 }
