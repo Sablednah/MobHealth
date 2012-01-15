@@ -20,3 +20,4 @@ permissions:
     MobHealth.commands:
         description: Allows user to use MobHealth commands.
         default: op
+        

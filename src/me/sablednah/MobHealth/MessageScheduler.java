@@ -120,7 +120,10 @@ public class MessageScheduler implements Runnable {
 			ChatMessage=ChatMessage.replaceAll("%D",Integer.toString(thisDamange));
 			ChatMessage=ChatMessage.replaceAll("%N",mobtype);
 			ChatMessage=ChatMessage.replaceAll("%M",Integer.toString(mobsMaxHealth));
-	        player.sendMessage(ChatMessage);
+			for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
+				ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByCode(chatcntr3))+"");
+			}
+			player.sendMessage(ChatMessage);
 	        
 		}
 	}
