@@ -36,6 +36,7 @@ public class ServerDamageEntityListener extends EntityListener  {
 	            	Projectile bullit = (Projectile) damageEvent.getDamager();
 	            	if (bullit.getShooter() instanceof Player) {
 	            		Player playa = (Player) bullit.getShooter();
+//	            		System.out.print("player - "+ event.getEntity().getLocation().getY()+" : arrow "+ bullit.getLocation().getY()+" ");
 	                	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 	                        LivingEntity targetMob = (LivingEntity) event.getEntity();
 	                       	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);

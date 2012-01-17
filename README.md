@@ -38,6 +38,15 @@ Only players with this can use the reload command.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+2.2:  Custom messages for Egg and Snowball hits.
+      Just add these lines to lang.yml
+      chatMessageEgg: 
+      chatMessageSnowball:
+      spoutEggTitle:
+      spoutEggMessage:
+      spoutSnowballTitle:
+      spoutSnowballMessage:
+ 
 2.1:  Chat colour fixes.
 
 2.0:  Finished config file.  Mob names now configurable in lang.yml.

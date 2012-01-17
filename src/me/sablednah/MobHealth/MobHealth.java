@@ -36,11 +36,19 @@ public class MobHealth extends JavaPlugin {
 	public static List<String> langProfanity;
 	public static String profanityMessage;
 	public static String eleven;
+
 	public static String chatMessage;
 	public static String chatKilledMessage;
+	public static String chatMessageEgg;
+	public static String chatMessageSnowball;
+	
+	public static String spoutDamageTitle;
 	public static String spoutDamageMessage;
 	public static String spoutKilledMessage;
-	public static String spoutDamageTitle;
+	public static String spoutEggTitle;
+	public static String spoutEggMessage;
+	public static String spoutSnowballTitle;
+	public static String spoutSnowballMessage;
 	
 	private MobHealthCommandExecutor myExecutor;
     private String VersionNew;
@@ -150,6 +158,13 @@ public class MobHealth extends JavaPlugin {
     	spoutDamageMessage = getLangConfig().getString("spoutDamageMessage");
     	spoutDamageTitle = getLangConfig().getString("spoutDamageTitle");
 
+    	chatMessageEgg = getLangConfig().getString("chatMessageEgg");
+    	chatMessageSnowball = getLangConfig().getString("chatMessageSnowball");
+       	spoutEggTitle = getLangConfig().getString("spoutEggTitle");
+    	spoutEggMessage = getLangConfig().getString("spoutEggMessage");
+    	spoutSnowballTitle = getLangConfig().getString("spoutSnowballTitle");
+    	spoutSnowballMessage = getLangConfig().getString("spoutSnowballMessage");
+    	
     	String entityName;
     	
     	for(String thisEntity : entityList) {

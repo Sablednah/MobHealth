@@ -3,9 +3,11 @@ package me.sablednah.MobHealth;
 import org.bukkit.Material;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
@@ -56,29 +58,51 @@ public class MessageScheduler implements Runnable {
         if (!MobHealth.disableSpout) {
 			if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 				if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
-					String title =  plugin.getLangConfig().getString("spoutDamageTitle");
+					String title, message = "";
+					Material icon;
+					if (damageEvent.getDamager() instanceof Projectile) {
+						if (damageEvent.getDamager() instanceof Egg) {
+							icon = Material.getMaterial(344);
+						} else if (damageEvent.getDamager() instanceof Snowball) {
+							icon = Material.getMaterial(332);
+						} else {
+							icon = Material.getMaterial(261);
+						}
+					} else {
+						icon = Material.getMaterial(276);
+					}				
+					if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle")==null))) {
+						title =  plugin.getLangConfig().getString("spoutEggTitle");
+					} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballTitle")==null))) {
+						title =  plugin.getLangConfig().getString("spoutSnowballTitle");
+					} else {
+						title =  plugin.getLangConfig().getString("spoutDamageTitle");
+					}
+
 					title=title.replaceAll("%D",Integer.toString(thisDamange));
 					title=title.replaceAll("%N",mobtype);
 					title=title.replaceAll("%M",Integer.toString(mobsMaxHealth));
 					
-
 					for (int chatcntr = 0;chatcntr<16;chatcntr++){
 						title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByCode(chatcntr))+"");
 					}
 
-					
-					String message = "";
-					
-			        if (targetMob.isDead()) {
-			        	message =  plugin.getLangConfig().getString("spoutKilledMessage");
-			        } else {
-			        	message =  plugin.getLangConfig().getString("spoutDamageMessage");
-				        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-				        	message=message.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
+					if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggMessage")==null))) {
+						message =  plugin.getLangConfig().getString("spoutEggMessage");
+					} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballMessage")==null))) {
+						message =  plugin.getLangConfig().getString("spoutSnowballMessage");
+					} else {
+				        if (targetMob.isDead()) {
+				        	message =  plugin.getLangConfig().getString("spoutKilledMessage");
 				        } else {
-				        	message=message.replaceAll("%H",Integer.toString(mobsHealth));
+				        	message =  plugin.getLangConfig().getString("spoutDamageMessage");
+					        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
+					        	message=message.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
+					        } else {
+					        	message=message.replaceAll("%H",Integer.toString(mobsHealth));
+					        }
 				        }
-			        }
+					}
 					for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
 						message=message.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByCode(chatcntr2))+"");
 					}
@@ -87,12 +111,6 @@ public class MessageScheduler implements Runnable {
 					message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
 					try {
 						spoutUsed=true;
-						Material icon;
-						if (damageEvent.getDamager() instanceof Projectile) {
-							icon = Material.getMaterial(261);
-						} else {
-							icon = Material.getMaterial(276);
-						}
 						SpoutManager.getPlayer(player).sendNotification(title, message, icon);
 					}
 					catch (UnsupportedOperationException e) {
@@ -106,17 +124,22 @@ public class MessageScheduler implements Runnable {
         
 		if (!spoutUsed) {
 			String ChatMessage;
-	        if (targetMob.isDead()) {
-				ChatMessage = plugin.getLangConfig().getString("chatKilledMessage");
-	        } else {
-	        	ChatMessage = plugin.getLangConfig().getString("chatMessage");
-				
-		        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
-		        	ChatMessage=ChatMessage.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
+			if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
+				ChatMessage =  plugin.getLangConfig().getString("chatMessageEgg");
+			} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
+				ChatMessage =  plugin.getLangConfig().getString("chatMessageSnowball");
+			} else {
+				if (targetMob.isDead()) {
+					ChatMessage = plugin.getLangConfig().getString("chatKilledMessage");
 		        } else {
-		        	ChatMessage=ChatMessage.replaceAll("%H",Integer.toString(mobsHealth));
+		        	ChatMessage = plugin.getLangConfig().getString("chatMessage");
+			        if ((mobsHealth<2) || (mobsHealth<=(mobsMaxHealth/4)) ) {
+			        	ChatMessage=ChatMessage.replaceAll("%H",(ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
+			        } else {
+			        	ChatMessage=ChatMessage.replaceAll("%H",Integer.toString(mobsHealth));
+			        }
 		        }
-	        }
+			}
 			ChatMessage=ChatMessage.replaceAll("%D",Integer.toString(thisDamange));
 			ChatMessage=ChatMessage.replaceAll("%N",mobtype);
 			ChatMessage=ChatMessage.replaceAll("%M",Integer.toString(mobsMaxHealth));
