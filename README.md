@@ -21,23 +21,26 @@ Turns on 'extra chat features'.  (A Basic profanity filter - and message when pe
 
 ### Commands
 
-Only one command at present.
-
 	/MobHealth reload
 Reloads current configuration.
 	
+	/MobHealth toggle [player]
+Toggle notifications. [player] is ignored via chat and mandatory via the console.
+
 ### Permissions
 
 	MobHealth.show
 If usePermissions is true then only players with this node with see damage messages.
 	
 	MobHealth.commands
-Only players with this can use the reload command.
+Only players with this can use the reload and toggle commands.
 	
 	MobHealth.* 
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+2.3:  /MobHealth toggle  option added.  Toggles display of notifications per player. 
+
 2.2:  Custom messages for Egg and Snowball hits.
       Just add these lines to lang.yml
       chatMessageEgg: 

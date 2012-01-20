@@ -9,44 +9,49 @@ import org.bukkit.event.entity.EntityListener;
 
 public class ServerDamageEntityListener extends EntityListener  {
 	public MobHealth plugin;
-	
+
 	public ServerDamageEntityListener(MobHealth instance) {
 		this.plugin=instance;
 	}
-	
-    public void onEntityDamage(EntityDamageEvent event){
-        
-    	//System.out.print("Entity Defender: " + event.getEntity().getEntityId());
-    	if (!event.isCancelled()) {
-	        if(event instanceof EntityDamageByEntityEvent) {
-	            EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-	            //System.out.print("Entity Damager " + damageEvent.getDamager().getEntityId());
-	
-	            if (damageEvent.getDamager() instanceof Player) {
-	            	Player playa = (Player) damageEvent.getDamager();
-	
-	            	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
-	                    LivingEntity targetMob = (LivingEntity) event.getEntity();
-	                   	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
-	            	} else {
-	            		System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
-	            	}
-	             }
-	            if (damageEvent.getDamager() instanceof Projectile) {
-	            	Projectile bullit = (Projectile) damageEvent.getDamager();
-	            	if (bullit.getShooter() instanceof Player) {
-	            		Player playa = (Player) bullit.getShooter();
-//	            		System.out.print("player - "+ event.getEntity().getLocation().getY()+" : arrow "+ bullit.getLocation().getY()+" ");
-	                	if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
-	                        LivingEntity targetMob = (LivingEntity) event.getEntity();
-	                       	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
-	                	} else {
-	                		System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
-	                	}           		
-	            	}
-	            }
-	        }
-    	}
-    }	
+
+	public void onEntityDamage(EntityDamageEvent event){
+
+		//System.out.print("Entity Defender: " + event.getEntity().getEntityId());
+		if (!event.isCancelled()) {
+			if(event instanceof EntityDamageByEntityEvent) {
+				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+				//System.out.print("Entity Damager " + damageEvent.getDamager().getEntityId());
+
+				if (damageEvent.getDamager() instanceof Player) {
+					Player playa = (Player) damageEvent.getDamager();
+					if(MobHealth.getPluginState(playa)){	
+						if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+							LivingEntity targetMob = (LivingEntity) event.getEntity();
+							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
+						} else {
+							System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
+						}
+					}
+				}
+				
+				if (damageEvent.getDamager() instanceof Projectile) {
+					Projectile bullit = (Projectile) damageEvent.getDamager();
+					if (bullit.getShooter() instanceof Player) {
+						Player playa = (Player) bullit.getShooter();
+						//System.out.print("player - "+ event.getEntity().getLocation().getY()+" : arrow "+ bullit.getLocation().getY()+" ");
+						if(MobHealth.getPluginState(playa)){	
+							if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+								LivingEntity targetMob = (LivingEntity) event.getEntity();
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
+							} else {
+								System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
+							}        
+						}
+					}
+				}
+				
+			}
+		}
+	}	
 }
 

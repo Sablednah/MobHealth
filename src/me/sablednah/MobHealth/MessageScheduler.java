@@ -147,7 +147,6 @@ public class MessageScheduler implements Runnable {
 				ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByCode(chatcntr3))+"");
 			}
 			player.sendMessage(ChatMessage);
-	        
 		}
 	}
 	

@@ -1,13 +1,13 @@
 name: MobHealth
 main: me.sablednah.MobHealth.MobHealth
-version: 2.2
+version: 2.3
 description: >
              Displays Mob health in chat. Optional support for spout.
 commands:
     MobHealth:
-        description: All the MobHealth Commands.
+        description: Root connand for all  MobHealth Commands.
         permission: <plugin name>.commands
-        usage: /<command> [reload]
+        usage: /<command> [reload|toggle]
 permissions:
     MobHealth.*:
         description: Gives access to all MobHealth commands/functions.

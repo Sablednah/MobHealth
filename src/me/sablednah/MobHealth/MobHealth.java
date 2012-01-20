@@ -18,6 +18,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 
@@ -57,8 +58,9 @@ public class MobHealth extends JavaPlugin {
 	private FileConfiguration LangConfig = null;
 	private File LangConfigurationFile = null;
     
-	public static Map<String, String> entityLookup = new HashMap<String, String>();
+	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
 	
+	public static Map<String, String> entityLookup = new HashMap<String, String>();
 	public String[] entityList={ "Blaze","Pig","Sheep","Cow","Chicken","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","MushroomCow","PigZombie","SilverFish","Snowman","Spider","Squid","Villager","Wolf" };
 
 
@@ -248,6 +250,40 @@ public class MobHealth extends JavaPlugin {
 	    	LangConfig.save(LangConfigurationFile);
 	    } catch (IOException ex) {
 	    	logger.severe("Could not save Lang config to " + LangConfigurationFile + " " + ex);
+	    }
+	}
+	
+	
+	/**
+	 * Get if plugin is enabled for a player.
+	 * 
+	 * @param player
+	 * @return Boolean
+	 */
+	public static Boolean getPluginState(Player player){	
+	    if(pluginEnabled.containsKey(player)){
+	        return pluginEnabled.get(player);
+	    }
+	    return true;
+	}
+
+	/**
+	 * Toggle if plugin is enabled for a player
+	 * 
+	 * @param player
+	 */
+	public static void togglePluginState(Player player){		
+	    if(pluginEnabled.containsKey(player)){
+	        if(pluginEnabled.get(player)){
+	            pluginEnabled.put(player, false);
+	            player.sendMessage("Notifications disabled.");
+	        } else {
+	            pluginEnabled.put(player, true);
+	            player.sendMessage("Notifications enabled.");
+	        }
+	    } else {
+	        pluginEnabled.put(player, false); //Plugin enabled by default.
+	        player.sendMessage("Notifications disabled.");
 	    }
 	}
 }
