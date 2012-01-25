@@ -1,10 +1,27 @@
-#Default Config file
+# Default MobHealth Config file
+# 
+# disableSpout: [true|false] - force messages to display in chat even if spout is present.
+# usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
+# enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)
+# disablePlayers: [true|false] - disable notifications for player hits.
+# disableMonsters: [true|false] - disable notifications for 'monster' hits.
+# disableAnimals: [true|false] - disable notifications for 'animal' hits.
+# damageDisplayType: [1|2|3|4]
+#    1: display damage inflicted.  
+#    2: display damage taken.
+#    3: display damage inflicted (-amount resisted)
+#    4: display damage taken (+amount resisted)
+# hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 
-#disableSpout: [true|false] - force messages to display in chat even if spout is present.
+
 disableSpout: false
-
-#usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
 usePermissions: false
+enableEasterEggs: true
 
-#enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)
-enableEasterEggs: false
+disablePlayers: false
+disableMonsters: false
+disableAnimals: false
+
+damageDisplayType: 1
+
+hideNoDammage: false

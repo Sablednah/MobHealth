@@ -7,8 +7,6 @@ Now supports Spout! (Optional)
 
 ### Configuration
 
-Configuration now has three settings.
-
 	usePermissions: false
 If true then the permission node MobHealth.show is needed to enable for a player.
 
@@ -16,8 +14,25 @@ If true then the permission node MobHealth.show is needed to enable for a player
 Force messages to display in chat even if spout is detected.
 
 	enableEasterEggs: false
-Turns on 'extra chat features'.  (A Basic profanity filter - and message when people mention 11/eleven.)
+Turns on 'extra chat features'.  (A Basic profanity filter - and message when people mention trigger keywords.)
 
+    disablePlayers: false
+Disable notifications for player hits.
+
+    disableMonsters: false
+Disable notifications for 'monster' hits.
+
+    disableAnimals: false
+Disable notifications for 'animal' hits.
+
+    damageDisplayType: [1|2|3|4]
+1. display damage inflicted.  
+2. display damage taken.
+2. display damage inflicted (-amount resisted)
+4. display damage taken (+amount resisted)
+
+    hideNoDammage: false
+Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 
 ### Commands
 
@@ -39,6 +54,11 @@ Only players with this can use the reload and toggle commands.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+2.4:  "eleven" message trigger changed to trigger list in lang.yml.  You can now have your own silly phrase trigger whenever you want!
+      Implemented flags to hide damage notifications if target is player, animal or monster.
+      Implemented various options for displaying damage in notifications.
+      Option to hide notifications that inflict '0' real damage.
+      
 2.3:  /MobHealth toggle  option added.  Toggles display of notifications per player. 
 
 2.2:  Custom messages for Egg and Snowball hits.

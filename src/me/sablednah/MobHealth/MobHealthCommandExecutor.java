@@ -30,7 +30,14 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				MobHealth.disableSpout=plugin.getConfig().getBoolean("disableSpout");
 				MobHealth.enableEasterEggs=plugin.getConfig().getBoolean("enableEasterEggs");
 
+				MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
+				MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
+				MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
+				MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
+				MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
+			
 				plugin.reloadLangConfig();
+				MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
 				MobHealth.langProfanity = plugin.getLangConfig().getList("profanity");
 				MobHealth.profanityMessage = plugin.getLangConfig().getString("profanityMessage");
 				MobHealth.eleven = plugin.getLangConfig().getString("eleven");
@@ -68,6 +75,22 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				} else {
 					MobHealth.logger.info("[" + myName + "] Spout Enabled.");
 				}
+				if (MobHealth.disablePlayers) {
+					MobHealth.logger.info("[" + myName + "] Player Notifications Disabled.");
+				} else {
+					MobHealth.logger.info("[" + myName + "] Player Notifications Enabled.");
+				}
+				if (MobHealth.disableMonsters) {
+					MobHealth.logger.info("[" + myName + "] Monster Notifications Disabled.");
+				} else {
+					MobHealth.logger.info("[" + myName + "] Monster Notifications Enabled.");
+				}
+				if (MobHealth.disableAnimals) {
+					MobHealth.logger.info("[" + myName + "] Animals Notifications Disabled.");
+				} else {
+					MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
+				}
+
 				if (MobHealth.enableEasterEggs) {
 					MobHealth.logger.info("[" + myName + "] Chat Features Enabled.");
 				}

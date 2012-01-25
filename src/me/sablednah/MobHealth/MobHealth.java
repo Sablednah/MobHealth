@@ -33,9 +33,15 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean usePermissions;
 	public static Boolean disableSpout;
 	public static Boolean enableEasterEggs;
-
+	public static Boolean disablePlayers;
+	public static Boolean disableMonsters;
+	public static Boolean disableAnimals;
+	public static int damageDisplayType;
+	public static Boolean hideNoDammage;
+	
 	public static List<String> langProfanity;
 	public static String profanityMessage;
+	public static List<String> langTriggers;
 	public static String eleven;
 
 	public static String chatMessage;
@@ -61,10 +67,16 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
 	
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
-	public String[] entityList={ "Blaze","Pig","Sheep","Cow","Chicken","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","MushroomCow","PigZombie","SilverFish","Snowman","Spider","Squid","Villager","Wolf" };
 
+	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Snowman","Squid","Villager","Wolf" };
+	public static String[] monsterList = { "Blaze","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","PigZombie","SilverFish","Spider" };
+	
+	//public String[] entityList={ "Blaze","Pig","Sheep","Cow","Chicken","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","MushroomCow","PigZombie","SilverFish","Snowman","Spider","Squid","Villager","Wolf" };
 
-	@Override
+    public String[] entityList= concat(animalList,monsterList);
+	
+    
+    @Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
@@ -77,6 +89,8 @@ public class MobHealth extends JavaPlugin {
 		VersionCurrent = getDescription().getVersion().substring(0, 3);
 		
 		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
+		
+//		System.out.println(java.util.Arrays.toString(entityList));
 		
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		
@@ -98,6 +112,21 @@ public class MobHealth extends JavaPlugin {
 			logger.info("[" + myName + "] Spout Disabled.");
 		} else {
 			logger.info("[" + myName + "] Spout Enabled.");
+		}
+		if (disablePlayers) {
+			logger.info("[" + myName + "] Player Notifications Disabled.");
+		} else {
+			logger.info("[" + myName + "] Player Notifications Enabled.");
+		}
+		if (disableMonsters) {
+			logger.info("[" + myName + "] Monster Notifications Disabled.");
+		} else {
+			logger.info("[" + myName + "] Monster Notifications Enabled.");
+		}
+		if (disableAnimals) {
+			logger.info("[" + myName + "] Animals Notifications Disabled.");
+		} else {
+			logger.info("[" + myName + "] Animals Notifications Enabled.");
 		}
 		if (enableEasterEggs) {
 			logger.info("[" + myName + "] Chat Features Enabled.");
@@ -139,6 +168,16 @@ public class MobHealth extends JavaPlugin {
         headertext+="usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.\r\n";
         headertext+="enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)\r\n";
         headertext+="\r\n";
+        headertext+="disablePlayers: [true|false] - disable notifications for player hits.\r\n";
+        headertext+="disableMonsters: [true|false] - disable notifications for 'monster' hits.\r\n";
+        headertext+="disableAnimals: [true|false] - disable notifications for 'animal' hits.\r\n";
+        headertext+="damageDisplayType: [1|2|3|4]\r\n";
+        headertext+="    1: display damage inflicted.  \r\n";
+        headertext+="    2: display damage taken.\r\n";
+        headertext+="    3: display damage inflicted (-amount resisted)\r\n";
+        headertext+="    4: display damage taken (+amount resisted)\r\n";
+        headertext+="hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.\r\n";
+        headertext+="\r\n";
         
         getConfig().options().header(headertext);
         getConfig().options().copyHeader(true);
@@ -147,11 +186,18 @@ public class MobHealth extends JavaPlugin {
 		disableSpout = getConfig().getBoolean("disableSpout");
 		enableEasterEggs = getConfig().getBoolean("enableEasterEggs");
         
+		disablePlayers = getConfig().getBoolean("disablePlayers");
+		disableMonsters = getConfig().getBoolean("disableMonsters");
+		disableAnimals = getConfig().getBoolean("disableAnimals");
+		damageDisplayType = getConfig().getInt("damageDisplayType");
+		
+		hideNoDammage = getConfig().getBoolean("hideNoDammage");
+		
         saveConfig();
    
         getLangConfig();
 
-    	langProfanity = getLangConfig().getList("profanity");
+        langTriggers = getLangConfig().getList("triggers");
     	profanityMessage = getLangConfig().getString("profanityMessage");
     	eleven = getLangConfig().getString("eleven");
     	chatMessage = getLangConfig().getString("chatMessage");
@@ -286,4 +332,17 @@ public class MobHealth extends JavaPlugin {
 	        player.sendMessage("Notifications disabled.");
 	    }
 	}
+
+	/**
+	 * Joins two arrays
+	 * 
+	 * @param first array
+	 * @param second array
+	 * @return Arrays joined
+	 */
+	public static <T> T[] concat(T[] first, T[] second) {
+		  T[] result = Arrays.copyOf(first, first.length + second.length);
+		  System.arraycopy(second, 0, result, first.length, second.length);
+		  return result;
+		}
 }

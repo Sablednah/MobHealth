@@ -27,14 +27,12 @@ public class ServerDamageEntityListener extends EntityListener  {
 					if(MobHealth.getPluginState(playa)){	
 						if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 							LivingEntity targetMob = (LivingEntity) event.getEntity();
-							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
+							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetMob.getHealth(), plugin), 1L);
 						} else {
 							System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
 						}
 					}
-				}
-				
-				if (damageEvent.getDamager() instanceof Projectile) {
+				} else if (damageEvent.getDamager() instanceof Projectile) {
 					Projectile bullit = (Projectile) damageEvent.getDamager();
 					if (bullit.getShooter() instanceof Player) {
 						Player playa = (Player) bullit.getShooter();
@@ -42,7 +40,7 @@ public class ServerDamageEntityListener extends EntityListener  {
 						if(MobHealth.getPluginState(playa)){	
 							if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 								LivingEntity targetMob = (LivingEntity) event.getEntity();
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, plugin), 1L);
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetMob.getHealth(), plugin), 1L);
 							} else {
 								System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
 							}        
