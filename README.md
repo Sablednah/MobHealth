@@ -103,21 +103,22 @@ Wildcard for all ModHealth permissions.
 
 To Do
 =====
-*<del>Detect change in health to  get **actual** damage dealt.</del>
-*--Add config to allow damage display type.--
-    * --Damage inflicted - e.g. 6 damage.--
-    * --Damage taken - e.g. 4 damage.--
-    * --Damage taken + damage absorbed - e.g. 4(+2) damage.--
-*--Config option to ignore notifications for 0 damage--
-*--Exception for eggs and/or snowballs for above option--
-*Heroes, MobArea etc. detection/integration
-*Spells damage detection.
+* <del>Detect change in health to  get **actual** damage dealt.</del>
+* <del>Add config to allow damage display type.</del>
+    * <del>Damage inflicted - e.g. 6 damage.</del>
+    * <del>Damage taken - e.g. 4 damage.</del>
+    * <del>Damage taken + damage absorbed - e.g. 4(+2) damage.</del>
+* <del>Config option to ignore notifications for 0 damage</del>
+* <del>Exception for eggs and/or snowballs for above option</del>
+* Heroes, MobArea etc. detection/integration
+* Spells damage detection.
+
 
 Known Bugs/Conflicts
 ====================
-*Ender Dragon damage not notified. Bukkit have pushed a fix through for 1.1 - working on it now.
-*Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
-    *--Likeaboss - I have details form the author and I'm working on adding support.-- Done Thanks bm01
-    *Heroes.  Once Heroes for 1.1 is out I'll look over the API.
-    *MobArena.  Again once a 1.1 build is out I'll look over the API.
-*Spells.  Bukkit have added a damage reason for spell damage now.  Once plugins start using it I will look at reporting spell damage.
+* Ender Dragon damage not notified. Bukkit have pushed a fix through for 1.1 - working on it now.
+* Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
+    * <del>Likeaboss - I have details form the author and I'm working on adding support.</del> Done Thanks bm01
+    * Heroes.  Once Heroes for 1.1 is out I'll look over the API.
+    * MobArena.  Again once a 1.1 build is out I'll look over the API.
+* Spells.  Bukkit have added a damage reason for spell damage now.  Once plugins start using it I will look at reporting spell damage.
