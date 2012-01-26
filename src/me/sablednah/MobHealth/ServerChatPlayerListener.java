@@ -4,16 +4,20 @@ import java.util.Iterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
 
-public class ServerChatPlayerListener extends PlayerListener  {
+
+public class ServerChatPlayerListener implements Listener  {
 	public MobHealth plugin;
 
 	public ServerChatPlayerListener(MobHealth instance) {
 		this.plugin=instance;
 	}
-
+	
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(PlayerChatEvent chat) {
 		String message = chat.getMessage();
 		String message_lower = message.toLowerCase();
@@ -22,10 +26,10 @@ public class ServerChatPlayerListener extends PlayerListener  {
 		ChatColor WHITE = ChatColor.WHITE;
 
 		if (MobHealth.enableEasterEggs) {	
-			Iterator<String> triggers = MobHealth.langTriggers.iterator();
+			Iterator<Object> triggers = MobHealth.langTriggers.iterator();
 			while (triggers.hasNext()) {
 				String trigger;
-				trigger = (triggers.next());
+				trigger = (String) (triggers.next());
 				if(message_lower.contains(trigger)) {
 					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						public void run() {
@@ -37,10 +41,10 @@ public class ServerChatPlayerListener extends PlayerListener  {
 				}
 			}
 
-			Iterator<String> iter = MobHealth.langProfanity.iterator();
+			Iterator<Object> iter = MobHealth.langProfanity.iterator();
 			while (iter.hasNext()) {
 				String swear;
-				swear = (iter.next());
+				swear = (String) (iter.next());
 				if(message_lower.contains(swear)) {
 					Player p = chat.getPlayer();
 					String outMessage;

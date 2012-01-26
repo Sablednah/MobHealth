@@ -1,9 +1,12 @@
 Mob Health
 ==========
 
-This is just a simple plugin to let you know the damage you just caused to a mob (including other players), and how much health it has left.
+This is just a simple plugin to let you know the damage you just caused to a mob (including other players), and how much health it has left.  
 
-Now supports Spout! (Optional)
+Now supports Spout! (_Optional_)
+
+Mob Health now has plenty of options to control how messages are shown,when they are shown (and more importantly when they are *not* shown), and what is displayed - with your own custom messages.
+
 
 ### Configuration
 
@@ -54,6 +57,9 @@ Only players with this can use the reload and toggle commands.
 Wildcard for all ModHealth permissions.
 
 ### Changelog
+2.5:  New bukkit event format.
+      Support for Likeaboss Boss entities.  
+
 2.4:  "eleven" message trigger changed to trigger list in lang.yml.  You can now have your own silly phrase trigger whenever you want!
       Implemented flags to hide damage notifications if target is player, animal or monster.
       Implemented various options for displaying damage in notifications.
@@ -93,3 +99,25 @@ Wildcard for all ModHealth permissions.
 1.1:  Added Spout notification.
 
 1.0:  First release.
+
+
+To Do
+=====
+*--Detect change in health to  get **actual** damage dealt. --
+*--Add config to allow damage display type.--
+    * --Damage inflicted - e.g. 6 damage.--
+    * --Damage taken - e.g. 4 damage.--
+    * --Damage taken + damage absorbed - e.g. 4(+2) damage.--
+*--Config option to ignore notifications for 0 damage--
+*--Exception for eggs and/or snowballs for above option--
+*Heroes, MobArea etc. detection/integration
+*Spells damage detection.
+
+Known Bugs/Conflicts
+====================
+*Ender Dragon damage not notified. Bukkit have pushed a fix through for 1.1 - working on it now.
+*Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
+    *--Likeaboss - I have details form the author and I'm working on adding support.-- Done Thanks bm01
+    *Heroes.  Once Heroes for 1.1 is out I'll look over the API.
+    *MobArena.  Again once a 1.1 build is out I'll look over the API.
+*Spells.  Bukkit have added a damage reason for spell damage now.  Once plugins start using it I will look at reporting spell damage.

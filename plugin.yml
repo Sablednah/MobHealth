@@ -1,6 +1,6 @@
 name: MobHealth
 main: me.sablednah.MobHealth.MobHealth
-version: 2.4
+version: 2.5
 description: >
              Displays Mob health in chat. Optional support for spout.
 commands:

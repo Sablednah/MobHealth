@@ -19,7 +19,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 
 
 
@@ -39,9 +38,9 @@ public class MobHealth extends JavaPlugin {
 	public static int damageDisplayType;
 	public static Boolean hideNoDammage;
 	
-	public static List<String> langProfanity;
+	public static List<Object> langProfanity;
 	public static String profanityMessage;
-	public static List<String> langTriggers;
+	public static List<Object> langTriggers;
 	public static String eleven;
 
 	public static String chatMessage;
@@ -75,6 +74,7 @@ public class MobHealth extends JavaPlugin {
 
     public String[] entityList= concat(animalList,monsterList);
 	
+    public static Boolean hasLikeABoss;
     
     @Override
 	public void onDisable() {
@@ -90,19 +90,21 @@ public class MobHealth extends JavaPlugin {
 		
 		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
 		
-//		System.out.println(java.util.Arrays.toString(entityList));
-		
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, this.EntityListener, Event.Priority.Normal, this);
-
+		
+		//old syntax for events.
+		//pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		
+		//pm.registerEvent(Event.Type.ENTITY_DAMAGE, this.EntityListener, Event.Priority.Lowest, this);
+		pm.registerEvents(this.playerListener, this);		
+		pm.registerEvents(this.EntityListener, this);
+		
 		myExecutor = new MobHealthCommandExecutor(this);
 		getCommand("MobHealth").setExecutor(myExecutor);
 		
 		loadConfiguration();
 		
-//		System.out.print("usePermissions "+usePermissions);
-//		System.out.print("disableSpout "+disableSpout);
+		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
+
 		if (usePermissions) {
 			logger.info("[" + myName + "] Using Permissions.");
 		} else {
@@ -158,7 +160,6 @@ public class MobHealth extends JavaPlugin {
 	/**
 	 * Initialise config file 
 	 */
-    @SuppressWarnings("unchecked")
 	public void loadConfiguration() {
         getConfig().options().copyDefaults(true);
         
@@ -197,9 +198,10 @@ public class MobHealth extends JavaPlugin {
    
         getLangConfig();
 
-        langTriggers = getLangConfig().getList("triggers");
-    	profanityMessage = getLangConfig().getString("profanityMessage");
-    	eleven = getLangConfig().getString("eleven");
+        langProfanity = getLangConfig().getList("profanity");
+        profanityMessage = getLangConfig().getString("profanityMessage");
+    	langTriggers = getLangConfig().getList("triggers");
+        eleven = getLangConfig().getString("eleven");
     	chatMessage = getLangConfig().getString("chatMessage");
     	chatKilledMessage = getLangConfig().getString("chatKilledMessage");
     	spoutKilledMessage = getLangConfig().getString("spoutKilledMessage");

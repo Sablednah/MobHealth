@@ -15,7 +15,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 		this.plugin=instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("mobhealth")){
@@ -38,9 +37,9 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 			
 				plugin.reloadLangConfig();
 				MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
+				MobHealth.eleven = plugin.getLangConfig().getString("eleven");
 				MobHealth.langProfanity = plugin.getLangConfig().getList("profanity");
 				MobHealth.profanityMessage = plugin.getLangConfig().getString("profanityMessage");
-				MobHealth.eleven = plugin.getLangConfig().getString("eleven");
 				MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");
 				MobHealth.spoutDamageMessage = plugin.getLangConfig().getString("spoutDamageMessage");
 				MobHealth.spoutDamageTitle = plugin.getLangConfig().getString("spoutDamageTitle");

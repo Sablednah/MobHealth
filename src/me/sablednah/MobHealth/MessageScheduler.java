@@ -14,42 +14,66 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
 
+import cam.Likeaboss;
+import cam.boss.Boss;
+import cam.boss.BossManager;
+
 public class MessageScheduler implements Runnable {
 	private Player player;
 	private EntityDamageByEntityEvent damageEvent;
 	private LivingEntity targetMob;
 	public MobHealth plugin;
 	private int HealthBefore;
+	private int DamageBefore;
 
-	public MessageScheduler(Player shooter, EntityDamageByEntityEvent damageEvent, LivingEntity targetMob, int HealthBefore, MobHealth plugin) {
-		//this.player = player;
+	public MessageScheduler(Player shooter, EntityDamageByEntityEvent damageEvent, LivingEntity targetMob, int HealthBefore, int DamageBefore, MobHealth plugin) {
 		this.plugin = plugin;
 		this.damageEvent = damageEvent;
 		this.player = shooter;
-		this.setTargetMob(targetMob);
+		this.targetMob = targetMob;
 		this.HealthBefore = HealthBefore;
+		this.DamageBefore = DamageBefore;
 	}
 	public void run() {
 
 		int thisDamange=0, mobsHealth=0, mobsMaxHealth=0, damageTaken=0, damageResisted=0;
-		Boolean isPlayer = false, isMonster = false, isAnimal = false;
+		Boolean isPlayer = false, isMonster = false, isAnimal = false, isSpecial =false;
 		String damageOutput;
 
-		//int mobID;
-		//mobID=targetMob.getEntityId();
+		// Get health/maxhealth and damage for Likeaboss Boss entities
+		if (MobHealth.hasLikeABoss) {
+			Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
+			BossManager BM=LaB.getBossManager();
+			Boss thisBoss = BM.getBoss(targetMob);
+			if(!(thisBoss == null))  {
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = targetMob.getMaxHealth();
+				mobsMaxHealth = (int) (thisBoss.getHealthCoef()*mobsMaxHealth);
+				mobsHealth = thisBoss.getHealth();
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+			}
+		} 
 
-		thisDamange = damageEvent.getDamage();
-		mobsMaxHealth = targetMob.getMaxHealth();
-		mobsHealth = targetMob.getHealth();
-		damageTaken = HealthBefore - mobsHealth;
-		damageResisted = thisDamange - damageTaken;
+		// if none of the above special cases for 3rd party plugins apply - get the info 'normally'.
+		if (!isSpecial) {
+			thisDamange = damageEvent.getDamage();
+			mobsMaxHealth = targetMob.getMaxHealth();
+			mobsHealth = targetMob.getHealth();
+			damageTaken = HealthBefore - mobsHealth;
+			damageResisted = thisDamange - damageTaken;
+		}
 		
-//		System.out.print("[MobHealth] " + thisDamange +" thisDamange.");
-//		System.out.print("[MobHealth] " + mobsHealth +" mobsHealth.");
-//		System.out.print("[MobHealth] " + HealthBefore +" HealthBefore.");
-//		System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
-//		System.out.print("[MobHealth] " + damageResisted +" damageResisted.");
-
+/*
+ 		System.out.print("--");
+ 		System.out.print("[MobHealth] " + thisDamange +" thisDamange.");
+		System.out.print("[MobHealth] " + mobsHealth +" mobsHealth.");
+		System.out.print("[MobHealth] " + HealthBefore +" HealthBefore.");
+		System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
+		System.out.print("[MobHealth] " + damageResisted +" damageResisted.");
+*/
+		
 		String mobtype = new String(targetMob.getClass().getName());
 
 		if (mobtype.indexOf("org.bukkit.craftbukkit.entity.Craft") == -1) {
@@ -64,29 +88,24 @@ public class MessageScheduler implements Runnable {
 			mobtype=mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
 			if (Arrays.asList(MobHealth.animalList).contains(mobtype)) isAnimal=true;
 			if (Arrays.asList(MobHealth.monsterList).contains(mobtype)) isMonster=true;
-
 			if (MobHealth.entityLookup.get(mobtype) != null) {
 				mobtype=MobHealth.entityLookup.get(mobtype);
 			}
 		}
 
-		//#    1: display damage inflicted.  
-		//#    2: display damage taken.
-		//#    3: display damage inflicted (-amount resisted)
-		//#    4: display damage taken (+amount resisted)
 		switch (MobHealth.damageDisplayType) {
-		case 4:
+		case 4: //#    4: display damage taken (+amount resisted)
 			damageOutput=Integer.toString(damageTaken);
 			if (damageResisted>0) damageOutput+= "(+" +  damageResisted + ")";
 			break;
-		case 3:
+		case 3: //#    3: display damage inflicted (-amount resisted)
 			damageOutput=Integer.toString(thisDamange);
 			if (damageResisted>0) damageOutput+= "(-" +  damageResisted + ")";
 			break;
-		case 2:		
+		case 2: //#    2: display damage taken.
 			damageOutput=Integer.toString(damageTaken);
 			break;
-		default:
+		default: //#    1: display damage inflicted.  
 			damageOutput=Integer.toString(thisDamange);
 		}
 		
@@ -113,12 +132,7 @@ public class MessageScheduler implements Runnable {
 				((MobHealth.disableAnimals&&!isAnimal) || !MobHealth.disableAnimals) 
 				&&
 				(!checkForZeroDamageHide)
-			)
-		{
-
-
-
-
+			){
 			if (!MobHealth.disableSpout) {
 				if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 					if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
@@ -148,7 +162,7 @@ public class MessageScheduler implements Runnable {
 						title=title.replaceAll("%M",Integer.toString(mobsMaxHealth));
 
 						for (int chatcntr = 0;chatcntr<16;chatcntr++){
-							title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByCode(chatcntr))+"");
+							title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByChar(Integer.toHexString(chatcntr)))+"");
 						}
 
 						if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggMessage")==null))) {
@@ -168,7 +182,7 @@ public class MessageScheduler implements Runnable {
 							}
 						}
 						for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
-							message=message.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByCode(chatcntr2))+"");
+							message=message.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByChar(Integer.toHexString(chatcntr2)))+"");
 						}
 						message=message.replaceAll("%D",damageOutput);
 						message=message.replaceAll("%N",mobtype);
@@ -208,30 +222,10 @@ public class MessageScheduler implements Runnable {
 				ChatMessage=ChatMessage.replaceAll("%N",mobtype);
 				ChatMessage=ChatMessage.replaceAll("%M",Integer.toString(mobsMaxHealth));
 				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
-					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByCode(chatcntr3))+"");
+					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
 				}
 				player.sendMessage(ChatMessage);
 			}
 		}
-	}
-
-	// Optional, if you need it
-	public Player getPlayer() {
-		return player;
-	}
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-	public LivingEntity getTargetMob() {
-		return targetMob;
-	}
-	public void setTargetMob(LivingEntity targetMob) {
-		this.targetMob = targetMob;
-	}
-	public EntityDamageByEntityEvent getdamageEvent() {
-		return damageEvent;
-	}
-	public void setdamageEvent(EntityDamageByEntityEvent damageEvent) {
-		this.damageEvent = damageEvent;
 	}
 }
