@@ -103,7 +103,7 @@ Wildcard for all ModHealth permissions.
 
 To Do
 =====
-*--Detect change in health to  get **actual** damage dealt. --
+*<del>Detect change in health to  get **actual** damage dealt.</del>
 *--Add config to allow damage display type.--
     * --Damage inflicted - e.g. 6 damage.--
     * --Damage taken - e.g. 4 damage.--
