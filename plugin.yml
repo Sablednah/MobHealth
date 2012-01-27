@@ -1,23 +1,37 @@
 name: MobHealth
 main: me.sablednah.MobHealth.MobHealth
-version: 2.5
+version: 3.0
 description: >
-             Displays Mob health in chat. Optional support for spout.
+             Displays Mob health in chat when damaged by players.
+
 commands:
     MobHealth:
         description: Root command for all  MobHealth Commands.
-        permission: <plugin name>.commands
         usage: /<command> [reload|toggle]
+
 permissions:
     MobHealth.*:
         description: Gives access to all MobHealth commands/functions.
         children:
             MobHealth.show: true
-            MobHealth.commands: true
+            MobHealth.command.*: true
+
     MobHealth.show:
         description: Allows user to view damage notifications.
+        default: true
+
+    MobHealth.command.*:
+        description: Allows user to use MobHealth commands. (Also MobHealth.commands for legacy support).
         default: op
-    MobHealth.commands:
-        description: Allows user to use MobHealth commands.
+        children:
+            MobHealth.command.reload: true
+            MobHealth.command.toggle: true
+
+    MobHealth.command.reload:
+        description: Allows user to use MobHealth reload command.
         default: op
+
+    MobHealth.command.toggle:
+        description: Allows user to use MobHealth toggle command.
+        default: true
         

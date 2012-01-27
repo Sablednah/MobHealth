@@ -23,77 +23,91 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 			String myName=pdfFile.getName();
 
 			if (args.length > 0 && args[0].toLowerCase().equals("reload")) {
-
-				plugin.reloadConfig();
-				MobHealth.usePermissions=plugin.getConfig().getBoolean("usePermissions");
-				MobHealth.disableSpout=plugin.getConfig().getBoolean("disableSpout");
-				MobHealth.enableEasterEggs=plugin.getConfig().getBoolean("enableEasterEggs");
-
-				MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
-				MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
-				MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
-				MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
-				MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
-			
-				plugin.reloadLangConfig();
-				MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
-				MobHealth.eleven = plugin.getLangConfig().getString("eleven");
-				MobHealth.langProfanity = plugin.getLangConfig().getList("profanity");
-				MobHealth.profanityMessage = plugin.getLangConfig().getString("profanityMessage");
-				MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");
-				MobHealth.spoutDamageMessage = plugin.getLangConfig().getString("spoutDamageMessage");
-				MobHealth.spoutDamageTitle = plugin.getLangConfig().getString("spoutDamageTitle");
-				MobHealth.chatKilledMessage = plugin.getLangConfig().getString("chatKilledMessage");
-				MobHealth.spoutKilledMessage = plugin.getLangConfig().getString("spoutKilledMessage");
-
-				MobHealth.chatMessageEgg = plugin.getLangConfig().getString("chatMessageEgg");
-				MobHealth.chatMessageSnowball = plugin.getLangConfig().getString("chatMessageSnowball");
-				MobHealth.spoutEggTitle = plugin.getLangConfig().getString("spoutEggTitle");
-				MobHealth.spoutEggMessage = plugin.getLangConfig().getString("spoutEggMessage");
-				MobHealth.spoutSnowballTitle = plugin.getLangConfig().getString("spoutSnowballTitle");
-				MobHealth.spoutSnowballMessage = plugin.getLangConfig().getString("spoutSnowballMessage");
-
-				String entityName;
-
-				for(String thisEntity : plugin.entityList) {
-					entityName=plugin.getLangConfig().getString("entity"+thisEntity);
-					if (entityName == null ) { 
-						entityName=thisEntity;
+				Boolean doReload = false;
+				
+				if (sender instanceof Player) {
+					if(((sender.hasPermission("MobHealth.command.reload") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+						doReload = true;
+					} else {
+						sender.sendMessage("You do not have permission to reload.");
+						return true;
 					}
-					MobHealth.entityLookup.put((thisEntity), entityName);
-					MobHealth.logger.info(thisEntity+" - "+entityName);
+				} else {
+					doReload = true;
 				}
 
-				if (MobHealth.usePermissions) {
-					MobHealth.logger.info("[" + myName + "] Using Permissions.");
-				} else {
-					MobHealth.logger.info("[" + myName + "] Permissions Disabled.");
+				if (doReload) {
+					plugin.reloadConfig();
+					MobHealth.usePermissions=plugin.getConfig().getBoolean("usePermissions");
+					MobHealth.disableSpout=plugin.getConfig().getBoolean("disableSpout");
+					MobHealth.enableEasterEggs=plugin.getConfig().getBoolean("enableEasterEggs");
+	
+					MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
+					MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
+					MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
+					MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
+					MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
+				
+					plugin.reloadLangConfig();
+					MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
+					MobHealth.eleven = plugin.getLangConfig().getString("eleven");
+					MobHealth.langProfanity = plugin.getLangConfig().getList("profanity");
+					MobHealth.profanityMessage = plugin.getLangConfig().getString("profanityMessage");
+					MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");
+					MobHealth.spoutDamageMessage = plugin.getLangConfig().getString("spoutDamageMessage");
+					MobHealth.spoutDamageTitle = plugin.getLangConfig().getString("spoutDamageTitle");
+					MobHealth.chatKilledMessage = plugin.getLangConfig().getString("chatKilledMessage");
+					MobHealth.spoutKilledMessage = plugin.getLangConfig().getString("spoutKilledMessage");
+	
+					MobHealth.chatMessageEgg = plugin.getLangConfig().getString("chatMessageEgg");
+					MobHealth.chatMessageSnowball = plugin.getLangConfig().getString("chatMessageSnowball");
+					MobHealth.spoutEggTitle = plugin.getLangConfig().getString("spoutEggTitle");
+					MobHealth.spoutEggMessage = plugin.getLangConfig().getString("spoutEggMessage");
+					MobHealth.spoutSnowballTitle = plugin.getLangConfig().getString("spoutSnowballTitle");
+					MobHealth.spoutSnowballMessage = plugin.getLangConfig().getString("spoutSnowballMessage");
+	
+					String entityName;
+	
+					for(String thisEntity : plugin.entityList) {
+						entityName=plugin.getLangConfig().getString("entity"+thisEntity);
+						if (entityName == null ) { 
+							entityName=thisEntity;
+						}
+						MobHealth.entityLookup.put((thisEntity), entityName);
+						MobHealth.logger.info(thisEntity+" - "+entityName);
+					}
+	
+					if (MobHealth.usePermissions) {
+						MobHealth.logger.info("[" + myName + "] Using Permissions.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Permissions Disabled.");
+					}
+					if (MobHealth.disableSpout) {
+						MobHealth.logger.info("[" + myName + "] Spout Disabled.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Spout Enabled.");
+					}
+					if (MobHealth.disablePlayers) {
+						MobHealth.logger.info("[" + myName + "] Player Notifications Disabled.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Player Notifications Enabled.");
+					}
+					if (MobHealth.disableMonsters) {
+						MobHealth.logger.info("[" + myName + "] Monster Notifications Disabled.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Monster Notifications Enabled.");
+					}
+					if (MobHealth.disableAnimals) {
+						MobHealth.logger.info("[" + myName + "] Animals Notifications Disabled.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
+					}
+	
+					if (MobHealth.enableEasterEggs) {
+						MobHealth.logger.info("[" + myName + "] Chat Features Enabled.");
+					}
+					return true;
 				}
-				if (MobHealth.disableSpout) {
-					MobHealth.logger.info("[" + myName + "] Spout Disabled.");
-				} else {
-					MobHealth.logger.info("[" + myName + "] Spout Enabled.");
-				}
-				if (MobHealth.disablePlayers) {
-					MobHealth.logger.info("[" + myName + "] Player Notifications Disabled.");
-				} else {
-					MobHealth.logger.info("[" + myName + "] Player Notifications Enabled.");
-				}
-				if (MobHealth.disableMonsters) {
-					MobHealth.logger.info("[" + myName + "] Monster Notifications Disabled.");
-				} else {
-					MobHealth.logger.info("[" + myName + "] Monster Notifications Enabled.");
-				}
-				if (MobHealth.disableAnimals) {
-					MobHealth.logger.info("[" + myName + "] Animals Notifications Disabled.");
-				} else {
-					MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
-				}
-
-				if (MobHealth.enableEasterEggs) {
-					MobHealth.logger.info("[" + myName + "] Chat Features Enabled.");
-				}
-				return true;
 			}
 		}
 
@@ -111,8 +125,13 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				MobHealth.togglePluginState(other);
 				return true;
 			}
-			Player player = (Player) sender;
-			MobHealth.togglePluginState(player);
+			
+			if(((sender.hasPermission("MobHealth.command.toggle") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+				MobHealth.togglePluginState((Player) sender);
+			} else {
+				sender.sendMessage("You do not have permission to toggle.");
+			}
+			
 			return true;
 		}
 		return false; 

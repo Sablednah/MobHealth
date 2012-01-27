@@ -37,6 +37,7 @@ Disable notifications for 'animal' hits.
     hideNoDammage: false
 Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 
+
 ### Commands
 
 	/MobHealth reload
@@ -45,19 +46,31 @@ Reloads current configuration.
 	/MobHealth toggle [player]
 Toggle notifications. [player] is ignored via chat and mandatory via the console.
 
+
 ### Permissions
+
+	MobHealth.* 
+Wildcard for all ModHealth permissions.
 
 	MobHealth.show
 If usePermissions is true then only players with this node with see damage messages.
 	
-	MobHealth.commands
-Only players with this can use the reload and toggle commands.
-	
-	MobHealth.* 
-Wildcard for all ModHealth permissions.
+	MobHealth.command.*
+Give player all MobHealth commands (and all future commands).
+MobHealth.commands also works for this to allow legacy compatibility.
+
+	MobHealth.command.toggle
+Give player MobHealth toggle command.
+
+	MobHealth.command.reload
+Give player MobHealth reload command.
+
 
 ### Changelog
-2.5:  New bukkit event format.
+
+3.0:  Permissions rewrite.
+
+2.5:  New Bukkit event format.
       Support for Likeaboss Boss entities.  
 
 2.4:  "eleven" message trigger changed to trigger list in lang.yml.  You can now have your own silly phrase trigger whenever you want!
