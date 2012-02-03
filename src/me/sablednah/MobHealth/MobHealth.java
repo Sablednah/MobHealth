@@ -24,6 +24,7 @@ import com.garbagemule.MobArena.MobArenaListener;
 
 
 
+
 public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
@@ -76,7 +77,7 @@ public class MobHealth extends JavaPlugin {
     public static Boolean hasLikeABoss;
     public static Boolean hasMobArena;
     public static int maBossHealthMax = 0;
-    public static MobArenaListener maListener;
+    
     
     @Override
 	public void onDisable() {
@@ -108,6 +109,8 @@ public class MobHealth extends JavaPlugin {
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
 		if (hasMobArena) {
+			@SuppressWarnings("unused")
+			MobArenaListener maListener;
 			maListener = new MobHealthArenaListener();
 		}
 		

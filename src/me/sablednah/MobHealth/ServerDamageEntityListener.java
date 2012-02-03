@@ -84,13 +84,13 @@ public class ServerDamageEntityListener implements Listener {
 								
 								MobArenaHandler maHandler = new MobArenaHandler();
 								Arena arena = maHandler.getArenaWithPlayer(playa);
-								
-								if (arena.isBossWave()) {
-									if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
-										targetHealth=MobHealth.maBossHealthMax;
-									} 
+								if (arena !=null) {
+									if (arena.isBossWave()) {
+										if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
+											targetHealth=MobHealth.maBossHealthMax;
+										} 
+									}
 								}
-								
 							} else {
 								targetHealth=targetMob.getHealth();
 							}
