@@ -67,6 +67,7 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+3.1:  Initial MobArena support.
 
 3.0:  Permissions rewrite.
 
@@ -123,7 +124,7 @@ To Do
     * <del>Damage taken + damage absorbed - e.g. 4(+2) damage.</del>
 * <del>Config option to ignore notifications for 0 damage</del>
 * <del>Exception for eggs and/or snowballs for above option</del>
-* Heroes, MobArea etc. detection/integration
+* Heroes detection/integration
 * Spells damage detection.
 
 
@@ -133,5 +134,5 @@ Known Bugs/Conflicts
 * Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
     * <del>Likeaboss - I have details form the author and I'm working on adding support.</del> Done Thanks bm01
     * Heroes.  Once Heroes for 1.1 is out I'll look over the API.
-    * MobArena.  Again once a 1.1 build is out I'll look over the API.
+    * <del>MobArena.  Again once a 1.1 build is out I'll look over the API.</del>  Initial Suport in place.
 * Spells.  Bukkit have added a damage reason for spell damage now.  Once plugins start using it I will look at reporting spell damage.
