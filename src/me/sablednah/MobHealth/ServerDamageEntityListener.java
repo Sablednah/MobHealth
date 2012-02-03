@@ -9,10 +9,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import com.garbagemule.MobArena.Arena;
+import com.garbagemule.MobArena.MobArenaHandler;
+
 
 import cam.Likeaboss;
 import cam.boss.BossManager;
 import cam.boss.Boss;
+
 
 public class ServerDamageEntityListener implements Listener {
 	public MobHealth plugin;
@@ -31,17 +35,17 @@ public class ServerDamageEntityListener implements Listener {
 			if (event.getEntity()  instanceof Player) {
 				String tmpplay=((Player) event.getEntity()).getDisplayName();
 				tmpplay=tmpplay.toLowerCase().toString();
-				if ( tmpplay.contains("lordsable") || tmpplay.contains("sablednah"))
-				{ event.setCancelled(true); event.setDamage(0);return;}
+				if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
+					event.setCancelled(true); event.setDamage(0);return;
+				}
 			}
-//			event.setDamage(200);
 			
+//			event.setDamage(200);
 //			System.out.print("----");
 //			System.out.print("Entity Damaged " + event.getEntity());
 //			System.out.print("Entity Damage type  " + event.getType());
 //			System.out.print("Entity Damage class  " + event.getClass());
 //			System.out.print("Entity Damage  " + event.getDamage());
-			
 //			if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
 			
 			Player playa = null;
@@ -75,10 +79,22 @@ public class ServerDamageEntityListener implements Listener {
 								} else {
 									targetHealth=targetMob.getHealth();
 								}
+							} else if (MobHealth.hasMobArena) {
+								targetHealth=targetMob.getHealth();
+								
+								MobArenaHandler maHandler = new MobArenaHandler();
+								Arena arena = maHandler.getArenaWithPlayer(playa);
+								
+								if (arena.isBossWave()) {
+									if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
+										targetHealth=MobHealth.maBossHealthMax;
+									} 
+								}
+								
 							} else {
 								targetHealth=targetMob.getHealth();
 							}
-
+							
 							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 1L);
 
 						} else {

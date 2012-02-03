@@ -1,6 +1,6 @@
 /**
  * @author	sable <darren.douglas@gmail.com>
- * @version	1.8
+ * @version	3.1
  * 
  */
 package me.sablednah.MobHealth;
@@ -19,6 +19,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import com.garbagemule.MobArena.MobArenaListener;
 
 
 
@@ -64,17 +66,17 @@ public class MobHealth extends JavaPlugin {
 	private File LangConfigurationFile = null;
     
 	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
-	
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
 
 	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Snowman","Squid","Villager","Wolf" };
 	public static String[] monsterList = { "Blaze","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","PigZombie","SilverFish","Spider" };
-	
-	//public String[] entityList={ "Blaze","Pig","Sheep","Cow","Chicken","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","MushroomCow","PigZombie","SilverFish","Snowman","Spider","Squid","Villager","Wolf" };
 
     public String[] entityList= concat(animalList,monsterList);
 	
     public static Boolean hasLikeABoss;
+    public static Boolean hasMobArena;
+    public static int maBossHealthMax = 0;
+    public static MobArenaListener maListener;
     
     @Override
 	public void onDisable() {
@@ -104,7 +106,12 @@ public class MobHealth extends JavaPlugin {
 		loadConfiguration();
 		
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
-
+		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
+		if (hasMobArena) {
+			maListener = new MobHealthArenaListener();
+		}
+		
+		
 		if (usePermissions) {
 			logger.info("[" + myName + "] Using Permissions.");
 		} else {

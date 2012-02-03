@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/sable/server/craftbukkit-1.1-R1.jar">
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/craftbukkit-1.1-R3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
 		</attributes>
@@ -12,6 +12,7 @@
 			<attribute name="javadoc_location" value="http://jd.spout.org/plugin/latest/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/sable/server/plugins/Likeaboss.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/Likeaboss.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/MobArena.jar" sourcepath="C:/Users/sable/workspace/garbagemule-MobArena-75e97e3.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

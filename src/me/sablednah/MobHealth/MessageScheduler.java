@@ -11,12 +11,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-
 import org.getspout.spoutapi.SpoutManager;
 
+import com.garbagemule.MobArena.Arena;
+import com.garbagemule.MobArena.MobArenaHandler;
+import com.garbagemule.MobArena.waves.BossWave;
+import com.garbagemule.MobArena.waves.Wave;
 import cam.Likeaboss;
 import cam.boss.Boss;
 import cam.boss.BossManager;
+
+
 
 public class MessageScheduler implements Runnable {
 	private Player player;
@@ -54,7 +59,51 @@ public class MessageScheduler implements Runnable {
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
 			}
+			thisBoss = null;
+			BM = null;
+			LaB = null;
 		} 
+
+
+		//Check if player is in a MobArena.
+		if (MobHealth.hasMobArena) {
+			MobArenaHandler maHandler = new MobArenaHandler();
+			Arena arena = maHandler.getArenaWithPlayer(player);
+			
+			if (maHandler != null) {
+				if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
+					isSpecial=true;
+					
+					if (arena.isBossWave()) {
+						BossWave thisWave=(BossWave) arena.getWave();
+						thisDamange = DamageBefore;
+						mobsMaxHealth=MobHealth.maBossHealthMax;
+						mobsHealth=thisWave.getHealth();
+						damageTaken = HealthBefore - mobsHealth;
+						damageResisted=0;
+						
+					} else {
+						Wave thisWave=arena.getWave();
+						mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+						thisDamange = damageEvent.getDamage();
+						mobsHealth = targetMob.getHealth();
+						damageTaken = thisDamange; //HealthBefore - mobsHealth;
+						damageResisted = thisDamange - damageTaken;	
+						
+					}
+					
+//				} else if (targetMob instanceof Player && maHandler.isPlayerInArena((Player) targetMob)) {
+//					isSpecial=true;
+					
+				} else if (maHandler.isPetInArena(targetMob)) {
+					return;  // cancel notification
+					
+				}
+			}
+			arena = null;
+			maHandler = null;
+			
+		}
 
 		// if none of the above special cases for 3rd party plugins apply - get the info 'normally'.
 		if (!isSpecial) {
@@ -63,17 +112,18 @@ public class MessageScheduler implements Runnable {
 			mobsHealth = targetMob.getHealth();
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;
+			
 		}
-		
-/*
+
+		/*
  		System.out.print("--");
  		System.out.print("[MobHealth] " + thisDamange +" thisDamange.");
 		System.out.print("[MobHealth] " + mobsHealth +" mobsHealth.");
 		System.out.print("[MobHealth] " + HealthBefore +" HealthBefore.");
 		System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
 		System.out.print("[MobHealth] " + damageResisted +" damageResisted.");
-*/
-		
+		 */
+
 		String mobtype = new String(targetMob.getClass().getName());
 
 		if (mobtype.indexOf("org.bukkit.craftbukkit.entity.Craft") == -1) {
@@ -108,10 +158,10 @@ public class MessageScheduler implements Runnable {
 		default: //#    1: display damage inflicted.  
 			damageOutput=Integer.toString(thisDamange);
 		}
-		
+
 		Boolean spoutUsed=false;
 		Boolean checkForZeroDamageHide=true;
-		
+
 		if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
 			checkForZeroDamageHide=false;
 		} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
@@ -119,11 +169,11 @@ public class MessageScheduler implements Runnable {
 		} else if ((MobHealth.hideNoDammage&&(damageTaken>0)) || !MobHealth.hideNoDammage) {
 			checkForZeroDamageHide=false;
 		}
-		
-//		if (isPlayer) { System.out.print("Is Player"); } else { System.out.print("Is not Player"); }
-//		if (isAnimal) { System.out.print("Is Animal"); } else { System.out.print("Is not Animal"); }
-//		if (isMonster) { System.out.print("Is Monster"); } else { System.out.print("Is not Monster"); }
-		
+
+		//		if (isPlayer) { System.out.print("Is Player"); } else { System.out.print("Is not Player"); }
+		//		if (isAnimal) { System.out.print("Is Animal"); } else { System.out.print("Is not Animal"); }
+		//		if (isMonster) { System.out.print("Is Monster"); } else { System.out.print("Is not Monster"); }
+
 		if (
 				((MobHealth.disablePlayers&&!isPlayer) || !MobHealth.disablePlayers) 
 				&& 
@@ -132,7 +182,7 @@ public class MessageScheduler implements Runnable {
 				((MobHealth.disableAnimals&&!isAnimal) || !MobHealth.disableAnimals) 
 				&&
 				(!checkForZeroDamageHide)
-			){
+				){
 			if (!MobHealth.disableSpout) {
 				if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 					if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
