@@ -14,5 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/Likeaboss.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/MobArena.jar" sourcepath="C:/Users/sable/workspace/garbagemule-MobArena-75e97e3.zip"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/Heroes.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

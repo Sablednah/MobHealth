@@ -48,6 +48,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
 					MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
 					MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
+					MobHealth.debugMode = plugin.getConfig().getBoolean("debugMode");
 				
 					plugin.reloadLangConfig();
 					MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
@@ -126,13 +127,24 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				MobHealth.togglePluginState(other);
 				return true;
 			}
-			
-			if(((sender.hasPermission("MobHealth.command.toggle") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
-				MobHealth.togglePluginState((Player) sender);
+			if (args.length<2) {
+				if(((sender.hasPermission("MobHealth.command.toggle") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+					MobHealth.togglePluginState((Player) sender);
+				} else {
+					sender.sendMessage("You do not have permission to toggle.");
+				}
 			} else {
-				sender.sendMessage("You do not have permission to toggle.");
+				if(((sender.hasPermission("MobHealth.command.toggle.others") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+					Player other = (Bukkit.getServer().getPlayer(args[1]));
+					if (other == null) {
+						sender.sendMessage(ChatColor.RED + args[1] + " is not online!");
+						return true;
+					}
+					MobHealth.togglePluginState(other);
+				} else {
+					sender.sendMessage("You do not have permission to toggle other players.");
+				}			
 			}
-			
 			return true;
 		}
 		return false; 

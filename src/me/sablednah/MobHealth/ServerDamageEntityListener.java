@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.garbagemule.MobArena.Arena;
 import com.garbagemule.MobArena.MobArenaHandler;
+import com.herocraftonline.dev.heroes.Heroes;
 
 
 import cam.Likeaboss;
@@ -69,19 +70,19 @@ public class ServerDamageEntityListener implements Listener {
 						if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
 							LivingEntity targetMob = (LivingEntity) event.getEntity();
+							
+							targetHealth=targetMob.getHealth();
 
 							if (MobHealth.hasLikeABoss) {
 								Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
 								BossManager BM=LaB.getBossManager();
-								Boss thisBoss = BM.getBoss(targetMob);
-								if(!(thisBoss == null))  {
-									targetHealth=thisBoss.getHealth();
-								} else {
-									targetHealth=targetMob.getHealth();
+								if(BM != null)  {
+									Boss thisBoss = BM.getBoss(targetMob);
+									if(thisBoss != null)  {
+										targetHealth=thisBoss.getHealth();
+									}
 								}
 							} else if (MobHealth.hasMobArena) {
-								targetHealth=targetMob.getHealth();
-								
 								MobArenaHandler maHandler = new MobArenaHandler();
 								Arena arena = maHandler.getArenaWithPlayer(playa);
 								if (arena !=null) {
@@ -91,8 +92,11 @@ public class ServerDamageEntityListener implements Listener {
 										} 
 									}
 								}
-							} else {
-								targetHealth=targetMob.getHealth();
+							} else if (MobHealth.hasHeroes) { //I need a Hero!
+								Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
+								if(heroes != null)  {
+									targetHealth=heroes.getDamageManager().getEntityHealth(targetMob);
+								}
 							}
 							
 							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 1L);

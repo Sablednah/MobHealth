@@ -37,6 +37,8 @@ Disable notifications for 'animal' hits.
     hideNoDammage: false
 Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 
+    debugMode: false
+Enable extra debugging messages in server logs.
 
 ### Commands
 
@@ -62,11 +64,18 @@ MobHealth.commands also works for this to allow legacy compatibility.
 	MobHealth.command.toggle
 Give player MobHealth toggle command.
 
+	MobHealth.command.toggle.others:
+Allows user to toggle others with the MobHealth toggle command.
+
 	MobHealth.command.reload
 Give player MobHealth reload command.
 
 
 ### Changelog
+3.2:  Initial Heroes support.
+      Added debug mode option to config.
+      New permissions node to allow toggling of other players notifications.
+
 3.1:  Initial MobArena support.
 
 3.0:  Permissions rewrite.

@@ -1,6 +1,6 @@
 /**
  * @author	sable <darren.douglas@gmail.com>
- * @version	3.1
+ * @version	3.2
  * 
  */
 package me.sablednah.MobHealth;
@@ -40,6 +40,7 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean disableAnimals;
 	public static int damageDisplayType;
 	public static Boolean hideNoDammage;
+	public static Boolean debugMode;
 	
 	public static List<Object> langProfanity;
 	public static String profanityMessage;
@@ -75,6 +76,7 @@ public class MobHealth extends JavaPlugin {
     public String[] entityList= concat(animalList,monsterList);
 	
     public static Boolean hasLikeABoss;
+    public static Boolean hasHeroes;
     public static Boolean hasMobArena;
     public static int maBossHealthMax = 0;
     
@@ -107,13 +109,13 @@ public class MobHealth extends JavaPlugin {
 		loadConfiguration();
 		
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
+		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
 		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
 		if (hasMobArena) {
 			@SuppressWarnings("unused")
 			MobArenaListener maListener;
 			maListener = new MobHealthArenaListener();
 		}
-		
 		
 		if (usePermissions) {
 			logger.info("[" + myName + "] Using Permissions.");
@@ -188,6 +190,7 @@ public class MobHealth extends JavaPlugin {
         headertext+="    3: display damage inflicted (-amount resisted)\r\n";
         headertext+="    4: display damage taken (+amount resisted)\r\n";
         headertext+="hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.\r\n";
+        headertext+="debugMode: [true|false] Enable extra debug info in logs.\r\n";
         headertext+="\r\n";
         
         getConfig().options().header(headertext);
@@ -203,6 +206,8 @@ public class MobHealth extends JavaPlugin {
 		damageDisplayType = getConfig().getInt("damageDisplayType");
 		
 		hideNoDammage = getConfig().getBoolean("hideNoDammage");
+		
+		debugMode = getConfig().getBoolean("debugMode");
 		
         saveConfig();
    

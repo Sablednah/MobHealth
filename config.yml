@@ -12,7 +12,7 @@
 #    3: display damage inflicted (-amount resisted)
 #    4: display damage taken (+amount resisted)
 # hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
-
+# debugMode: [true|false] Enable extra debugging messages in server logs.
 
 disableSpout: false
 usePermissions: false
@@ -25,3 +25,5 @@ disableAnimals: false
 damageDisplayType: 1
 
 hideNoDammage: false
+
+debugMode: false
