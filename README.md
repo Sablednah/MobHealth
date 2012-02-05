@@ -28,17 +28,18 @@ Disable notifications for 'monster' hits.
     disableAnimals: false
 Disable notifications for 'animal' hits.
 
+    hideNoDammage: false
+Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
+
+    debugMode: false
+Enable extra debugging messages in server logs.
+
     damageDisplayType: [1|2|3|4]
 1. display damage inflicted.  
 2. display damage taken.
 2. display damage inflicted (-amount resisted)
 4. display damage taken (+amount resisted)
 
-    hideNoDammage: false
-Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
-
-    debugMode: false
-Enable extra debugging messages in server logs.
 
 ### Commands
 
