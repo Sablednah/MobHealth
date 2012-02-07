@@ -1,6 +1,6 @@
 name: MobHealth
 main: me.sablednah.MobHealth.MobHealth
-version: 3.2
+version: 3.3
 description: >
              Displays Mob health in chat when damaged by players.
 

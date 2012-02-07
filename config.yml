@@ -2,7 +2,7 @@
 # 
 # disableSpout: [true|false] - force messages to display in chat even if spout is present.
 # usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
-# enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)
+#
 # disablePlayers: [true|false] - disable notifications for player hits.
 # disableMonsters: [true|false] - disable notifications for 'monster' hits.
 # disableAnimals: [true|false] - disable notifications for 'animal' hits.
@@ -16,7 +16,6 @@
 
 disableSpout: false
 usePermissions: false
-enableEasterEggs: true
 
 disablePlayers: false
 disableMonsters: false

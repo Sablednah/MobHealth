@@ -28,13 +28,11 @@ import com.garbagemule.MobArena.MobArenaListener;
 public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
-	public final ServerChatPlayerListener playerListener = new ServerChatPlayerListener(this);
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 	
 	public static Boolean usePermissions;
 	public static Boolean disableSpout;
-	public static Boolean enableEasterEggs;
 	public static Boolean disablePlayers;
 	public static Boolean disableMonsters;
 	public static Boolean disableAnimals;
@@ -42,11 +40,6 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean hideNoDammage;
 	public static Boolean debugMode;
 	
-	public static List<Object> langProfanity;
-	public static String profanityMessage;
-	public static List<Object> langTriggers;
-	public static String eleven;
-
 	public static String chatMessage;
 	public static String chatKilledMessage;
 	public static String chatMessageEgg;
@@ -95,12 +88,7 @@ public class MobHealth extends JavaPlugin {
 		
 		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
 		
-		PluginManager pm = getServer().getPluginManager();
-		
-		//old syntax for events.
-		//pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Normal, this);		
-		//pm.registerEvent(Event.Type.ENTITY_DAMAGE, this.EntityListener, Event.Priority.Lowest, this);
-		pm.registerEvents(this.playerListener, this);		
+		PluginManager pm = getServer().getPluginManager();	
 		pm.registerEvents(this.EntityListener, this);
 		
 		myExecutor = new MobHealthCommandExecutor(this);
@@ -142,9 +130,7 @@ public class MobHealth extends JavaPlugin {
 		} else {
 			logger.info("[" + myName + "] Animals Notifications Enabled.");
 		}
-		if (enableEasterEggs) {
-			logger.info("[" + myName + "] Chat Features Enabled.");
-		}		
+
 		
         /**
          *  Schedule a version check every 6 hours for update notification .
@@ -155,7 +141,8 @@ public class MobHealth extends JavaPlugin {
                 try {
                 	VersionNew = getNewVersion(VersionCurrent);
                     String VersionOld = getDescription().getVersion().substring(0, 3);
-                    if (!VersionNew.contains(VersionOld)) {
+                    //if (!VersionNew.contains(VersionOld)) {
+                    if (Float.parseFloat(VersionNew) > Float.parseFloat(VersionOld)) {
                     	logger.warning(VersionNew + " is available. You're using " + VersionOld);
                     	logger.warning("http://dev.bukkit.org/server-mods/mobhealth/");
                     }
@@ -179,7 +166,6 @@ public class MobHealth extends JavaPlugin {
         headertext="Default MobHealth Config file\r\n\r\n";
         headertext+="disableSpout: [true|false] - force messages to display in chat even if spout is present.\r\n";
         headertext+="usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.\r\n";
-        headertext+="enableEasterEggs: [true|false] - turns on 'extra chat features'.  (Basic Profanity filter - and message when people mention 11/eleven.)\r\n";
         headertext+="\r\n";
         headertext+="disablePlayers: [true|false] - disable notifications for player hits.\r\n";
         headertext+="disableMonsters: [true|false] - disable notifications for 'monster' hits.\r\n";
@@ -198,7 +184,6 @@ public class MobHealth extends JavaPlugin {
  
 		usePermissions = getConfig().getBoolean("usePermissions");
 		disableSpout = getConfig().getBoolean("disableSpout");
-		enableEasterEggs = getConfig().getBoolean("enableEasterEggs");
         
 		disablePlayers = getConfig().getBoolean("disablePlayers");
 		disableMonsters = getConfig().getBoolean("disableMonsters");
@@ -213,10 +198,6 @@ public class MobHealth extends JavaPlugin {
    
         getLangConfig();
 
-        langProfanity = getLangConfig().getList("profanity");
-        profanityMessage = getLangConfig().getString("profanityMessage");
-    	langTriggers = getLangConfig().getList("triggers");
-        eleven = getLangConfig().getString("eleven");
     	chatMessage = getLangConfig().getString("chatMessage");
     	chatKilledMessage = getLangConfig().getString("chatKilledMessage");
     	spoutKilledMessage = getLangConfig().getString("spoutKilledMessage");

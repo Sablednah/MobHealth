@@ -41,7 +41,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					plugin.reloadConfig();
 					MobHealth.usePermissions=plugin.getConfig().getBoolean("usePermissions");
 					MobHealth.disableSpout=plugin.getConfig().getBoolean("disableSpout");
-					MobHealth.enableEasterEggs=plugin.getConfig().getBoolean("enableEasterEggs");
 	
 					MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
 					MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
@@ -51,10 +50,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.debugMode = plugin.getConfig().getBoolean("debugMode");
 				
 					plugin.reloadLangConfig();
-					MobHealth.langTriggers = plugin.getLangConfig().getList("triggers");
-					MobHealth.eleven = plugin.getLangConfig().getString("eleven");
-					MobHealth.langProfanity = plugin.getLangConfig().getList("profanity");
-					MobHealth.profanityMessage = plugin.getLangConfig().getString("profanityMessage");
 					MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");
 					MobHealth.spoutDamageMessage = plugin.getLangConfig().getString("spoutDamageMessage");
 					MobHealth.spoutDamageTitle = plugin.getLangConfig().getString("spoutDamageTitle");
@@ -105,9 +100,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 						MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
 					}
 	
-					if (MobHealth.enableEasterEggs) {
-						MobHealth.logger.info("[" + myName + "] Chat Features Enabled.");
-					}
 					return true;
 				}
 			}

@@ -16,9 +16,6 @@ If true then the permission node MobHealth.show is needed to enable for a player
 	disableSpout: false
 Force messages to display in chat even if spout is detected.
 
-	enableEasterEggs: false
-Turns on 'extra chat features'.  (A Basic profanity filter - and message when people mention trigger keywords.)
-
     disablePlayers: false
 Disable notifications for player hits.
 
@@ -73,6 +70,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+3.3:  Chat features moved to separate plugin.
+      
 3.2:  Initial Heroes support.
       Added debug mode option to config.
       New permissions node to allow toggling of other players notifications.

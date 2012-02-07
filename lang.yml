@@ -12,19 +12,6 @@ spoutKilledMessage: "%N: &4Killed."
 chatMessage:  "&f%N took %D damage.  %H/%M health."
 chatKilledMessage:  "&f%N took %D damage.  &4Killed."
 
-triggers:
-- eleven
-- '11'
-
-eleven: "That's ridiculous, it's not even funny."
-
-profanity:
-- shit
-- fuck
-- piss
-- cunt
-
-profanityMessage: "Oi %N! Mind your language!"
 
 entityPig: Piggy
 entitySheep: Sheep
@@ -33,7 +20,7 @@ entityMushroomCow: MooShroom
 entityChicken: Chicken
 entitySquid: Squid
 entityVillager: Villager
-entitySnowman: Snowman
+entitySnowman: Snow Golem
 entityWolf: Wolf
 
 entityZombie: Zombie
