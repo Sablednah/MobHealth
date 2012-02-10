@@ -67,7 +67,7 @@ public class ServerDamageEntityListener implements Listener {
 				
 				if (playa != null) {	
 					if(MobHealth.getPluginState(playa)){	
-						if((playa.hasPermission("MobHealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+						if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
 							LivingEntity targetMob = (LivingEntity) event.getEntity();
 							
@@ -102,7 +102,7 @@ public class ServerDamageEntityListener implements Listener {
 							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 1L);
 
 						} else {
-							System.out.print("Not allowed - "+playa.hasPermission("MobHealth.show")+" "+MobHealth.usePermissions);
+							System.out.print("Not allowed - "+playa.hasPermission("mobhealth.show")+" "+MobHealth.usePermissions);
 						}
 					}
 				} 

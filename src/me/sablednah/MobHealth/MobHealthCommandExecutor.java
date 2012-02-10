@@ -27,7 +27,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				Boolean doReload = false;
 				
 				if (sender instanceof Player) {
-					if(((sender.hasPermission("MobHealth.command.reload") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+					if(((sender.hasPermission("mobhealth.command.reload") || sender.hasPermission("mobhealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 						doReload = true;
 					} else {
 						sender.sendMessage("You do not have permission to reload.");
@@ -120,13 +120,13 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				return true;
 			}
 			if (args.length<2) {
-				if(((sender.hasPermission("MobHealth.command.toggle") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+				if(((sender.hasPermission("mobhealth.command.toggle") || sender.hasPermission("mobhealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 					MobHealth.togglePluginState((Player) sender);
 				} else {
 					sender.sendMessage("You do not have permission to toggle.");
 				}
 			} else {
-				if(((sender.hasPermission("MobHealth.command.toggle.others") || sender.hasPermission("MobHealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+				if(((sender.hasPermission("mobhealth.command.toggle.others") || sender.hasPermission("mobhealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 					Player other = (Bukkit.getServer().getPlayer(args[1]));
 					if (other == null) {
 						sender.sendMessage(ChatColor.RED + args[1] + " is not online!");

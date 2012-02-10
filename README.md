@@ -49,27 +49,29 @@ Toggle notifications. [player] is ignored via chat and mandatory via the console
 
 ### Permissions
 
-	MobHealth.* 
+	mobhealth.* 
 Wildcard for all ModHealth permissions.
 
-	MobHealth.show
+	mobhealth.show
 If usePermissions is true then only players with this node with see damage messages.
 	
-	MobHealth.command.*
+	mobhealth.command.*
 Give player all MobHealth commands (and all future commands).
 MobHealth.commands also works for this to allow legacy compatibility.
 
-	MobHealth.command.toggle
+	mobhealth.command.toggle
 Give player MobHealth toggle command.
 
-	MobHealth.command.toggle.others:
+	mobhealth.command.toggle.others:
 Allows user to toggle others with the MobHealth toggle command.
 
-	MobHealth.command.reload
+	mobhealth.command.reload
 Give player MobHealth reload command.
 
 
 ### Changelog
+3.4:  Lower case permissions nodes for PermissionsEx Compatability.
+
 3.3:  Chat features moved to separate plugin.
       
 3.2:  Initial Heroes support.

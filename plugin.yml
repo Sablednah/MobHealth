@@ -1,6 +1,6 @@
 name: MobHealth
 main: me.sablednah.MobHealth.MobHealth
-version: 3.3
+version: 3.4
 description: >
              Displays Mob health in chat when damaged by players.
 
@@ -10,32 +10,32 @@ commands:
         usage: /<command> [reload|toggle]
 
 permissions:
-    MobHealth.*:
+    mobhealth.*:
         description: Gives access to all MobHealth commands/functions.
         children:
-            MobHealth.show: true
-            MobHealth.command.*: true
+            mobhealth.show: true
+            mobhealth.command.*: true
 
-    MobHealth.show:
+    mobhealth.show:
         description: Allows user to view damage notifications.
         default: true
 
-    MobHealth.command.*:
+    mobhealth.command.*:
         description: Allows user to use MobHealth commands. (Also MobHealth.commands for legacy support).
         default: op
         children:
-            MobHealth.command.reload: true
-            MobHealth.command.toggle: true
-            MobHealth.command.toggle.others: true
+            mobhealth.command.reload: true
+            mobhealth.command.toggle: true
+            mobhealth.command.toggle.others: true
 
-    MobHealth.command.reload:
+    mobhealth.command.reload:
         description: Allows user to use MobHealth reload command.
         default: op
 
-    MobHealth.command.toggle:
+    mobhealth.command.toggle:
         description: Allows user to use MobHealth toggle command.
         default: true
 
-    MobHealth.command.toggle.others:
+    mobhealth.command.toggle.others:
         description: Allows user to toggle others with the MobHealth toggle command.
         default: op
