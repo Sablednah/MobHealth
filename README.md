@@ -13,8 +13,13 @@ Mob Health now has plenty of options to control how messages are shown,when they
 	usePermissions: false
 If true then the permission node MobHealth.show is needed to enable for a player.
 
+	disableChat: false
+Force messages to display only if spout is detected.
+
 	disableSpout: false
 Force messages to display in chat even if spout is detected.
+
+_Note:_ If both the above are set to true - nothing will ever show!!
 
     disablePlayers: false
 Disable notifications for player hits.
@@ -70,7 +75,7 @@ Give player MobHealth reload command.
 
 
 ### Changelog
-3.4:  Lower case permissions nodes for PermissionsEx Compatability.
+3.4:  Lower case permissions nodes for PermissionsEx Compatibility.
 
 3.3:  Chat features moved to separate plugin.
       

@@ -39,8 +39,10 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 
 				if (doReload) {
 					plugin.reloadConfig();
-					MobHealth.usePermissions=plugin.getConfig().getBoolean("usePermissions");
-					MobHealth.disableSpout=plugin.getConfig().getBoolean("disableSpout");
+					MobHealth.usePermissions = plugin.getConfig().getBoolean("usePermissions");
+					
+					MobHealth.disableSpout = plugin.getConfig().getBoolean("disableSpout");
+					MobHealth.disableChat = plugin.getConfig().getBoolean("disableChat");
 	
 					MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
 					MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
@@ -71,9 +73,14 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 							entityName=thisEntity;
 						}
 						MobHealth.entityLookup.put((thisEntity), entityName);
-						MobHealth.logger.info(thisEntity+" - "+entityName);
+						if (MobHealth.debugMode) {
+							MobHealth.logger.info(thisEntity+" - "+entityName);
+						}
 					}
 	
+					if (MobHealth.debugMode) {
+						MobHealth.logger.info("[" + myName + "] DebugMode enabled.");
+					}
 					if (MobHealth.usePermissions) {
 						MobHealth.logger.info("[" + myName + "] Using Permissions.");
 					} else {

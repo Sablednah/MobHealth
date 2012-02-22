@@ -29,10 +29,12 @@ public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
+	public final HeroesWeaponDamageEventListener HeroesDamageEventListener  = new HeroesWeaponDamageEventListener(this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 	
 	public static Boolean usePermissions;
 	public static Boolean disableSpout;
+	public static Boolean disableChat;
 	public static Boolean disablePlayers;
 	public static Boolean disableMonsters;
 	public static Boolean disableAnimals;
@@ -89,7 +91,6 @@ public class MobHealth extends JavaPlugin {
 		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
 		
 		PluginManager pm = getServer().getPluginManager();	
-		pm.registerEvents(this.EntityListener, this);
 		
 		myExecutor = new MobHealthCommandExecutor(this);
 		getCommand("MobHealth").setExecutor(myExecutor);
@@ -98,13 +99,21 @@ public class MobHealth extends JavaPlugin {
 		
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
+		if (hasHeroes) {
+			pm.registerEvents(this.HeroesDamageEventListener, this);
+		} else {
+			pm.registerEvents(this.EntityListener, this);
+		}
 		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
 		if (hasMobArena) {
 			@SuppressWarnings("unused")
 			MobArenaListener maListener;
 			maListener = new MobHealthArenaListener();
 		}
-		
+
+		if (debugMode) {
+			logger.info("[" + myName + "] DebugMode Enabled.");
+		}
 		if (usePermissions) {
 			logger.info("[" + myName + "] Using Permissions.");
 		} else {
@@ -146,6 +155,7 @@ public class MobHealth extends JavaPlugin {
                     	logger.warning(VersionNew + " is available. You're using " + VersionOld);
                     	logger.warning("http://dev.bukkit.org/server-mods/mobhealth/");
                     }
+                    	
                 } catch (Exception e) {
                     // ignore exceptions
                 }
@@ -165,6 +175,9 @@ public class MobHealth extends JavaPlugin {
         String headertext;
         headertext="Default MobHealth Config file\r\n\r\n";
         headertext+="disableSpout: [true|false] - force messages to display in chat even if spout is present.\r\n";
+        headertext+="disableChat: [true|false] - force messages to display only if spout is present.\r\n";
+        headertext+="setting both these to true will cause no notifications to appear!  \r\n";
+        headertext+="\r\n";
         headertext+="usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.\r\n";
         headertext+="\r\n";
         headertext+="disablePlayers: [true|false] - disable notifications for player hits.\r\n";
@@ -183,8 +196,10 @@ public class MobHealth extends JavaPlugin {
         getConfig().options().copyHeader(true);
  
 		usePermissions = getConfig().getBoolean("usePermissions");
+		
 		disableSpout = getConfig().getBoolean("disableSpout");
-        
+		disableChat = getConfig().getBoolean("disableChat");
+		
 		disablePlayers = getConfig().getBoolean("disablePlayers");
 		disableMonsters = getConfig().getBoolean("disableMonsters");
 		disableAnimals = getConfig().getBoolean("disableAnimals");

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Egg;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -18,6 +19,7 @@ import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.waves.BossWave;
 import com.garbagemule.MobArena.waves.Wave;
 import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.dev.heroes.api.WeaponDamageEvent;
 
 import cam.Likeaboss;
 import cam.boss.Boss;
@@ -28,7 +30,9 @@ import cam.boss.BossManager;
 public class MessageScheduler implements Runnable {
 	private Player player;
 	private EntityDamageByEntityEvent damageEvent;
+	private WeaponDamageEvent weaponDamageEvent;
 	private LivingEntity targetMob;
+	private Entity damagerMob;
 	public MobHealth plugin;
 	private int HealthBefore;
 	private int DamageBefore;
@@ -41,6 +45,17 @@ public class MessageScheduler implements Runnable {
 		this.HealthBefore = HealthBefore;
 		this.DamageBefore = DamageBefore;
 	}
+
+	public MessageScheduler(Player shooter, WeaponDamageEvent weaponDamageEvent, LivingEntity targetMob, int HealthBefore, int DamageBefore, MobHealth plugin) {
+		this.plugin = plugin;
+		this.weaponDamageEvent = weaponDamageEvent;
+		this.player = shooter;
+		this.targetMob = targetMob;
+		this.HealthBefore = HealthBefore;
+		this.DamageBefore = DamageBefore;
+	}
+	
+	
 	public void run() {
 
 		int thisDamange=0, mobsHealth=0, mobsMaxHealth=0, damageTaken=0, damageResisted=0;
@@ -65,24 +80,6 @@ public class MessageScheduler implements Runnable {
 			BM = null;
 			LaB = null;
 		} 
-
-		//I need a Hero!
-		if (MobHealth.hasHeroes) {
-			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
-			isSpecial=true;
-			thisDamange = DamageBefore; //damageEvent.getDamage();
-			mobsMaxHealth = heroes.getDamageManager().getEntityMaxHealth(targetMob);
-			if (targetMob.isDead()) {
-				mobsHealth=HealthBefore-thisDamange;
-			} else {
-				mobsHealth = heroes.getDamageManager().getEntityHealth(targetMob);
-			}
-			damageTaken = HealthBefore - mobsHealth;
-			damageResisted = thisDamange - damageTaken;
-
-			heroes = null;
-		}
-
 		//Check if player is in a MobArena.
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
@@ -103,7 +100,11 @@ public class MessageScheduler implements Runnable {
 					} else {
 						Wave thisWave=arena.getWave();
 						mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
-						thisDamange = damageEvent.getDamage();
+						if (damageEvent != null) {
+							thisDamange = damageEvent.getDamage();
+						} else {
+							thisDamange = weaponDamageEvent.getDamage();
+						}
 						mobsHealth = targetMob.getHealth();
 						damageTaken = thisDamange; //HealthBefore - mobsHealth;
 						damageResisted = thisDamange - damageTaken;	
@@ -115,12 +116,27 @@ public class MessageScheduler implements Runnable {
 
 				} else if (maHandler.isPetInArena(targetMob)) {
 					return;  // cancel notification
-
 				}
 			}
 			arena = null;
 			maHandler = null;
 
+		}
+		//I need a Hero!
+		if (weaponDamageEvent != null) {
+			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
+			isSpecial=true;
+			thisDamange = weaponDamageEvent.getDamage();
+			mobsMaxHealth = heroes.getDamageManager().getEntityMaxHealth(targetMob);
+			if (targetMob.isDead()) {
+				mobsHealth = HealthBefore-thisDamange;
+			} else {
+				mobsHealth = heroes.getDamageManager().getEntityHealth(targetMob);
+			}
+			damageTaken = HealthBefore - mobsHealth;
+			damageResisted = thisDamange - damageTaken;
+			damagerMob = weaponDamageEvent.getDamager();
+			heroes = null;
 		}
 
 		// if none of the above special cases for 3rd party plugins apply - get the info 'normally'.
@@ -130,16 +146,21 @@ public class MessageScheduler implements Runnable {
 			mobsHealth = targetMob.getHealth();
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;
-
+			damagerMob = damageEvent.getDamager();
 		}
 
 		if (MobHealth.debugMode) {
 			System.out.print("--");
+			
+			if (damageEvent != null) { System.out.print("[MobHealth] " + damageEvent.getDamage() +" damageEvent.getDamage();."); }
+			if (weaponDamageEvent != null) { System.out.print("[MobHealth] " + weaponDamageEvent.getDamage() +" weaponDamageEvent.getDamage();."); }
+			System.out.print("[MobHealth] " + DamageBefore +" DamageBefore.");
 			System.out.print("[MobHealth] " + thisDamange +" thisDamange.");
 			System.out.print("[MobHealth] " + mobsHealth +" mobsHealth.");
 			System.out.print("[MobHealth] " + HealthBefore +" HealthBefore.");
 			System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
 			System.out.print("[MobHealth] " + damageResisted +" damageResisted.");
+			System.out.print("[MobHealth] " + targetMob.getLastDamage() +" targetMob.getLastDamage().");
 		}
 
 		String mobtype = new String(targetMob.getClass().getName());
@@ -180,9 +201,9 @@ public class MessageScheduler implements Runnable {
 		Boolean spoutUsed=false;
 		Boolean checkForZeroDamageHide=true;
 
-		if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
+		if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
 			checkForZeroDamageHide=false;
-		} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
+		} else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
 			checkForZeroDamageHide=false;
 		} else if ((MobHealth.hideNoDammage&&(damageTaken>0)) || !MobHealth.hideNoDammage) {
 			checkForZeroDamageHide=false;
@@ -210,10 +231,10 @@ public class MessageScheduler implements Runnable {
 						if (MobHealth.debugMode) { System.out.print("SpoutCraftEnabled"); }
 						String title, message = "";
 						Material icon;
-						if (damageEvent.getDamager() instanceof Projectile) {
-							if (damageEvent.getDamager() instanceof Egg) {
+						if (damagerMob instanceof Projectile) {
+							if (damagerMob instanceof Egg) {
 								icon = Material.getMaterial(344);
-							} else if (damageEvent.getDamager() instanceof Snowball) {
+							} else if (damagerMob instanceof Snowball) {
 								icon = Material.getMaterial(332);
 							} else {
 								icon = Material.getMaterial(261);
@@ -221,9 +242,9 @@ public class MessageScheduler implements Runnable {
 						} else {
 							icon = Material.getMaterial(276);
 						}				
-						if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle")==null))) {
+						if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle")==null))) {
 							title =  plugin.getLangConfig().getString("spoutEggTitle");
-						} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballTitle")==null))) {
+						} else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballTitle")==null))) {
 							title =  plugin.getLangConfig().getString("spoutSnowballTitle");
 						} else {
 							title =  plugin.getLangConfig().getString("spoutDamageTitle");
@@ -237,9 +258,9 @@ public class MessageScheduler implements Runnable {
 							title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByChar(Integer.toHexString(chatcntr)))+"");
 						}
 
-						if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggMessage")==null))) {
+						if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggMessage")==null))) {
 							message =  plugin.getLangConfig().getString("spoutEggMessage");
-						} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballMessage")==null))) {
+						} else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballMessage")==null))) {
 							message =  plugin.getLangConfig().getString("spoutSnowballMessage");
 						} else {
 							if (targetMob.isDead()) {
@@ -263,8 +284,11 @@ public class MessageScheduler implements Runnable {
 							spoutUsed=true;
 							SpoutManager.getPlayer(player).sendNotification(title, message, icon);
 							if (MobHealth.debugMode) { 
+								System.out.print("---");
 								System.out.print("Title: "+title); 
 								System.out.print("Message: "+message); 
+								System.out.print("---");
+								System.out.print(" ");
 							}
 						}
 						catch (UnsupportedOperationException e) {
@@ -282,9 +306,9 @@ public class MessageScheduler implements Runnable {
 
 			if (!spoutUsed) {
 				String ChatMessage;
-				if (damageEvent.getDamager() instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
+				if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
 					ChatMessage =  plugin.getLangConfig().getString("chatMessageEgg");
-				} else if (damageEvent.getDamager() instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
+				} else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball")==null))) {
 					ChatMessage =  plugin.getLangConfig().getString("chatMessageSnowball");
 				} else {
 					if (targetMob.isDead()) {

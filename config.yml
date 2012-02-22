@@ -1,6 +1,9 @@
 # Default MobHealth Config file
 # 
 # disableSpout: [true|false] - force messages to display in chat even if spout is present.
+# disableChat: [true|false] - force messages to display only if spout is present.
+# setting both these to true will cause no notifications to appear!  
+#
 # usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
 #
 # disablePlayers: [true|false] - disable notifications for player hits.
@@ -15,6 +18,8 @@
 # debugMode: [true|false] Enable extra debugging messages in server logs.
 
 disableSpout: false
+disableChat: false
+
 usePermissions: false
 
 disablePlayers: false
@@ -23,6 +28,6 @@ disableAnimals: false
 
 damageDisplayType: 1
 
-hideNoDammage: false
+hideNoDammage: true
 
 debugMode: false

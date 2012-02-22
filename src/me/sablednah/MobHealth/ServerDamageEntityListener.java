@@ -1,5 +1,6 @@
 package me.sablednah.MobHealth;
 
+import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -26,28 +27,36 @@ public class ServerDamageEntityListener implements Listener {
 		this.plugin=instance;
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamage(EntityDamageEvent event){
 		
 		if (!event.isCancelled()) {
 			
 			int targetHealth=0;
 			
-			if (event.getEntity()  instanceof Player) {
+/*
+ 			if (event.getEntity() instanceof Player) {
+ 
 				String tmpplay=((Player) event.getEntity()).getDisplayName();
 				tmpplay=tmpplay.toLowerCase().toString();
 				if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
 					event.setCancelled(true); event.setDamage(0);return;
 				}
 			}
+*/
 			
-//			event.setDamage(200);
-//			System.out.print("----");
-//			System.out.print("Entity Damaged " + event.getEntity());
-//			System.out.print("Entity Damage type  " + event.getType());
-//			System.out.print("Entity Damage class  " + event.getClass());
-//			System.out.print("Entity Damage  " + event.getDamage());
-//			if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
+			if (MobHealth.debugMode) {
+//				event.setDamage(200);
+				System.out.print("----");
+				System.out.print("Entity Damaged " + event.getEntity());
+				System.out.print("Entity getEventName  " + event.getEventName());
+				System.out.print("Entity getHandlerList  " + EntityDamageEvent.getHandlerList());
+				System.out.print("Entity Damage class  " + event.getClass());
+				System.out.print("Entity Damage  " + event.getDamage());
+				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
+			}
+			
+
 			
 			Player playa = null;
 			
@@ -99,10 +108,12 @@ public class ServerDamageEntityListener implements Listener {
 								}
 							}
 							
-							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 1L);
+							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
 
 						} else {
-							System.out.print("Not allowed - "+playa.hasPermission("mobhealth.show")+" "+MobHealth.usePermissions);
+							if (MobHealth.debugMode) {
+								System.out.print("Not allowed - mobhealth.show is "+playa.hasPermission("mobhealth.show")+" - usePermissions set to "+MobHealth.usePermissions);
+							}
 						}
 					}
 				} 
