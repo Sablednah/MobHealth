@@ -65,6 +65,12 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.spoutSnowballTitle = plugin.getLangConfig().getString("spoutSnowballTitle");
 					MobHealth.spoutSnowballMessage = plugin.getLangConfig().getString("spoutSnowballMessage");
 	
+					MobHealth.heroesSkillSpoutDamageTitle = plugin.getLangConfig().getString("heroesSkillSpoutDamageTitle");
+			    	MobHealth.heroesSkillSpoutDamageMessage = plugin.getLangConfig().getString("heroesSkillSpoutDamageMessage");
+			    	MobHealth.heroesSkillSpoutKilledMessage = plugin.getLangConfig().getString("heroesSkillSpoutKilledMessage");
+			    	MobHealth.heroesSkillChatMessage = plugin.getLangConfig().getString("heroesSkillChatMessage");
+			    	MobHealth.heroesSkillChatKilledMessage = plugin.getLangConfig().getString("heroesSkillChatKilledMessage");
+			  
 					String entityName;
 	
 					for(String thisEntity : plugin.entityList) {

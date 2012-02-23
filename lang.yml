@@ -2,8 +2,9 @@
 # Please note the spout title and message must be < 26 characters. So keep them short :)
 # %D is the amount of damage caused.
 # %N is the type of mob or playername.
-# %H is the mobs health 
-# %M is the mobs maxhealth
+# %H is the mobs health.
+# %M is the mobs maxhealth.
+# %S is the name of the Heroes Skill used.
 
 spoutDamageTitle: "&f%D damage."
 spoutDamageMessage: "%N: %H/%M."
@@ -12,6 +13,12 @@ spoutKilledMessage: "%N: &4Killed."
 chatMessage:  "&f%N took %D damage.  %H/%M health."
 chatKilledMessage:  "&f%N took %D damage.  &4Killed."
 
+heroesSkillSpoutDamageTitle: "%S: &f%D damage."
+heroesSkillSpoutDamageMessage: "%N: %H/%M."
+heroesSkillSpoutKilledMessage: "%N: &4Killed."
+
+heroesSkillChatMessage:  "&f%N took %D damage from %S.  %H/%M health."
+heroesSkillChatKilledMessage:  "&f%N took %D damage from %S.  &4Killed."
 
 entityPig: Piggy
 entitySheep: Sheep

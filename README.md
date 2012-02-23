@@ -5,6 +5,8 @@ This is just a simple plugin to let you know the damage you just caused to a mob
 
 Now supports Spout! (_Optional_)
 
+Also Now supports Heroes! (inc. skill usage) (_Optional_)
+
 Mob Health now has plenty of options to control how messages are shown,when they are shown (and more importantly when they are *not* shown), and what is displayed - with your own custom messages.
 
 
@@ -75,6 +77,10 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+3.6:  Heroes Skill Notifications
+
+3.5:  Updated Heroes Code.
+
 3.4:  Lower case permissions nodes for PermissionsEx Compatibility.
 
 3.3:  Chat features moved to separate plugin.

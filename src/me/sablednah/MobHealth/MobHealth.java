@@ -54,6 +54,12 @@ public class MobHealth extends JavaPlugin {
 	public static String spoutEggMessage;
 	public static String spoutSnowballTitle;
 	public static String spoutSnowballMessage;
+
+	public static String heroesSkillSpoutDamageTitle;
+	public static String heroesSkillSpoutDamageMessage;
+	public static String heroesSkillSpoutKilledMessage;
+	public static String heroesSkillChatMessage;
+	public static String heroesSkillChatKilledMessage;
 	
 	private MobHealthCommandExecutor myExecutor;
     private String VersionNew;
@@ -225,6 +231,13 @@ public class MobHealth extends JavaPlugin {
     	spoutEggMessage = getLangConfig().getString("spoutEggMessage");
     	spoutSnowballTitle = getLangConfig().getString("spoutSnowballTitle");
     	spoutSnowballMessage = getLangConfig().getString("spoutSnowballMessage");
+
+    	heroesSkillSpoutDamageTitle = getLangConfig().getString("heroesSkillSpoutDamageTitle");
+    	heroesSkillSpoutDamageMessage = getLangConfig().getString("heroesSkillSpoutDamageMessage");
+    	heroesSkillSpoutKilledMessage = getLangConfig().getString("heroesSkillSpoutKilledMessage");
+    	heroesSkillChatMessage = getLangConfig().getString("heroesSkillChatMessage");
+    	heroesSkillChatKilledMessage = getLangConfig().getString("heroesSkillChatKilledMessage");
+    	
     	
     	String entityName;
     	

@@ -12,8 +12,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.garbagemule.MobArena.Arena;
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.herocraftonline.dev.heroes.Heroes;
-
 
 import cam.Likeaboss;
 import cam.boss.BossManager;
@@ -34,29 +32,15 @@ public class ServerDamageEntityListener implements Listener {
 			
 			int targetHealth=0;
 			
-/*
- 			if (event.getEntity() instanceof Player) {
- 
-				String tmpplay=((Player) event.getEntity()).getDisplayName();
-				tmpplay=tmpplay.toLowerCase().toString();
-				if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
-					event.setCancelled(true); event.setDamage(0);return;
-				}
-			}
-*/
-			
 			if (MobHealth.debugMode) {
 //				event.setDamage(200);
 				System.out.print("----");
 				System.out.print("Entity Damaged " + event.getEntity());
 				System.out.print("Entity getEventName  " + event.getEventName());
-				System.out.print("Entity getHandlerList  " + EntityDamageEvent.getHandlerList());
 				System.out.print("Entity Damage class  " + event.getClass());
 				System.out.print("Entity Damage  " + event.getDamage());
 				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
 			}
-			
-
 			
 			Player playa = null;
 			
@@ -100,11 +84,6 @@ public class ServerDamageEntityListener implements Listener {
 											targetHealth=MobHealth.maBossHealthMax;
 										} 
 									}
-								}
-							} else if (MobHealth.hasHeroes) { //I need a Hero!
-								Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
-								if(heroes != null)  {
-									targetHealth=heroes.getDamageManager().getEntityHealth(targetMob);
 								}
 							}
 							
