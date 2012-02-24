@@ -26,7 +26,7 @@ disablePlayers: false
 disableMonsters: false
 disableAnimals: false
 
-damageDisplayType: 1
+damageDisplayType: 4
 
 hideNoDammage: true
 
