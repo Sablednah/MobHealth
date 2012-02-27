@@ -1,5 +1,7 @@
 package me.sablednah.MobHealth;
 
+import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
+import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,8 +14,10 @@ import cam.Likeaboss;
 import cam.boss.Boss;
 import cam.boss.BossManager;
 
-import com.garbagemule.MobArena.Arena;
+
 import com.garbagemule.MobArena.MobArenaHandler;
+import com.garbagemule.MobArena.framework.Arena;
+import com.garbagemule.MobArena.waves.MABoss;
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.api.*;
 
@@ -64,10 +68,15 @@ public class HeroesWeaponDamageEventListener implements Listener {
 					if(MobHealth.getPluginState(playa)){	
 						if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
-							LivingEntity targetMob = (LivingEntity) event.getEntity();
+							LivingEntity targetMob = null;
 							
+							if (event.getEntity() instanceof ComplexEntityPart) {
+								targetMob = ((ComplexEntityPart) event.getEntity()).getParent();
+							} else if (event.getEntity() instanceof LivingEntity) {
+								targetMob = (LivingEntity) event.getEntity();
+							}
 							targetHealth=targetMob.getHealth();
-
+							
 							if (MobHealth.hasLikeABoss) {
 								Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
 								BossManager BM=LaB.getBossManager();
@@ -81,10 +90,9 @@ public class HeroesWeaponDamageEventListener implements Listener {
 								MobArenaHandler maHandler = new MobArenaHandler();
 								Arena arena = maHandler.getArenaWithPlayer(playa);
 								if (arena !=null) {
-									if (arena.isBossWave()) {
-										if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
-											targetHealth=MobHealth.maBossHealthMax;
-										} 
+									MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+									if (thisBoss != null) {
+										targetHealth=thisBoss.getHealth();
 									}
 								}
 							} else { //I need a Hero!
@@ -138,8 +146,12 @@ public class HeroesWeaponDamageEventListener implements Listener {
 					if(MobHealth.getPluginState(playa)){	
 						if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
-							LivingEntity targetMob = (LivingEntity) event.getEntity();
-							
+							LivingEntity targetMob = null;
+							if (event.getEntity() instanceof ComplexEntityPart) {
+								targetMob = ((CraftEnderDragonPart) event.getEntity()).getParent();
+							} else if (event.getEntity() instanceof LivingEntity) {
+								targetMob = (LivingEntity) event.getEntity();
+							}
 							targetHealth=targetMob.getHealth();
 
 							Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");

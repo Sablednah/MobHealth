@@ -13,9 +13,10 @@ import cam.Likeaboss;
 import cam.boss.Boss;
 import cam.boss.BossManager;
 
-import com.garbagemule.MobArena.Arena;
+
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.garbagemule.MobArena.waves.BossWave;
+import com.garbagemule.MobArena.framework.Arena;
+import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
 
 import com.herocraftonline.dev.heroes.Heroes;
@@ -69,26 +70,30 @@ public class SkillMessageScheduler implements Runnable {
 			MobArenaHandler maHandler = new MobArenaHandler();
 			Arena arena = maHandler.getArenaWithPlayer(player);
 
-			if (maHandler != null) {
+			if (arena != null) {
 				if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
 					isSpecial=true;
 
-					if (arena.isBossWave()) {
-						BossWave thisWave=(BossWave) arena.getWave();
-						thisDamange = DamageBefore;
-						mobsMaxHealth=MobHealth.maBossHealthMax;
-						mobsHealth=thisWave.getHealth();
-						damageTaken = HealthBefore - mobsHealth;
-						damageResisted=0;
-
-					} else {
-						Wave thisWave=arena.getWave();
-						mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
-						thisDamange = skillDamageEvent.getDamage();
-						mobsHealth = targetMob.getHealth();
-						damageTaken = thisDamange; //HealthBefore - mobsHealth;
-						damageResisted = thisDamange - damageTaken;	
-
+					if (arena !=null) {
+						MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+						if (thisBoss != null) {
+							
+							thisDamange = DamageBefore;
+							mobsMaxHealth=thisBoss.getMaxHealth();
+							mobsHealth=thisBoss.getHealth();
+							damageTaken = HealthBefore - mobsHealth;
+							damageResisted=0;
+							
+						} else {
+							
+							Wave thisWave=arena.getWave();
+							mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							thisDamange = skillDamageEvent.getDamage();
+							mobsHealth = targetMob.getHealth();
+							damageTaken = thisDamange; //HealthBefore - mobsHealth;
+							damageResisted = thisDamange - damageTaken;
+							
+						}
 					}
 
 				} else if (maHandler.isPetInArena(targetMob)) {

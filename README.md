@@ -77,6 +77,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+3.7:  Fix Ender Dragon notifications
+
 3.6:  Heroes Skill Notifications
 
 3.5:  Updated Heroes Code.
@@ -144,9 +146,5 @@ To Do
 
 Known Bugs/Conflicts
 ====================
-* Ender Dragon damage not notified. Bukkit have pushed a fix through for 1.1 - working on it now.
+* <del>Ender Dragon damage not notified.</del> Fixed
 * Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
-    * <del>Likeaboss - I have details form the author and I'm working on adding support.</del> Done Thanks bm01
-    * <del>Heroes.  Once Heroes for 1.1 is out I'll look over the API.<del>  Heroes Now supported.
-    * <del>MobArena.  Again once a 1.1 build is out I'll look over the API.</del>  Initial Support in place.
-* Spells.  Bukkit have added a damage reason for spell damage now.  Once plugins start using it I will look at reporting spell damage.

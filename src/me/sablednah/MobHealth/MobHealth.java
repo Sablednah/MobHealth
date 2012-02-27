@@ -20,9 +20,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.garbagemule.MobArena.MobArenaListener;
-
-
 
 
 public class MobHealth extends JavaPlugin {
@@ -79,7 +76,7 @@ public class MobHealth extends JavaPlugin {
     public static Boolean hasLikeABoss;
     public static Boolean hasHeroes;
     public static Boolean hasMobArena;
-    public static int maBossHealthMax = 0;
+
     
     
     @Override
@@ -111,11 +108,6 @@ public class MobHealth extends JavaPlugin {
 			pm.registerEvents(this.EntityListener, this);
 		}
 		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
-		if (hasMobArena) {
-			@SuppressWarnings("unused")
-			MobArenaListener maListener;
-			maListener = new MobHealthArenaListener();
-		}
 
 		if (debugMode) {
 			logger.info("[" + myName + "] DebugMode Enabled.");

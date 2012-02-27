@@ -12,12 +12,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
 import org.getspout.spoutapi.SpoutManager;
 
-import com.garbagemule.MobArena.Arena;
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.garbagemule.MobArena.waves.BossWave;
+import com.garbagemule.MobArena.framework.Arena;
+import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
+
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.api.WeaponDamageEvent;
 
@@ -85,34 +87,35 @@ public class MessageScheduler implements Runnable {
 			MobArenaHandler maHandler = new MobArenaHandler();
 			Arena arena = maHandler.getArenaWithPlayer(player);
 
-			if (maHandler != null) {
+			if (arena != null) {
 				if (targetMob instanceof LivingEntity && maHandler.isMonsterInArena(targetMob)) {
 					isSpecial=true;
 
-					if (arena.isBossWave()) {
-						BossWave thisWave=(BossWave) arena.getWave();
-						thisDamange = DamageBefore;
-						mobsMaxHealth=MobHealth.maBossHealthMax;
-						mobsHealth=thisWave.getHealth();
-						damageTaken = HealthBefore - mobsHealth;
-						damageResisted=0;
-
-					} else {
-						Wave thisWave=arena.getWave();
-						mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
-						if (damageEvent != null) {
-							thisDamange = damageEvent.getDamage();
+					if (arena !=null) {
+						MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+						if (thisBoss != null) {
+							
+							thisDamange = DamageBefore;
+							mobsMaxHealth=thisBoss.getMaxHealth();
+							mobsHealth=thisBoss.getHealth();
+							damageTaken = HealthBefore - mobsHealth;
+							damageResisted=0;
+							
 						} else {
-							thisDamange = weaponDamageEvent.getDamage();
+							
+							Wave thisWave=arena.getWave();
+							mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							if (damageEvent != null) {
+								thisDamange = damageEvent.getDamage();
+							} else {
+								thisDamange = weaponDamageEvent.getDamage();
+							}
+							mobsHealth = targetMob.getHealth();
+							damageTaken = thisDamange; //HealthBefore - mobsHealth;
+							damageResisted = thisDamange - damageTaken;
+							
 						}
-						mobsHealth = targetMob.getHealth();
-						damageTaken = thisDamange; //HealthBefore - mobsHealth;
-						damageResisted = thisDamange - damageTaken;	
-
 					}
-
-					//				} else if (targetMob instanceof Player && maHandler.isPlayerInArena((Player) targetMob)) {
-					//					isSpecial=true;
 
 				} else if (maHandler.isPetInArena(targetMob)) {
 					return;  // cancel notification
