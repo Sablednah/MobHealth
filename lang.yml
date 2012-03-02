@@ -27,8 +27,11 @@ entityMushroomCow: MooShroom
 entityChicken: Chicken
 entitySquid: Squid
 entityVillager: Villager
-entitySnowman: Snow Golem
 entityWolf: Wolf
+entityOcelot: Cat
+entityGolem: Golem
+entitySnowman: Snow Golem
+entityIronGolem: Iron Golem
 
 entityZombie: Zombie
 entityCreeper: Creeper
@@ -39,7 +42,6 @@ entityCaveSpider: Cave Spider
 entityEnderDragon: Ender Dragon
 entityEnderman: Enderman
 entityGiant: Giant
-
 entityPigZombie: Zombie Pigman
 entitySilverFish: silverFish
 entityBlaze: Blaze

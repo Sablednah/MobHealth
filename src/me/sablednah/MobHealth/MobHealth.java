@@ -68,7 +68,7 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
 
-	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Snowman","Squid","Villager","Wolf" };
+	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Golem","IronGolem","Snowman","Squid","Villager","Wolf","Ocelot" };
 	public static String[] monsterList = { "Blaze","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","PigZombie","SilverFish","Spider" };
 
     public String[] entityList= concat(animalList,monsterList);
