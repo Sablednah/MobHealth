@@ -76,7 +76,7 @@ public class MessageScheduler implements Runnable {
 				isSpecial=true;
 				thisDamange = DamageBefore;
 				mobsMaxHealth = targetMob.getMaxHealth();
-				mobsMaxHealth = (int) (thisBoss.getHealthCoef()*mobsMaxHealth);
+				mobsMaxHealth = (int) (thisBoss.getBossData().getHealthCoef()*mobsMaxHealth);
 				mobsHealth = thisBoss.getHealth();
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;

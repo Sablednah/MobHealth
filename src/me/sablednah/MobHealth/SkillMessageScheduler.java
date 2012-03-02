@@ -56,7 +56,7 @@ public class SkillMessageScheduler implements Runnable {
 				isSpecial=true;
 				thisDamange = DamageBefore;
 				mobsMaxHealth = targetMob.getMaxHealth();
-				mobsMaxHealth = (int) (thisBoss.getHealthCoef()*mobsMaxHealth);
+				mobsMaxHealth = (int) (thisBoss.getBossData().getHealthCoef()*mobsMaxHealth);
 				mobsHealth = thisBoss.getHealth();
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
@@ -64,7 +64,8 @@ public class SkillMessageScheduler implements Runnable {
 			thisBoss = null;
 			BM = null;
 			LaB = null;
-		} 
+		}
+		
 		//Check if player is in a MobArena.
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
