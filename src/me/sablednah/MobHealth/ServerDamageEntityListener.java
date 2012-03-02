@@ -1,5 +1,9 @@
 package me.sablednah.MobHealth;
 
+import me.coldandtired.mobs.Main;
+import me.coldandtired.mobs.Mob;
+
+
 import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
@@ -42,8 +46,10 @@ public class ServerDamageEntityListener implements Listener {
 				System.out.print("Entity getEventName  " + event.getEventName());
 				System.out.print("Entity Damage class  " + event.getClass());
 				System.out.print("Entity Damage  " + event.getDamage());
-				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
+				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");				
 			}
+			
+
 			
 			Player playa = null;
 			
@@ -91,6 +97,12 @@ public class ServerDamageEntityListener implements Listener {
 									if (thisBoss != null) {
 										targetHealth=thisBoss.getHealth();
 									}
+								}
+							} else if (MobHealth.hasMobs) {
+								Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
+								Mob mob = mobs.get_mob(targetMob);
+								if (mob != null) {
+									targetHealth=mob.hp;
 								}
 							}
 							

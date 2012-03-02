@@ -91,7 +91,7 @@ public class MobHealth extends JavaPlugin {
 		String myName=pdfFile.getName();
 		VersionCurrent = getDescription().getVersion().substring(0, 3);
 		
-		logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
+		//logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
 		
 		PluginManager pm = getServer().getPluginManager();	
 		
@@ -111,23 +111,20 @@ public class MobHealth extends JavaPlugin {
 		hasMobs  = this.getServer().getPluginManager().isPluginEnabled("Mobs");
 		
 		if (hasLikeABoss) {
-			logger.info("[" + myName + "] Likeaboss Suport Enabled");
+			logger.info("[" + myName + "] Likeaboss Support Enabled");
 		}
 		if (hasMobArena) {
-			logger.info("[" + myName + "] MobArena Suport Enabled");
+			logger.info("[" + myName + "] MobArena Support Enabled");
 		}
 		if (hasHeroes) {
-			logger.info("[" + myName + "] Heroes Suport Enabled");
+			logger.info("[" + myName + "] Heroes Support Enabled");
 		}
 		if (hasMobs) {
-			logger.info("[" + myName + "] Mobs Suport Enabled");
+			logger.info("[" + myName + "] Mobs Support Enabled");
 		}
-
-		
 		if (hasMobArena && hasMobs) {
 			logger.info("[" + myName + "] Using 'Mobs' and 'Heroes' together is NOT recomended by either plugin.");
 		}
-		
 		if (debugMode) {
 			logger.info("[" + myName + "] DebugMode Enabled.");
 		}

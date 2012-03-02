@@ -2,6 +2,9 @@ package me.sablednah.MobHealth;
 
 import java.util.Arrays;
 
+import me.coldandtired.mobs.Main;
+import me.coldandtired.mobs.Mob;
+
 import org.bukkit.Material;
 
 import org.bukkit.ChatColor;
@@ -56,8 +59,8 @@ public class MessageScheduler implements Runnable {
 		this.HealthBefore = HealthBefore;
 		this.DamageBefore = DamageBefore;
 	}
-	
-	
+
+
 	public void run() {
 
 		int thisDamange=0, mobsHealth=0, mobsMaxHealth=0, damageTaken=0, damageResisted=0;
@@ -82,7 +85,8 @@ public class MessageScheduler implements Runnable {
 			BM = null;
 			LaB = null;
 		} 
-		//Check if player is in a MobArena.
+		
+		//Check if target is in a MobArena.
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
 			Arena arena = maHandler.getArenaWithPlayer(player);
@@ -94,15 +98,15 @@ public class MessageScheduler implements Runnable {
 					if (arena !=null) {
 						MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
 						if (thisBoss != null) {
-							
+
 							thisDamange = DamageBefore;
 							mobsMaxHealth=thisBoss.getMaxHealth();
 							mobsHealth=thisBoss.getHealth();
 							damageTaken = HealthBefore - mobsHealth;
 							damageResisted=0;
-							
+
 						} else {
-							
+
 							Wave thisWave=arena.getWave();
 							mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
 							if (damageEvent != null) {
@@ -113,7 +117,7 @@ public class MessageScheduler implements Runnable {
 							mobsHealth = targetMob.getHealth();
 							damageTaken = thisDamange; //HealthBefore - mobsHealth;
 							damageResisted = thisDamange - damageTaken;
-							
+
 						}
 					}
 
@@ -125,6 +129,23 @@ public class MessageScheduler implements Runnable {
 			maHandler = null;
 
 		}
+		
+		//is entity tracked by mob-health.
+		if (MobHealth.hasMobs) {
+			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
+			Mob mob = mobs.get_mob(targetMob);
+			if (mob != null) {
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = mob.max_hp;
+				mobsHealth = mob.hp;
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+			}
+			mob = null;
+			mobs = null;
+		}
+		
 		//I need a Hero!
 		if (weaponDamageEvent != null) {
 			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
@@ -142,6 +163,8 @@ public class MessageScheduler implements Runnable {
 			heroes = null;
 		}
 
+
+
 		// if none of the above special cases for 3rd party plugins apply - get the info 'normally'.
 		if (!isSpecial) {
 			thisDamange = damageEvent.getDamage();
@@ -154,7 +177,7 @@ public class MessageScheduler implements Runnable {
 
 		if (MobHealth.debugMode) {
 			System.out.print("--");
-			
+
 			if (damageEvent != null) { System.out.print("[MobHealth] " + damageEvent.getDamage() +" damageEvent.getDamage();."); }
 			if (weaponDamageEvent != null) { System.out.print("[MobHealth] " + weaponDamageEvent.getDamage() +" weaponDamageEvent.getDamage();."); }
 			System.out.print("[MobHealth] " + DamageBefore +" DamageBefore.");
@@ -217,7 +240,7 @@ public class MessageScheduler implements Runnable {
 			if (isAnimal) { System.out.print("Is Animal"); } else { System.out.print("Is not Animal"); }
 			if (isMonster) { System.out.print("Is Monster"); } else { System.out.print("Is not Monster"); }
 		}
-		
+
 		if (
 				((MobHealth.disablePlayers&&!isPlayer) || !MobHealth.disablePlayers) 
 				&& 
