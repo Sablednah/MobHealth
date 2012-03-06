@@ -1,8 +1,11 @@
 name: MobHealth
+version: 4.0
+description: Displays Mob health in chat when damaged by players.
+author: SableDnah
+website: http://dev.bukkit.org/server-mods/mobhealth/
+
 main: me.sablednah.MobHealth.MobHealth
-version: 3.9
-description: >
-             Displays Mob health in chat when damaged by players.
+softdepend: [ Spout, Heroes, MobArena, Mobs, Likeaboss, Monster Apocalypse ]
 
 commands:
     MobHealth:

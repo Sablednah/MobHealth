@@ -16,6 +16,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import blainicus.MonsterApocalypse.MonsterApocalypse;
+import blainicus.MonsterApocalypse.healthmanager;
+
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
@@ -103,6 +106,12 @@ public class ServerDamageEntityListener implements Listener {
 								Mob mob = mobs.get_mob(targetMob);
 								if (mob != null) {
 									targetHealth=mob.hp;
+								}
+							} else if (MobHealth.hasMA) {
+								MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
+								healthmanager MAHealthManager = ma.getHealthManager();
+								if (MAHealthManager != null) {
+									targetHealth = MAHealthManager.getmobhp(targetMob);
 								}
 							}
 							

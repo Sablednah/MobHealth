@@ -27,6 +27,7 @@ public class MobHealth extends JavaPlugin {
 	public static MobHealth plugin;
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
 	public final HeroesWeaponDamageEventListener HeroesDamageEventListener  = new HeroesWeaponDamageEventListener(this);
+	public final LikeAbossDamageEventListener BossDamageEvent  = new LikeAbossDamageEventListener(this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 	
 	public static Boolean usePermissions;
@@ -77,7 +78,7 @@ public class MobHealth extends JavaPlugin {
     public static Boolean hasHeroes;
     public static Boolean hasMobArena;
     public static Boolean hasMobs;
-    
+    public static Boolean hasMA;
     
     @Override
 	public void onDisable() {
@@ -102,13 +103,19 @@ public class MobHealth extends JavaPlugin {
 		
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
+		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
+		hasMobs  = this.getServer().getPluginManager().isPluginEnabled("Mobs");
+		hasMA  = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
+
+		
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
 		} else {
+			if (hasLikeABoss) {
+				pm.registerEvents(this.BossDamageEvent, this);
+			}
 			pm.registerEvents(this.EntityListener, this);
 		}
-		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
-		hasMobs  = this.getServer().getPluginManager().isPluginEnabled("Mobs");
 		
 		if (hasLikeABoss) {
 			logger.info("[" + myName + "] Likeaboss Support Enabled");
@@ -125,6 +132,10 @@ public class MobHealth extends JavaPlugin {
 		if (hasMobArena && hasMobs) {
 			logger.info("[" + myName + "] Using 'Mobs' and 'Heroes' together is NOT recomended by either plugin.");
 		}
+		if (hasMA) {
+			logger.info("[" + myName + "] Monster Apocalypse Support Enabled");
+		}
+		
 		if (debugMode) {
 			logger.info("[" + myName + "] DebugMode Enabled.");
 		}

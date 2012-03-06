@@ -18,6 +18,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
 
+import blainicus.MonsterApocalypse.MonsterApocalypse;
+import blainicus.MonsterApocalypse.healthmanager;
+
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
@@ -85,7 +88,7 @@ public class MessageScheduler implements Runnable {
 			BM = null;
 			LaB = null;
 		} 
-		
+
 		//Check if target is in a MobArena.
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
@@ -129,7 +132,7 @@ public class MessageScheduler implements Runnable {
 			maHandler = null;
 
 		}
-		
+
 		//is entity tracked by mob-health.
 		if (MobHealth.hasMobs) {
 			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
@@ -145,7 +148,29 @@ public class MessageScheduler implements Runnable {
 			mob = null;
 			mobs = null;
 		}
-		
+
+		//
+		if (MobHealth.hasMA) {
+			MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
+			healthmanager MAHealthManager = ma.getHealthManager();
+
+			if (MAHealthManager != null) { 
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = ma.getMobHealth(targetMob);
+				mobsHealth = MAHealthManager.getmobhp(targetMob);
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+			} else {
+				if (MobHealth.debugMode) {
+					System.out.print("MAHealthManager is null");
+				}
+			}
+			MAHealthManager = null;
+			ma = null;
+		}
+
+
 		//I need a Hero!
 		if (weaponDamageEvent != null) {
 			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
