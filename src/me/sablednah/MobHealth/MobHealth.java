@@ -27,7 +27,6 @@ public class MobHealth extends JavaPlugin {
 	public static MobHealth plugin;
 	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
 	public final HeroesWeaponDamageEventListener HeroesDamageEventListener  = new HeroesWeaponDamageEventListener(this);
-	public final LikeAbossDamageEventListener BossDamageEvent  = new LikeAbossDamageEventListener(this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 	
 	public static Boolean usePermissions;
@@ -111,9 +110,6 @@ public class MobHealth extends JavaPlugin {
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
 		} else {
-			if (hasLikeABoss) {
-				pm.registerEvents(this.BossDamageEvent, this);
-			}
 			pm.registerEvents(this.EntityListener, this);
 		}
 		

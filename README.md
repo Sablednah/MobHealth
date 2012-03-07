@@ -77,6 +77,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.1:  Code Cleanup - remove unused likeaboss event.
+
 4.0:  Updated plugin file - now soft depends supported plugins to load after them.
       Monster Apocalypse support.
 
@@ -154,5 +156,5 @@ To Do
 
 Known Bugs/Conflicts
 ====================
-* <del>Ender Dragon damage not notified.</del> Fixed
-* Plugins that alter mobs health levels usually aren't detected by my plugin.  So far I know the following cause issues.
+
+* Plugins that alter mobs health levels usually aren't detected by my plugin, unless listed above as supported.
