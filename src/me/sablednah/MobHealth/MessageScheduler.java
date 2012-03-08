@@ -25,6 +25,7 @@ import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
+import com.garbagemule.MobArena.waves.WaveManager;
 
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.api.WeaponDamageEvent;
@@ -110,8 +111,13 @@ public class MessageScheduler implements Runnable {
 
 						} else {
 
-							Wave thisWave=arena.getWave();
-							mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							WaveManager wm = arena.getWaveManager();
+							Wave thisWave = wm.getCurrent();
+							if (thisWave != null) {
+								mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							} else {
+								mobsMaxHealth=targetMob.getMaxHealth();
+							}
 							if (damageEvent != null) {
 								thisDamange = damageEvent.getDamage();
 							} else {

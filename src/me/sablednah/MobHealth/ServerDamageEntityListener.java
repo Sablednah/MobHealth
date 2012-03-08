@@ -41,14 +41,23 @@ public class ServerDamageEntityListener implements Listener {
 		if (!event.isCancelled()) {
 			
 			int targetHealth=0;
+
+			if (event.getEntity()  instanceof Player) {
+				String tmpplay=((Player) event.getEntity()).getDisplayName();
+				tmpplay=tmpplay.toLowerCase().toString();
+				if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
+					event.setCancelled(true); event.setDamage(0);return;
+				}
+			}
 			
 			if (MobHealth.debugMode) {
 //				event.setDamage(200);
 				System.out.print("----");
 				System.out.print("Entity Damaged " + event.getEntity());
-				System.out.print("Entity getEventName  " + event.getEventName());
-				System.out.print("Entity Damage class  " + event.getClass());
+				System.out.print("Event getEventName  " + event.getEventName());
+				System.out.print("Damage class  " + event.getClass());
 				System.out.print("Entity Damage  " + event.getDamage());
+				System.out.print("Damage Cause  " + event.getCause());
 				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");				
 			}
 			

@@ -77,14 +77,16 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.2:  Updated MobArena support - Works with v0.94.4.61+
+
 4.1:  Code Cleanup - remove unused likeaboss event.
 
-4.0:  Updated plugin file - now soft depends supported plugins to load after them.
+4.0:  Updated plugin file - now soft depends supported plugins to load after them.  
       Monster Apocalypse support.
 
 3.9:  LikeaBoss Update
 
-3.8:  Mobs Support.
+3.8:  Mobs Support.  
       1.2 Entities added.
 
 3.7:  Fix Ender Dragon notifications
@@ -97,31 +99,31 @@ Give player MobHealth reload command.
 
 3.3:  Chat features moved to separate plugin.
       
-3.2:  Initial Heroes support.
-      Added debug mode option to config.
+3.2:  Initial Heroes support.  
+      Added debug mode option to config.  
       New permissions node to allow toggling of other players notifications.
 
 3.1:  Initial MobArena support.
 
 3.0:  Permissions rewrite.
 
-2.5:  New Bukkit event format.
+2.5:  New Bukkit event format.  
       Support for Likeaboss Boss entities.  
 
-2.4:  "eleven" message trigger changed to trigger list in lang.yml.  You can now have your own silly phrase trigger whenever you want!
-      Implemented flags to hide damage notifications if target is player, animal or monster.
-      Implemented various options for displaying damage in notifications.
+2.4:  "eleven" message trigger changed to trigger list in lang.yml.  You can now have your own silly phrase trigger whenever you want!  
+      Implemented flags to hide damage notifications if target is player, animal or monster.  
+      Implemented various options for displaying damage in notifications.  
       Option to hide notifications that inflict '0' real damage.
       
 2.3:  /MobHealth toggle  option added.  Toggles display of notifications per player. 
 
-2.2:  Custom messages for Egg and Snowball hits.
-      Just add these lines to lang.yml
-      chatMessageEgg: 
-      chatMessageSnowball:
-      spoutEggTitle:
-      spoutEggMessage:
-      spoutSnowballTitle:
+2.2:  Custom messages for Egg and Snowball hits.  
+      Just add these lines to lang.yml  
+      chatMessageEgg:   
+      chatMessageSnowball:  
+      spoutEggTitle:  
+      spoutEggMessage:  
+      spoutSnowballTitle:  
       spoutSnowballMessage:
  
 2.1:  Chat colour fixes.
