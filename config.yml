@@ -4,6 +4,8 @@
 # disableChat: [true|false] - force messages to display only if spout is present.
 # setting both these to true will cause no notifications to appear!  
 #
+# showRPG: [true|false] - show RPG style notification (requires SpoutCraft).
+#
 # usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
 #
 # disablePlayers: [true|false] - disable notifications for player hits.
@@ -19,6 +21,8 @@
 
 disableSpout: false
 disableChat: false
+
+showRPG: false
 
 usePermissions: false
 

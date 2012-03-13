@@ -43,6 +43,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					
 					MobHealth.disableSpout = plugin.getConfig().getBoolean("disableSpout");
 					MobHealth.disableChat = plugin.getConfig().getBoolean("disableChat");
+					MobHealth.showRPG = plugin.getConfig().getBoolean("showRPG");
 	
 					MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
 					MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
@@ -64,6 +65,8 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.spoutEggMessage = plugin.getLangConfig().getString("spoutEggMessage");
 					MobHealth.spoutSnowballTitle = plugin.getLangConfig().getString("spoutSnowballTitle");
 					MobHealth.spoutSnowballMessage = plugin.getLangConfig().getString("spoutSnowballMessage");
+					
+					MobHealth.RPGnotify = plugin.getLangConfig().getString("RPGnotify");
 	
 					MobHealth.heroesSkillSpoutDamageTitle = plugin.getLangConfig().getString("heroesSkillSpoutDamageTitle");
 			    	MobHealth.heroesSkillSpoutDamageMessage = plugin.getLangConfig().getString("heroesSkillSpoutDamageMessage");

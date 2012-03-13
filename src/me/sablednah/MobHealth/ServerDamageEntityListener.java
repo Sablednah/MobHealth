@@ -37,9 +37,9 @@ public class ServerDamageEntityListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamage(EntityDamageEvent event){
-		
+
 		if (!event.isCancelled()) {
-			
+
 			int targetHealth=0;
 
 			if (event.getEntity()  instanceof Player) {
@@ -49,22 +49,9 @@ public class ServerDamageEntityListener implements Listener {
 					event.setCancelled(true); event.setDamage(0);return;
 				}
 			}
-			
-			if (MobHealth.debugMode) {
-//				event.setDamage(200);
-				System.out.print("----");
-				System.out.print("Entity Damaged " + event.getEntity());
-				System.out.print("Event getEventName  " + event.getEventName());
-				System.out.print("Damage class  " + event.getClass());
-				System.out.print("Entity Damage  " + event.getDamage());
-				System.out.print("Damage Cause  " + event.getCause());
-				if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");				
-			}
-			
 
-			
 			Player playa = null;
-			
+
 			if(event instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
 
@@ -74,12 +61,24 @@ public class ServerDamageEntityListener implements Listener {
 						playa = (Player) bullit.getShooter();
 					}
 				}
-				
+
 				if (damageEvent.getDamager() instanceof Player) {
 					playa = (Player) damageEvent.getDamager();
 				}
-				
+
 				if (playa != null) {	
+
+					if (MobHealth.debugMode) {
+						//event.setDamage(200);
+						System.out.print("----");
+						System.out.print("Entity Damaged " + event.getEntity());
+						System.out.print("Event getEventName  " + event.getEventName());
+						System.out.print("Damage class  " + event.getClass());
+						System.out.print("Entity Damage  " + event.getDamage());
+						System.out.print("Damage Cause  " + event.getCause());
+						if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");				
+					}
+
 					if(MobHealth.getPluginState(playa)){	
 						if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
@@ -90,7 +89,7 @@ public class ServerDamageEntityListener implements Listener {
 								targetMob = (LivingEntity) event.getEntity();
 							}
 							targetHealth=targetMob.getHealth();
-							
+
 
 							if (MobHealth.hasLikeABoss) {
 								Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
@@ -123,7 +122,7 @@ public class ServerDamageEntityListener implements Listener {
 									targetHealth = MAHealthManager.getmobhp(targetMob);
 								}
 							}
-							
+
 							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
 
 						} else {

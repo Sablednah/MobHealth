@@ -16,7 +16,17 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import org.getspout.spoutapi.gui.Widget;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.gui.Color;
+import org.getspout.spoutapi.gui.ContainerType;
+import org.getspout.spoutapi.gui.GenericContainer;
+import org.getspout.spoutapi.gui.GenericGradient;
+import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.gui.RenderPriority;
+import org.getspout.spoutapi.gui.WidgetAnchor;
+import org.getspout.spoutapi.gui.WidgetAnim;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 import blainicus.MonsterApocalypse.MonsterApocalypse;
 import blainicus.MonsterApocalypse.healthmanager;
@@ -27,8 +37,8 @@ import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
 import com.garbagemule.MobArena.waves.WaveManager;
 
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.api.WeaponDamageEvent;
+import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.heroes.api.events.*;
 
 import cam.Likeaboss;
 import cam.boss.Boss;
@@ -182,15 +192,16 @@ public class MessageScheduler implements Runnable {
 			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
 			isSpecial=true;
 			thisDamange = weaponDamageEvent.getDamage();
-			mobsMaxHealth = heroes.getDamageManager().getEntityMaxHealth(targetMob);
+			mobsMaxHealth = heroes.getDamageManager().getMaxHealth(targetMob);
 			if (targetMob.isDead()) {
 				mobsHealth = HealthBefore-thisDamange;
 			} else {
-				mobsHealth = heroes.getDamageManager().getEntityHealth(targetMob);
+				mobsHealth = heroes.getDamageManager().getHealth(targetMob);
 			}
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;
-			damagerMob = weaponDamageEvent.getDamager();
+			damagerMob = (Entity) weaponDamageEvent.getDamager().getEntity();
+
 			heroes = null;
 		}
 
@@ -281,11 +292,12 @@ public class MessageScheduler implements Runnable {
 				&&
 				(!checkForZeroDamageHide)
 				){
-			if (!MobHealth.disableSpout) {
+			if (!MobHealth.disableSpout || MobHealth.showRPG) {
 				if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 					if (MobHealth.debugMode) { System.out.print("SpoutPlugin detected"); }
 					if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
 						if (MobHealth.debugMode) { System.out.print("SpoutCraftEnabled"); }
+
 						String title, message = "";
 						Material icon;
 						if (damagerMob instanceof Projectile) {
@@ -337,24 +349,99 @@ public class MessageScheduler implements Runnable {
 						message=message.replaceAll("%D",damageOutput);
 						message=message.replaceAll("%N",mobtype);
 						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
-						try {
-							spoutUsed=true;
-							SpoutManager.getPlayer(player).sendNotification(title, message, icon);
-							if (MobHealth.debugMode) { 
-								System.out.print("---");
-								System.out.print("Title: "+title); 
-								System.out.print("Message: "+message); 
-								System.out.print("---");
-								System.out.print(" ");
+
+						if (!MobHealth.disableSpout) { 
+							try {
+								spoutUsed=true;
+								SpoutManager.getPlayer(player).sendNotification(title, message, icon);
+								if (MobHealth.debugMode) { 
+									System.out.print("---");
+									System.out.print("Title: "+title); 
+									System.out.print("Message: "+message); 
+									System.out.print("---");
+									System.out.print(" ");
+								}
+							}
+							catch (UnsupportedOperationException e) {
+								System.err.println(e.getMessage());
+								if (MobHealth.debugMode) { 
+									System.out.print("Spout error");
+									System.out.print(e.getMessage());
+								}
+								spoutUsed=false;
 							}
 						}
-						catch (UnsupportedOperationException e) {
-							System.err.println(e.getMessage());
-							if (MobHealth.debugMode) { 
-								System.out.print("Spout error");
-								System.out.print(e.getMessage());
+
+						if (MobHealth.showRPG) {
+							spoutUsed=true;
+							try {
+								SpoutPlayer splayer = SpoutManager.getPlayer(player);
+
+								Widget w = MobHealth.getWidget(player);
+
+								if (w!=null){  // remove widget if already onscreen
+									splayer.getMainScreen().removeWidget(w);
+								}
+
+								String rpg = MobHealth.RPGnotify;
+								for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
+									rpg=rpg.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByChar(Integer.toHexString(chatcntr2)))+"");
+								}
+								rpg=rpg.replaceAll("%D",damageOutput);
+								rpg=rpg.replaceAll("%N",mobtype);
+								rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
+								rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
+								
+								Widget damageWidget = new GenericLabel(rpg).setAlign(WidgetAnchor.TOP_CENTER)//
+										.setTextColor(new Color(0.8F, 0.0F, 0, 1.0F))//
+										.setAuto(true).setScale(2F)//
+										.setHeight(20).setWidth(20)//
+										.shiftXPos(-10).shiftYPos(-30)//
+										.setAnchor(WidgetAnchor.CENTER_CENTER)//
+										.animate(WidgetAnim.POS_Y, -4F, (short)60, (short)2, false, false).animateStart();
+
+								MobHealth.putWidget(player,damageWidget);
+								splayer.getMainScreen().attachWidget(plugin, damageWidget);
 							}
-							spoutUsed=false;
+							catch (UnsupportedOperationException e) {
+								System.err.println(e.getMessage());
+								if (MobHealth.debugMode) { 
+									System.out.print("Spout error");
+									System.out.print(e.getMessage());
+								}
+								spoutUsed=false;
+							}
+						}
+
+						if (MobHealth.debugMode) {
+							final SpoutPlayer splayer2 = SpoutManager.getPlayer(player);
+							Widget widget = new GenericLabel(title+" \n"+message).setAlign(WidgetAnchor.BOTTOM_RIGHT).setTextColor(new Color(1.0F, 1.0F, 1.0F, 0.5F));
+							widget.setHeight(30).setWidth(150).setPriority(RenderPriority.Normal);
+							//widget.shiftXPos(-150).shiftYPos(-15);
+							//widget.setAnchor(WidgetAnchor.CENTER_CENTER);
+							widget.animate(WidgetAnim.POS_X, -1F, (short)20, (short)1, false, false).animateStart();
+
+							Widget gradient = new GenericGradient().setTopColor(new Color(0.0F, 0.0F, 0.0F, 1.0F)).setBottomColor(new Color(0.0F, 0.0F, 0.1F, 1.0F));//.setOrientation(Orientation.HORIZONTAL);
+							gradient.setHeight(30).setWidth(150).setPriority(RenderPriority.High).setMargin(0);
+							//gradient.setAnchor(WidgetAnchor.CENTER_CENTER);
+							//gradient.shiftXPos(-145).shiftYPos(-20);
+
+
+							final Widget box = new GenericContainer().setLayout(ContainerType.OVERLAY).setAlign(WidgetAnchor.BOTTOM_CENTER)//
+									.addChildren(gradient, widget).setAnchor(WidgetAnchor.CENTER_RIGHT).shiftXPos(-150).shiftYPos(-15).setHeight(30).setWidth(150);//.setPriority(RenderPriority.Highest);
+
+
+							//splayer2.getMainScreen().attachWidget(plugin,gradient);
+							//splayer2.getMainScreen().attachWidget(plugin,widget);
+							splayer2.getMainScreen().attachWidget(plugin,box);
+
+							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+								public void run() {
+									//splayer2.getMainScreen().removeWidget(widget);
+									//splayer2.getMainScreen().removeWidget(gradient);
+									splayer2.getMainScreen().removeWidget(box);
+								}
+							}, 80L);
 						}
 					}
 				}

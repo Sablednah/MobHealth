@@ -19,9 +19,13 @@ If true then the permission node MobHealth.show is needed to enable for a player
 Force messages to display only if spout is detected.
 
 	disableSpout: false
-Force messages to display in chat even if spout is detected.
+Set to true to disable the achievement notification. 
 
-_Note:_ If both the above are set to true - nothing will ever show!!
+	showRPG: false
+show RPG style notification (requires SpoutCraft).
+
+_Note:_ If disableChat and disableSpout are true and showRPG is false then nothing will ever show!!!
+
 
     disablePlayers: false
 Disable notifications for player hits.
@@ -77,6 +81,9 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.3:  Updates Heroes support - now requires heroes build #1308+   
+      New Feature:  RPG style notifications.
+
 4.2:  Updated MobArena support - Works with v0.94.4.61+
 
 4.1:  Code Cleanup - remove unused likeaboss event.

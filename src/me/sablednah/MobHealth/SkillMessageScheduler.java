@@ -19,8 +19,8 @@ import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
 
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.api.*;
+import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.heroes.api.events.SkillDamageEvent;
 
 public class SkillMessageScheduler implements Runnable {
 
@@ -109,11 +109,11 @@ public class SkillMessageScheduler implements Runnable {
 		if (!isSpecial) {
 			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
 			thisDamange = skillDamageEvent.getDamage();
-			mobsMaxHealth = heroes.getDamageManager().getEntityMaxHealth(targetMob);
+			mobsMaxHealth = heroes.getDamageManager().getMaxHealth(targetMob);
 			if (targetMob.isDead()) {
 				mobsHealth = HealthBefore-thisDamange;
 			} else {
-				mobsHealth = heroes.getDamageManager().getEntityHealth(targetMob);
+				mobsHealth = heroes.getDamageManager().getHealth(targetMob);
 			}
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;

@@ -20,6 +20,8 @@ heroesSkillSpoutKilledMessage: "%N: &4Killed."
 heroesSkillChatMessage:  "&f%N took %D damage from %S.  %H/%M health."
 heroesSkillChatKilledMessage:  "&f%N took %D damage from %S.  &4Killed."
 
+RPGnotify: "%D"
+
 entityPig: Piggy
 entitySheep: Sheep
 entityCow: Cow
