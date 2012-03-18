@@ -88,43 +88,44 @@ public class ServerDamageEntityListener implements Listener {
 							} else if (event.getEntity() instanceof LivingEntity) {
 								targetMob = (LivingEntity) event.getEntity();
 							}
-							targetHealth=targetMob.getHealth();
-
-
-							if (MobHealth.hasLikeABoss) {
-								Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
-								BossManager BM=LaB.getBossManager();
-								if(BM != null)  {
-									Boss thisBoss = BM.getBoss(targetMob);
-									if(thisBoss != null)  {
-										targetHealth=thisBoss.getHealth();
+							if (targetMob!=null) {
+								targetHealth=targetMob.getHealth();
+	
+								
+								if (MobHealth.hasLikeABoss) {
+									Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
+									BossManager BM=LaB.getBossManager();
+									if(BM != null)  {
+										Boss thisBoss = BM.getBoss(targetMob);
+										if(thisBoss != null)  {
+											targetHealth=thisBoss.getHealth();
+										}
+									}
+								} else if (MobHealth.hasMobArena) {
+									MobArenaHandler maHandler = new MobArenaHandler();
+									Arena arena = maHandler.getArenaWithPlayer(playa);
+									if (arena !=null) {
+										MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+										if (thisBoss != null) {
+											targetHealth=thisBoss.getHealth();
+										}
+									}
+								} else if (MobHealth.hasMobs) {
+									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
+									Mob mob = mobs.get_mob(targetMob);
+									if (mob != null) {
+										targetHealth=mob.hp;
+									}
+								} else if (MobHealth.hasMA) {
+									MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
+									healthmanager MAHealthManager = ma.getHealthManager();
+									if (MAHealthManager != null) {
+										targetHealth = MAHealthManager.getmobhp(targetMob);
 									}
 								}
-							} else if (MobHealth.hasMobArena) {
-								MobArenaHandler maHandler = new MobArenaHandler();
-								Arena arena = maHandler.getArenaWithPlayer(playa);
-								if (arena !=null) {
-									MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
-									if (thisBoss != null) {
-										targetHealth=thisBoss.getHealth();
-									}
-								}
-							} else if (MobHealth.hasMobs) {
-								Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-								Mob mob = mobs.get_mob(targetMob);
-								if (mob != null) {
-									targetHealth=mob.hp;
-								}
-							} else if (MobHealth.hasMA) {
-								MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
-								healthmanager MAHealthManager = ma.getHealthManager();
-								if (MAHealthManager != null) {
-									targetHealth = MAHealthManager.getmobhp(targetMob);
-								}
+	
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
 							}
-
-							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
-
 						} else {
 							if (MobHealth.debugMode) {
 								System.out.print("Not allowed - mobhealth.show is "+playa.hasPermission("mobhealth.show")+" - usePermissions set to "+MobHealth.usePermissions);

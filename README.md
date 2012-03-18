@@ -24,7 +24,11 @@ Set to true to disable the achievement notification.
 	showRPG: false
 show RPG style notification (requires SpoutCraft).
 
-_Note:_ If disableChat and disableSpout are true and showRPG is false then nothing will ever show!!!
+	showRPG: false
+show RPG style notification (requires SpoutCraft).
+
+
+_Note:_ If disableChat and disableSpout are true with showRPG and showSideNotification set to false then nothing will ever show!!!
 
 
     disablePlayers: false
@@ -81,6 +85,11 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.5:  Two new display modes - RPG style and side notification.  
+      Heroes support fixes.
+
+4.4:  Added option to change default toggle.
+
 4.3:  Updates Heroes support - now requires heroes build #1308+   
       New Feature:  RPG style notifications.
 

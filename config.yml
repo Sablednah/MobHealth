@@ -6,6 +6,8 @@
 #
 # showRPG: [true|false] - show RPG style notification (requires SpoutCraft).
 #
+# showSideNotification: [true|false] - show side style notification (requires SpoutCraft).
+#
 # usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.
 #
 # disablePlayers: [true|false] - disable notifications for player hits.
@@ -23,6 +25,7 @@ disableSpout: false
 disableChat: false
 
 showRPG: false
+showSideNotification: false
 
 usePermissions: false
 
@@ -33,5 +36,7 @@ disableAnimals: false
 damageDisplayType: 4
 
 hideNoDammage: true
+
+defaultToggle: true
 
 debugMode: false

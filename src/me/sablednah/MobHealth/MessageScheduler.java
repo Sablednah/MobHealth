@@ -19,8 +19,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.getspout.spoutapi.gui.Widget;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.gui.Color;
-import org.getspout.spoutapi.gui.ContainerType;
-import org.getspout.spoutapi.gui.GenericContainer;
 import org.getspout.spoutapi.gui.GenericGradient;
 import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.gui.RenderPriority;
@@ -377,7 +375,7 @@ public class MessageScheduler implements Runnable {
 							try {
 								SpoutPlayer splayer = SpoutManager.getPlayer(player);
 
-								Widget w = MobHealth.getWidget(player);
+								Widget w = MobHealth.getWidget(player,0);
 
 								if (w!=null){  // remove widget if already onscreen
 									splayer.getMainScreen().removeWidget(w);
@@ -391,7 +389,7 @@ public class MessageScheduler implements Runnable {
 								rpg=rpg.replaceAll("%N",mobtype);
 								rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
 								rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
-								
+
 								Widget damageWidget = new GenericLabel(rpg).setAlign(WidgetAnchor.TOP_CENTER)//
 										.setTextColor(new Color(0.8F, 0.0F, 0, 1.0F))//
 										.setAuto(true).setScale(2F)//
@@ -400,8 +398,10 @@ public class MessageScheduler implements Runnable {
 										.setAnchor(WidgetAnchor.CENTER_CENTER)//
 										.animate(WidgetAnim.POS_Y, -4F, (short)60, (short)2, false, false).animateStart();
 
-								MobHealth.putWidget(player,damageWidget);
+								MobHealth.putWidget(player,damageWidget,0);
 								splayer.getMainScreen().attachWidget(plugin, damageWidget);
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 0, damageWidget), 80L);
+								
 							}
 							catch (UnsupportedOperationException e) {
 								System.err.println(e.getMessage());
@@ -414,34 +414,52 @@ public class MessageScheduler implements Runnable {
 						}
 
 						if (MobHealth.debugMode) {
-							final SpoutPlayer splayer2 = SpoutManager.getPlayer(player);
-							Widget widget = new GenericLabel(title+" \n"+message).setAlign(WidgetAnchor.BOTTOM_RIGHT).setTextColor(new Color(1.0F, 1.0F, 1.0F, 0.5F));
-							widget.setHeight(30).setWidth(150).setPriority(RenderPriority.Normal);
-							//widget.shiftXPos(-150).shiftYPos(-15);
-							//widget.setAnchor(WidgetAnchor.CENTER_CENTER);
-							widget.animate(WidgetAnim.POS_X, -1F, (short)20, (short)1, false, false).animateStart();
-
-							Widget gradient = new GenericGradient().setTopColor(new Color(0.0F, 0.0F, 0.0F, 1.0F)).setBottomColor(new Color(0.0F, 0.0F, 0.1F, 1.0F));//.setOrientation(Orientation.HORIZONTAL);
-							gradient.setHeight(30).setWidth(150).setPriority(RenderPriority.High).setMargin(0);
-							//gradient.setAnchor(WidgetAnchor.CENTER_CENTER);
-							//gradient.shiftXPos(-145).shiftYPos(-20);
-
-
-							final Widget box = new GenericContainer().setLayout(ContainerType.OVERLAY).setAlign(WidgetAnchor.BOTTOM_CENTER)//
-									.addChildren(gradient, widget).setAnchor(WidgetAnchor.CENTER_RIGHT).shiftXPos(-150).shiftYPos(-15).setHeight(30).setWidth(150);//.setPriority(RenderPriority.Highest);
-
-
-							//splayer2.getMainScreen().attachWidget(plugin,gradient);
-							//splayer2.getMainScreen().attachWidget(plugin,widget);
-							splayer2.getMainScreen().attachWidget(plugin,box);
-
-							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-								public void run() {
-									//splayer2.getMainScreen().removeWidget(widget);
-									//splayer2.getMainScreen().removeWidget(gradient);
-									splayer2.getMainScreen().removeWidget(box);
+							spoutUsed=true;
+							try {
+								SpoutPlayer splayer2 = SpoutManager.getPlayer(player);
+								
+								Widget g = MobHealth.getWidget(player,1);
+								if (g!=null){  // remove widget if already onscreen
+									splayer2.getMainScreen().removeWidget(g);
 								}
-							}, 80L);
+								Widget m = MobHealth.getWidget(player,2);
+								if (m!=null){  // remove widget if already onscreen
+									splayer2.getMainScreen().removeWidget(m);
+								}								
+								
+								Widget widget = new GenericLabel(title+" \n"+message).setAlign(WidgetAnchor.BOTTOM_RIGHT).setTextColor(new Color(1.0F, 1.0F, 1.0F, 0.5F));
+								widget.setHeight(30).setWidth(150).setPriority(RenderPriority.Normal);
+								widget.shiftXPos(-150).shiftYPos(-15);
+								widget.setAnchor(WidgetAnchor.CENTER_RIGHT);
+								widget.animate(WidgetAnim.POS_X, -1F, (short)20, (short)1, false, false).animateStart();
+
+								Widget gradient = new GenericGradient().setTopColor(new Color(0.0F, 0.0F, 0.0F, 1.0F)).setBottomColor(new Color(0.0F, 0.0F, 0.1F, 1.0F));//.setOrientation(Orientation.HORIZONTAL);
+								gradient.setHeight(30).setWidth(150).setPriority(RenderPriority.High).setMargin(0);
+								gradient.shiftXPos(-145).shiftYPos(-40);
+								gradient.setAnchor(WidgetAnchor.CENTER_RIGHT);
+
+								MobHealth.putWidget(player,widget,2);
+								MobHealth.putWidget(player,gradient,1);
+								
+								splayer2.getMainScreen().attachWidget(plugin,gradient);
+								splayer2.getMainScreen().attachWidget(plugin,widget);
+
+//								System.out.print(gradient.getY());
+//								System.out.print(widget.getY());
+
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 1, gradient), 80L);
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 2, widget), 80L);
+								
+
+							}
+							catch (UnsupportedOperationException e) {
+								System.err.println(e.getMessage());
+								if (MobHealth.debugMode) { 
+									System.out.print("Spout error");
+									System.out.print(e.getMessage());
+								}
+								spoutUsed=false;
+							}
 						}
 					}
 				}

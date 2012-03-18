@@ -50,7 +50,10 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
 					MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
 					MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
+					MobHealth.defaultToggle = plugin.getConfig().getBoolean("defaultToggle");
+					
 					MobHealth.debugMode = plugin.getConfig().getBoolean("debugMode");
+					MobHealth.showSideNotification = plugin.getConfig().getBoolean("showSideNotification");
 				
 					plugin.reloadLangConfig();
 					MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");

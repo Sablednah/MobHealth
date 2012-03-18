@@ -37,11 +37,13 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean disableSpout;
 	public static Boolean disableChat;
 	public static Boolean showRPG;
+	public static Boolean showSideNotification;
 	public static Boolean disablePlayers;
 	public static Boolean disableMonsters;
 	public static Boolean disableAnimals;
 	public static int damageDisplayType;
 	public static Boolean hideNoDammage;
+	public static Boolean defaultToggle;
 	public static Boolean debugMode;
 
 	public static String chatMessage;
@@ -74,6 +76,8 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
 	public static Map<Player, Widget> hesGotAWidget = new HashMap<Player, Widget>();
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
+	public static Map<Player, Widget> hesGotASideWidget = new HashMap<Player, Widget>();
+	public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
 
 
 	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Golem","IronGolem","Snowman","Squid","Villager","Wolf","Ocelot" };
@@ -231,6 +235,7 @@ public class MobHealth extends JavaPlugin {
 		disableSpout = getConfig().getBoolean("disableSpout");
 		disableChat = getConfig().getBoolean("disableChat");
 		showRPG = getConfig().getBoolean("showRPG");
+		showSideNotification = getConfig().getBoolean("showSideNotification");
 		
 		disablePlayers = getConfig().getBoolean("disablePlayers");
 		disableMonsters = getConfig().getBoolean("disableMonsters");
@@ -238,6 +243,8 @@ public class MobHealth extends JavaPlugin {
 		damageDisplayType = getConfig().getInt("damageDisplayType");
 
 		hideNoDammage = getConfig().getBoolean("hideNoDammage");
+		
+		defaultToggle = getConfig().getBoolean("defaultToggle");
 
 		debugMode = getConfig().getBoolean("debugMode");
 
@@ -364,7 +371,7 @@ public class MobHealth extends JavaPlugin {
 		if(pluginEnabled.containsKey(player)){
 			return pluginEnabled.get(player);
 		}
-		return true;
+		return defaultToggle;
 	}
 
 	/**
@@ -381,9 +388,13 @@ public class MobHealth extends JavaPlugin {
 				pluginEnabled.put(player, true);
 				player.sendMessage("Notifications enabled.");
 			}
-		} else {
-			pluginEnabled.put(player, false); //Plugin enabled by default.
-			player.sendMessage("Notifications disabled.");
+		} else { // use defaultToggle
+			pluginEnabled.put(player, !defaultToggle); //Plugin was enabled by default. - now uses defaultToggle
+			if (defaultToggle) {
+				player.sendMessage("Notifications disabled.");
+			} else {
+				player.sendMessage("Notifications enabled.");
+			}
 		}
 	}
 
@@ -393,9 +404,15 @@ public class MobHealth extends JavaPlugin {
 	 * @param Player
 	 * @return widget
 	 */
-	public static Widget getWidget(Player player){	
+	public static Widget getWidget(Player player, int widgetnumber){	
 		if(hesGotAWidget.containsKey(player)){
-			return hesGotAWidget.get(player);
+			if (widgetnumber==2) {
+				return hesGotASideWidget.get(player);
+			} else if (widgetnumber==1) {
+				return hesGotASideGradient.get(player);				
+			} else {
+				return hesGotAWidget.get(player);
+			}
 		}
 		return null;
 	}
@@ -405,8 +422,14 @@ public class MobHealth extends JavaPlugin {
 	 * 
 	 * @param Player Widget
 	 */
-	public static void putWidget(Player player, Widget widget){
-		hesGotAWidget.put(player, widget);
+	public static void putWidget(Player player, Widget widget, int widgetnumber){
+		if (widgetnumber==2) {
+			hesGotASideWidget.put(player, widget);
+		} else if (widgetnumber==1) {
+			hesGotASideGradient.put(player, widget);		
+		} else {
+			hesGotAWidget.put(player, widget);
+		}
 	}
 	
 	/**
@@ -414,9 +437,18 @@ public class MobHealth extends JavaPlugin {
 	 * 
 	 * @param Player
 	 */
-	public static void killWidget(Player player){
-		hesGotAWidget.remove(player);
+	public static void killWidget(Player player, int widgetnumber){
+		if (widgetnumber==2) {
+			hesGotASideWidget.remove(player);
+		} else if (widgetnumber==1) {
+			hesGotASideGradient.remove(player);		
+		} else {
+			hesGotAWidget.remove(player);
+		}
 	}	
+
+	
+	//
 	
 
 	/**
