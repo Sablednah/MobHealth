@@ -413,7 +413,7 @@ public class MessageScheduler implements Runnable {
 							}
 						}
 
-						if (MobHealth.debugMode) {
+						if (MobHealth.showSideNotification) {
 							spoutUsed=true;
 							try {
 								SpoutPlayer splayer2 = SpoutManager.getPlayer(player);
