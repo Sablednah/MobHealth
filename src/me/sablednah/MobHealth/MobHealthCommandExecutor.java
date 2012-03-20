@@ -56,6 +56,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.showSideNotification = plugin.getConfig().getBoolean("showSideNotification");
 				
 					plugin.reloadLangConfig();
+					
 					MobHealth.chatMessage = plugin.getLangConfig().getString("chatMessage");
 					MobHealth.spoutDamageMessage = plugin.getLangConfig().getString("spoutDamageMessage");
 					MobHealth.spoutDamageTitle = plugin.getLangConfig().getString("spoutDamageTitle");

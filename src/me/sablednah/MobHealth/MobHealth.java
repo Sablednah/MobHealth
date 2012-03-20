@@ -78,6 +78,7 @@ public class MobHealth extends JavaPlugin {
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
 	public static Map<Player, Widget> hesGotASideWidget = new HashMap<Player, Widget>();
 	public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
+	public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
 
 
 	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Golem","IronGolem","Snowman","Squid","Villager","Wolf","Ocelot" };
@@ -99,6 +100,8 @@ public class MobHealth extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		plugin = this;
+		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		String myName=pdfFile.getName();
 		VersionCurrent = getDescription().getVersion().substring(0, 3);
@@ -399,22 +402,21 @@ public class MobHealth extends JavaPlugin {
 	}
 
 	/**
-	 * Get widget for a player.
+	 * Get widgets for a player.
 	 * 
 	 * @param Player
 	 * @return widget
 	 */
 	public static Widget getWidget(Player player, int widgetnumber){	
-		if(hesGotAWidget.containsKey(player)){
-			if (widgetnumber==2) {
-				return hesGotASideWidget.get(player);
-			} else if (widgetnumber==1) {
-				return hesGotASideGradient.get(player);				
-			} else {
-				return hesGotAWidget.get(player);
-			}
+		if (widgetnumber==3) {
+			return hesGotASideIcon.get(player);
+		} else if (widgetnumber==2) {
+			return hesGotASideWidget.get(player);
+		} else if (widgetnumber==1) {
+			return hesGotASideGradient.get(player);				
+		} else {
+			return hesGotAWidget.get(player);
 		}
-		return null;
 	}
 
 	/**
@@ -423,7 +425,9 @@ public class MobHealth extends JavaPlugin {
 	 * @param Player Widget
 	 */
 	public static void putWidget(Player player, Widget widget, int widgetnumber){
-		if (widgetnumber==2) {
+		if (widgetnumber==3) {
+			hesGotASideIcon.put(player, widget);
+		} else if (widgetnumber==2) {
 			hesGotASideWidget.put(player, widget);
 		} else if (widgetnumber==1) {
 			hesGotASideGradient.put(player, widget);		
@@ -438,7 +442,9 @@ public class MobHealth extends JavaPlugin {
 	 * @param Player
 	 */
 	public static void killWidget(Player player, int widgetnumber){
-		if (widgetnumber==2) {
+		if (widgetnumber==3) {
+			hesGotASideIcon.remove(player);
+		} else if (widgetnumber==2) {
 			hesGotASideWidget.remove(player);
 		} else if (widgetnumber==1) {
 			hesGotASideGradient.remove(player);		

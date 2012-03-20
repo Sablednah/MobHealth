@@ -2,11 +2,12 @@ package me.sablednah.MobHealth;
 
 import java.util.Arrays;
 
+import me.sablednah.MobHealth.SpoutNotifications;
+
 import me.coldandtired.mobs.Main;
 import me.coldandtired.mobs.Mob;
 
 import org.bukkit.Material;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
@@ -16,15 +17,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import org.getspout.spoutapi.gui.Widget;
 import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.gui.Color;
-import org.getspout.spoutapi.gui.GenericGradient;
-import org.getspout.spoutapi.gui.GenericLabel;
-import org.getspout.spoutapi.gui.RenderPriority;
-import org.getspout.spoutapi.gui.WidgetAnchor;
-import org.getspout.spoutapi.gui.WidgetAnim;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 import blainicus.MonsterApocalypse.MonsterApocalypse;
 import blainicus.MonsterApocalypse.healthmanager;
@@ -290,7 +283,7 @@ public class MessageScheduler implements Runnable {
 				&&
 				(!checkForZeroDamageHide)
 				){
-			if (!MobHealth.disableSpout || MobHealth.showRPG) {
+			if (!MobHealth.disableSpout || MobHealth.showRPG || MobHealth.showSideNotification) {
 				if(player.getServer().getPluginManager().isPluginEnabled("Spout")) {
 					if (MobHealth.debugMode) { System.out.print("SpoutPlugin detected"); }
 					if(SpoutManager.getPlayer(player).isSpoutCraftEnabled()) {
@@ -349,124 +342,31 @@ public class MessageScheduler implements Runnable {
 						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
 
 						if (!MobHealth.disableSpout) { 
-							try {
-								spoutUsed=true;
-								SpoutManager.getPlayer(player).sendNotification(title, message, icon);
-								if (MobHealth.debugMode) { 
-									System.out.print("---");
-									System.out.print("Title: "+title); 
-									System.out.print("Message: "+message); 
-									System.out.print("---");
-									System.out.print(" ");
-								}
-							}
-							catch (UnsupportedOperationException e) {
-								System.err.println(e.getMessage());
-								if (MobHealth.debugMode) { 
-									System.out.print("Spout error");
-									System.out.print(e.getMessage());
-								}
-								spoutUsed=false;
-							}
+							spoutUsed = SpoutNotifications.showAchievement(player, title, message, icon);
 						}
 
 						if (MobHealth.showRPG) {
-							spoutUsed=true;
-							try {
-								SpoutPlayer splayer = SpoutManager.getPlayer(player);
-
-								Widget w = MobHealth.getWidget(player,0);
-
-								if (w!=null){  // remove widget if already onscreen
-									splayer.getMainScreen().removeWidget(w);
-								}
-
-								String rpg = MobHealth.RPGnotify;
-								for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
-									rpg=rpg.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByChar(Integer.toHexString(chatcntr2)))+"");
-								}
-								rpg=rpg.replaceAll("%D",damageOutput);
-								rpg=rpg.replaceAll("%N",mobtype);
-								rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
-								rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
-
-								Widget damageWidget = new GenericLabel(rpg).setAlign(WidgetAnchor.TOP_CENTER)//
-										.setTextColor(new Color(0.8F, 0.0F, 0, 1.0F))//
-										.setAuto(true).setScale(2F)//
-										.setHeight(20).setWidth(20)//
-										.shiftXPos(-10).shiftYPos(-30)//
-										.setAnchor(WidgetAnchor.CENTER_CENTER)//
-										.animate(WidgetAnim.POS_Y, -4F, (short)60, (short)2, false, false).animateStart();
-
-								MobHealth.putWidget(player,damageWidget,0);
-								splayer.getMainScreen().attachWidget(plugin, damageWidget);
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 0, damageWidget), 80L);
-								
+							String rpg = MobHealth.RPGnotify;
+							for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
+								rpg=rpg.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByChar(Integer.toHexString(chatcntr2)))+"");
 							}
-							catch (UnsupportedOperationException e) {
-								System.err.println(e.getMessage());
-								if (MobHealth.debugMode) { 
-									System.out.print("Spout error");
-									System.out.print(e.getMessage());
-								}
-								spoutUsed=false;
-							}
+							rpg=rpg.replaceAll("%D",damageOutput);
+							rpg=rpg.replaceAll("%N",mobtype);
+							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
+							rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
+							
+							spoutUsed = SpoutNotifications.showRPG(player, rpg, icon);
 						}
 
 						if (MobHealth.showSideNotification) {
-							spoutUsed=true;
-							try {
-								SpoutPlayer splayer2 = SpoutManager.getPlayer(player);
-								
-								Widget g = MobHealth.getWidget(player,1);
-								if (g!=null){  // remove widget if already onscreen
-									splayer2.getMainScreen().removeWidget(g);
-								}
-								Widget m = MobHealth.getWidget(player,2);
-								if (m!=null){  // remove widget if already onscreen
-									splayer2.getMainScreen().removeWidget(m);
-								}								
-								
-								Widget widget = new GenericLabel(title+" \n"+message).setAlign(WidgetAnchor.BOTTOM_RIGHT).setTextColor(new Color(1.0F, 1.0F, 1.0F, 0.5F));
-								widget.setHeight(30).setWidth(150).setPriority(RenderPriority.Normal);
-								widget.shiftXPos(-150).shiftYPos(-15);
-								widget.setAnchor(WidgetAnchor.CENTER_RIGHT);
-								widget.animate(WidgetAnim.POS_X, -1F, (short)20, (short)1, false, false).animateStart();
-
-								Widget gradient = new GenericGradient().setTopColor(new Color(0.0F, 0.0F, 0.0F, 1.0F)).setBottomColor(new Color(0.0F, 0.0F, 0.1F, 1.0F));//.setOrientation(Orientation.HORIZONTAL);
-								gradient.setHeight(30).setWidth(150).setPriority(RenderPriority.High).setMargin(0);
-								gradient.shiftXPos(-145).shiftYPos(-40);
-								gradient.setAnchor(WidgetAnchor.CENTER_RIGHT);
-
-								MobHealth.putWidget(player,widget,2);
-								MobHealth.putWidget(player,gradient,1);
-								
-								splayer2.getMainScreen().attachWidget(plugin,gradient);
-								splayer2.getMainScreen().attachWidget(plugin,widget);
-
-//								System.out.print(gradient.getY());
-//								System.out.print(widget.getY());
-
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 1, gradient), 80L);
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new NewWidgitActions(player,  plugin, 2, widget), 80L);
-								
-
-							}
-							catch (UnsupportedOperationException e) {
-								System.err.println(e.getMessage());
-								if (MobHealth.debugMode) { 
-									System.out.print("Spout error");
-									System.out.print(e.getMessage());
-								}
-								spoutUsed=false;
-							}
+							spoutUsed = SpoutNotifications.showSideWidget(player, title, message, icon);
 						}
 					}
 				}
 			}
 
 
-			if (!spoutUsed) {
+			if (!spoutUsed && !MobHealth.disableChat) {
 				String ChatMessage;
 				if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
 					ChatMessage =  plugin.getLangConfig().getString("chatMessageEgg");
