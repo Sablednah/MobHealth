@@ -42,14 +42,18 @@ public class ServerDamageEntityListener implements Listener {
 
 			int targetHealth=0;
 
-			if (event.getEntity()  instanceof Player) {
-				String tmpplay=((Player) event.getEntity()).getDisplayName();
-				tmpplay=tmpplay.toLowerCase().toString();
-				if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
-					event.setCancelled(true); event.setDamage(0);return;
+/*
+			if (MobHealth.debugMode) {
+				if (event.getEntity()  instanceof Player) {
+					String tmpplay=((Player) event.getEntity()).getDisplayName();
+					tmpplay=tmpplay.toLowerCase().toString();
+					if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
+						event.setCancelled(true); event.setDamage(0);return;
+					}
 				}
 			}
-
+*/
+			
 			Player playa = null;
 
 			if(event instanceof EntityDamageByEntityEvent) {
