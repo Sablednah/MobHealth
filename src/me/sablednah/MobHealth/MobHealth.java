@@ -94,6 +94,7 @@ public class MobHealth extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		this.getServer().getScheduler().cancelTasks(this);
 		PluginDescriptionFile pdfFile = this.getDescription();
 		logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
 	}
@@ -185,6 +186,7 @@ public class MobHealth extends JavaPlugin {
 			public void run() {
 				try {
 					VersionNew = getNewVersion(VersionCurrent);
+//					System.out.print("VersionNew: " + VersionNew);
 					String VersionOld = getDescription().getVersion().substring(0, 3);
 					//if (!VersionNew.contains(VersionOld)) {
 						if (Float.parseFloat(VersionNew) > Float.parseFloat(VersionOld)) {
@@ -311,7 +313,9 @@ public class MobHealth extends JavaPlugin {
 			return inStr;
 
 		}
-		catch (Exception localException) {}
+		catch (Exception localException) {
+//			System.out.print("exp: " + localException);
+		}
 		return VersionCurrent;
 	}
 

@@ -16,7 +16,11 @@ public class SpoutNotifications {
 
 		try {
 			spoutUsed=true;
-			SpoutManager.getPlayer(player).sendNotification(title, message, icon);
+			if (icon.getId()==373) {
+				SpoutManager.getPlayer(player).sendNotification(title, message, new ItemStack(icon), 16396);
+			} else {
+				SpoutManager.getPlayer(player).sendNotification(title, message, icon);
+			}
 			if (MobHealth.debugMode) { 
 				System.out.print("---");
 				System.out.print("Title: "+title); 
@@ -62,14 +66,14 @@ public class SpoutNotifications {
 
 			MobHealth.putWidget(player,damageWidget,0);
 			splayer.getMainScreen().attachWidget(MobHealth.plugin, damageWidget);
-			
+
 			if (MobHealth.debugMode) { 
 				System.out.print("MobHealth.plugin: "+MobHealth.plugin);
 				System.out.print("player: "+player);
 				System.out.print("player: "+damageWidget);
-				
+
 			}
-			
+
 			MobHealth.plugin.getServer().getScheduler().scheduleSyncDelayedTask(MobHealth.plugin, new NewWidgitActions(player,  MobHealth.plugin, 0, damageWidget), 80L);
 
 		}
@@ -117,12 +121,12 @@ public class SpoutNotifications {
 			gradient.shiftXPos(-145).shiftYPos(10);  //40
 			gradient.setAnchor(WidgetAnchor.CENTER_RIGHT);
 
-			Widget item = new GenericItemWidget(new ItemStack(icon,1)).setDepth(30);
+			Widget item = new GenericItemWidget(new ItemStack(icon,1)).setDepth(8);
 			item.setHeight(8).setWidth(8).setPriority(RenderPriority.Normal).setMargin(0);
 			item.shiftXPos(-140).shiftYPos(16);  //40
 			item.setAnchor(WidgetAnchor.CENTER_RIGHT);
-			
-			
+
+
 			MobHealth.putWidget(player,item,3);
 			MobHealth.putWidget(player,widget,2);
 			MobHealth.putWidget(player,gradient,1);

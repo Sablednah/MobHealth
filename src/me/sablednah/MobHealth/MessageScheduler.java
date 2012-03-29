@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
+import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
@@ -293,14 +294,20 @@ public class MessageScheduler implements Runnable {
 						Material icon;
 						if (damagerMob instanceof Projectile) {
 							if (damagerMob instanceof Egg) {
-								icon = Material.getMaterial(344);
+								icon = Material.EGG;
 							} else if (damagerMob instanceof Snowball) {
-								icon = Material.getMaterial(332);
-							} else {
-								icon = Material.getMaterial(261);
+								icon = Material.SNOW_BALL;
+							} else if (damagerMob instanceof ThrownPotion) {
+								icon = Material.POTION;
+								//16396 splash damage
+							}else {
+								icon = Material.ARROW;  //arrow
 							}
 						} else {
-							icon = Material.getMaterial(276);
+							icon=player.getItemInHand().getType();
+							if (icon==null || icon==Material.AIR) {
+								icon = Material.STICK; //was diamond sword 276
+							}
 						}				
 						if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle")==null))) {
 							title =  plugin.getLangConfig().getString("spoutEggTitle");

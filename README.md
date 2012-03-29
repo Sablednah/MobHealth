@@ -85,6 +85,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.7:  Display item used to inflict damage in spout notifications.
+
 4.6:  Fixed bugs cause by spout not being available.
 
 4.5:  Two new display modes - RPG style and side notification.  
