@@ -102,7 +102,7 @@ public class MobHealth extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		
+
 		PluginDescriptionFile pdfFile = this.getDescription();
 		String myName=pdfFile.getName();
 		VersionCurrent = getDescription().getVersion().substring(0, 3);
@@ -186,13 +186,13 @@ public class MobHealth extends JavaPlugin {
 			public void run() {
 				try {
 					VersionNew = getNewVersion(VersionCurrent);
-//					System.out.print("VersionNew: " + VersionNew);
-					String VersionOld = getDescription().getVersion().substring(0, 3);
-					//if (!VersionNew.contains(VersionOld)) {
-						if (Float.parseFloat(VersionNew) > Float.parseFloat(VersionOld)) {
-							logger.warning(VersionNew + " is available. You're using " + VersionOld);
-							logger.warning("http://dev.bukkit.org/server-mods/mobhealth/");
-						}
+					//System.out.print("VersionNew: " + VersionNew);
+					String VersionOld = getDescription().getVersion();//.substring(0, 3);
+					if (!VersionNew.contains(VersionOld)) {
+						//if (Float.parseFloat(VersionNew) > Float.parseFloat(VersionOld)) {
+						logger.warning("[MobHealth] " + VersionNew + " is available. You're using " + VersionOld);
+						logger.warning("[MobHealth] http://dev.bukkit.org/server-mods/mobhealth/");
+					}
 
 				} catch (Exception e) {
 					// ignore exceptions
@@ -241,14 +241,14 @@ public class MobHealth extends JavaPlugin {
 		disableChat = getConfig().getBoolean("disableChat");
 		showRPG = getConfig().getBoolean("showRPG");
 		showSideNotification = getConfig().getBoolean("showSideNotification");
-		
+
 		disablePlayers = getConfig().getBoolean("disablePlayers");
 		disableMonsters = getConfig().getBoolean("disableMonsters");
 		disableAnimals = getConfig().getBoolean("disableAnimals");
 		damageDisplayType = getConfig().getInt("damageDisplayType");
 
 		hideNoDammage = getConfig().getBoolean("hideNoDammage");
-		
+
 		defaultToggle = getConfig().getBoolean("defaultToggle");
 
 		debugMode = getConfig().getBoolean("debugMode");
@@ -269,7 +269,7 @@ public class MobHealth extends JavaPlugin {
 		spoutEggMessage = getLangConfig().getString("spoutEggMessage");
 		spoutSnowballTitle = getLangConfig().getString("spoutSnowballTitle");
 		spoutSnowballMessage = getLangConfig().getString("spoutSnowballMessage");
-		
+
 		RPGnotify = getLangConfig().getString("RPGnotify");
 
 		heroesSkillSpoutDamageTitle = getLangConfig().getString("heroesSkillSpoutDamageTitle");
@@ -314,7 +314,7 @@ public class MobHealth extends JavaPlugin {
 
 		}
 		catch (Exception localException) {
-//			System.out.print("exp: " + localException);
+			//			System.out.print("exp: " + localException);
 		}
 		return VersionCurrent;
 	}
@@ -439,7 +439,7 @@ public class MobHealth extends JavaPlugin {
 			hesGotAWidget.put(player, widget);
 		}
 	}
-	
+
 	/**
 	 * remove a widget!
 	 * 
@@ -457,9 +457,9 @@ public class MobHealth extends JavaPlugin {
 		}
 	}	
 
-	
+
 	//
-	
+
 
 	/**
 	 * Joins two arrays
