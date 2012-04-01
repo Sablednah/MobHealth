@@ -34,6 +34,7 @@ import com.herocraftonline.heroes.api.events.*;
 
 import cam.Likeaboss;
 import cam.boss.Boss;
+import cam.boss.BossData;
 import cam.boss.BossManager;
 
 
@@ -73,6 +74,43 @@ public class MessageScheduler implements Runnable {
 		Boolean isPlayer = false, isMonster = false, isAnimal = false, isSpecial =false;
 		String damageOutput;
 
+		//is entity tracked by mob-health.
+		if (MobHealth.hasMobs) {
+			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
+			Mob mob = mobs.get_mob(targetMob);
+			if (mob != null) {
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = mob.max_hp;
+				mobsHealth = mob.hp;
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+			}
+			mob = null;
+			mobs = null;
+		}
+
+		// tracked by MonsterApocalypse
+		if (MobHealth.hasMA) {
+			MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
+			healthmanager MAHealthManager = ma.getHealthManager();
+
+			if (MAHealthManager != null) { 
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = ma.getMobHealth(targetMob);
+				mobsHealth = MAHealthManager.getmobhp(targetMob);
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+			} else {
+				if (MobHealth.debugMode) {
+					System.out.print("MAHealthManager is null");
+				}
+			}
+			MAHealthManager = null;
+			ma = null;
+		}
+
 		// Get health/maxhealth and damage for Likeaboss Boss entities
 		if (MobHealth.hasLikeABoss) {
 			Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
@@ -82,7 +120,10 @@ public class MessageScheduler implements Runnable {
 				isSpecial=true;
 				thisDamange = DamageBefore;
 				mobsMaxHealth = targetMob.getMaxHealth();
-				mobsMaxHealth = (int) (thisBoss.getBossData().getHealthCoef()*mobsMaxHealth);
+				BossData bd = thisBoss.getBossData();
+				double hc = bd.getHealthCoef();
+				//thisBoss.getBossData().getHealthCoef()
+				mobsMaxHealth = (int) (hc*mobsMaxHealth);
 				mobsHealth = thisBoss.getHealth();
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
@@ -141,43 +182,6 @@ public class MessageScheduler implements Runnable {
 
 		}
 
-		//is entity tracked by mob-health.
-		if (MobHealth.hasMobs) {
-			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-			Mob mob = mobs.get_mob(targetMob);
-			if (mob != null) {
-				isSpecial=true;
-				thisDamange = DamageBefore;
-				mobsMaxHealth = mob.max_hp;
-				mobsHealth = mob.hp;
-				damageTaken = HealthBefore - mobsHealth;
-				damageResisted = thisDamange - damageTaken;
-			}
-			mob = null;
-			mobs = null;
-		}
-
-		//
-		if (MobHealth.hasMA) {
-			MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
-			healthmanager MAHealthManager = ma.getHealthManager();
-
-			if (MAHealthManager != null) { 
-				isSpecial=true;
-				thisDamange = DamageBefore;
-				mobsMaxHealth = ma.getMobHealth(targetMob);
-				mobsHealth = MAHealthManager.getmobhp(targetMob);
-				damageTaken = HealthBefore - mobsHealth;
-				damageResisted = thisDamange - damageTaken;
-			} else {
-				if (MobHealth.debugMode) {
-					System.out.print("MAHealthManager is null");
-				}
-			}
-			MAHealthManager = null;
-			ma = null;
-		}
-
 
 		//I need a Hero!
 		if (weaponDamageEvent != null) {
@@ -217,6 +221,7 @@ public class MessageScheduler implements Runnable {
 			System.out.print("[MobHealth] " + DamageBefore +" DamageBefore.");
 			System.out.print("[MobHealth] " + thisDamange +" thisDamange.");
 			System.out.print("[MobHealth] " + mobsHealth +" mobsHealth.");
+			System.out.print("[MobHealth] " + mobsMaxHealth +" mobsMaxHealth.");
 			System.out.print("[MobHealth] " + HealthBefore +" HealthBefore.");
 			System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
 			System.out.print("[MobHealth] " + damageResisted +" damageResisted.");

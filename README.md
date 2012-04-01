@@ -85,6 +85,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.7.2:  Mobs and LikeABoss updates.  
+
 4.7.1:  Swap to grownup version numbering system :)   
         Corrected Version number.
         

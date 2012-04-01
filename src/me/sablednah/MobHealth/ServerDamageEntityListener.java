@@ -53,7 +53,7 @@ public class ServerDamageEntityListener implements Listener {
 				}
 			}
 
-			
+
 			Player playa = null;
 
 			if(event instanceof EntityDamageByEntityEvent) {
@@ -94,27 +94,8 @@ public class ServerDamageEntityListener implements Listener {
 							}
 							if (targetMob!=null) {
 								targetHealth=targetMob.getHealth();
-	
-								
-								if (MobHealth.hasLikeABoss) {
-									Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
-									BossManager BM=LaB.getBossManager();
-									if(BM != null)  {
-										Boss thisBoss = BM.getBoss(targetMob);
-										if(thisBoss != null)  {
-											targetHealth=thisBoss.getHealth();
-										}
-									}
-								} else if (MobHealth.hasMobArena) {
-									MobArenaHandler maHandler = new MobArenaHandler();
-									Arena arena = maHandler.getArenaWithPlayer(playa);
-									if (arena !=null) {
-										MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
-										if (thisBoss != null) {
-											targetHealth=thisBoss.getHealth();
-										}
-									}
-								} else if (MobHealth.hasMobs) {
+
+								if (MobHealth.hasMobs) {
 									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
 									Mob mob = mobs.get_mob(targetMob);
 									if (mob != null) {
@@ -127,7 +108,26 @@ public class ServerDamageEntityListener implements Listener {
 										targetHealth = MAHealthManager.getmobhp(targetMob);
 									}
 								}
-	
+								if (MobHealth.hasLikeABoss) {
+									Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
+									BossManager BM=LaB.getBossManager();
+									if(BM != null)  {
+										Boss thisBoss = BM.getBoss(targetMob);
+										if(thisBoss != null)  {
+											targetHealth=thisBoss.getHealth();
+										}
+									}
+								} 
+								if (MobHealth.hasMobArena) {
+									MobArenaHandler maHandler = new MobArenaHandler();
+									Arena arena = maHandler.getArenaWithPlayer(playa);
+									if (arena !=null) {
+										MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+										if (thisBoss != null) {
+											targetHealth=thisBoss.getHealth();
+										}
+									}
+								} 	
 								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
 							}
 						} else {
