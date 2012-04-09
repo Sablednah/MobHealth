@@ -24,13 +24,13 @@ import org.bukkit.entity.Player;
 
 import org.getspout.spoutapi.gui.Widget;
 
-
-
 public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
-	public final ServerDamageEntityListener EntityListener  = new ServerDamageEntityListener(this);
-	public final HeroesEventListener HeroesDamageEventListener  = new HeroesEventListener(this);
+	public final ServerDamageEntityListener EntityListener = new ServerDamageEntityListener(
+			this);
+	public final HeroesEventListener HeroesDamageEventListener = new HeroesEventListener(
+			this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 
 	public static Boolean usePermissions;
@@ -73,18 +73,25 @@ public class MobHealth extends JavaPlugin {
 	private FileConfiguration LangConfig = null;
 	private File LangConfigurationFile = null;
 
-	public static Map<Player, Boolean> pluginEnabled = new HashMap<Player, Boolean>();
+	public static FileConfiguration PlayerConfig = null;
+	public static File PlayerConfigurationFile = null;
+	
+	public static Map<Player, Boolean> pluginEnabled = null;
 	public static Map<Player, Widget> hesGotAWidget = new HashMap<Player, Widget>();
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
 	public static Map<Player, Widget> hesGotASideWidget = new HashMap<Player, Widget>();
 	public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
 	public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
 
+	public static String[] animalList = { "Pig", "Sheep", "Cow", "Chicken",
+			"MushroomCow", "Golem", "IronGolem", "Snowman", "Squid",
+			"Villager", "Wolf", "Ocelot" };
+	public static String[] monsterList = { "Blaze", "Zombie", "Creeper",
+			"Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider",
+			"EnderDragon", "EnderMan", "Giant", "PigZombie", "SilverFish",
+			"Spider" };
 
-	public static String[] animalList = { "Pig","Sheep","Cow","Chicken","MushroomCow","Golem","IronGolem","Snowman","Squid","Villager","Wolf","Ocelot" };
-	public static String[] monsterList = { "Blaze","Zombie","Creeper","Skeleton","Spider","Ghast","MagmaCube","Slime","CaveSpider","EnderDragon","EnderMan","Giant","PigZombie","SilverFish","Spider" };
-
-	public String[] entityList= concat(animalList,monsterList);
+	public String[] entityList = concat(animalList, monsterList);
 
 	public static Boolean hasLikeABoss;
 	public static Boolean hasHeroes;
@@ -104,12 +111,13 @@ public class MobHealth extends JavaPlugin {
 		plugin = this;
 
 		PluginDescriptionFile pdfFile = this.getDescription();
-		String myName=pdfFile.getName();
-		VersionCurrent = getDescription().getVersion().substring(0, 3);
+		String myName = pdfFile.getName();
+		VersionCurrent = getDescription().getVersion();
 
-		//logger.info("[" + myName + "] Version " + pdfFile.getVersion() + " starting.");
+		// logger.info("[" + myName + "] Version " + pdfFile.getVersion() +
+		// " starting.");
 
-		PluginManager pm = getServer().getPluginManager();	
+		PluginManager pm = getServer().getPluginManager();
 
 		myExecutor = new MobHealthCommandExecutor(this);
 		getCommand("MobHealth").setExecutor(myExecutor);
@@ -118,10 +126,9 @@ public class MobHealth extends JavaPlugin {
 
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
-		hasMobArena  = this.getServer().getPluginManager().isPluginEnabled("MobArena");
-		hasMobs  = this.getServer().getPluginManager().isPluginEnabled("Mobs");
-		hasMA  = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
-
+		hasMobArena = this.getServer().getPluginManager().isPluginEnabled("MobArena");
+		hasMobs = this.getServer().getPluginManager().isPluginEnabled("Mobs");
+		hasMA = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
 
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
@@ -177,60 +184,57 @@ public class MobHealth extends JavaPlugin {
 			logger.info("[" + myName + "] Animals Notifications Enabled.");
 		}
 
-
 		/**
-		 *  Schedule a version check every 6 hours for update notification .
+		 * Schedule a version check every 6 hours for update notification .
 		 */
-		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-			@Override
-			public void run() {
-				try {
-					VersionNew = getNewVersion(VersionCurrent);
-					//System.out.print("VersionNew: " + VersionNew);
-					String VersionOld = getDescription().getVersion();//.substring(0, 3);
-					if (!VersionNew.contains(VersionOld)) {
-						//if (Float.parseFloat(VersionNew) > Float.parseFloat(VersionOld)) {
-						logger.warning("[MobHealth] " + VersionNew + " is available. You're using " + VersionOld);
-						logger.warning("[MobHealth] http://dev.bukkit.org/server-mods/mobhealth/");
-					}
+		this.getServer().getScheduler()
+				.scheduleAsyncRepeatingTask(this, new Runnable() {
+					@Override
+					public void run() {
+						try {
+							VersionNew = getNewVersion(VersionCurrent);
+							String VersionOld = getDescription().getVersion();
+							if (!VersionNew.contains(VersionOld)) {
+								logger.warning("[MobHealth] " + VersionNew + " is available. You're using " + VersionOld);
+								logger.warning("[MobHealth] http://dev.bukkit.org/server-mods/mobhealth/");
+							}
 
-				} catch (Exception e) {
-					// ignore exceptions
-				}
-			}
-		}, 0, 5184000);
+						} catch (Exception e) {
+							// ignore exceptions
+						}
+					}
+				}, 0, 5184000);
 
 		logger.info("[" + myName + "] Online.");
 	}
 
-
 	/**
-	 * Initialise config file 
+	 * Initialise config file
 	 */
 	public void loadConfiguration() {
 		getConfig().options().copyDefaults(true);
 
 		String headertext;
-		headertext="Default MobHealth Config file\r\n\r\n";
-		headertext+="disableSpout: [true|false] - force messages to display in chat even if spout is present.\r\n";
-		headertext+="disableChat: [true|false] - force messages to display only if spout is present.\r\n";
-		headertext+="setting both these to true will cause no notifications to appear!  \r\n";
-		headertext+="\r\n";
-		headertext+="showRPG: [true|false] - show RPG style notification (requires SpoutCraft).\r\n";
-		headertext+="\r\n";
-		headertext+="usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.\r\n";
-		headertext+="\r\n";
-		headertext+="disablePlayers: [true|false] - disable notifications for player hits.\r\n";
-		headertext+="disableMonsters: [true|false] - disable notifications for 'monster' hits.\r\n";
-		headertext+="disableAnimals: [true|false] - disable notifications for 'animal' hits.\r\n";
-		headertext+="damageDisplayType: [1|2|3|4]\r\n";
-		headertext+="    1: display damage inflicted.  \r\n";
-		headertext+="    2: display damage taken.\r\n";
-		headertext+="    3: display damage inflicted (-amount resisted)\r\n";
-		headertext+="    4: display damage taken (+amount resisted)\r\n";
-		headertext+="hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.\r\n";
-		headertext+="debugMode: [true|false] Enable extra debug info in logs.\r\n";
-		headertext+="\r\n";
+		headertext = "Default MobHealth Config file\r\n\r\n";
+		headertext += "disableSpout: [true|false] - force messages to display in chat even if spout is present.\r\n";
+		headertext += "disableChat: [true|false] - force messages to display only if spout is present.\r\n";
+		headertext += "setting both these to true will cause no notifications to appear!  \r\n";
+		headertext += "\r\n";
+		headertext += "showRPG: [true|false] - show RPG style notification (requires SpoutCraft).\r\n";
+		headertext += "\r\n";
+		headertext += "usePermissions: [true|false] - true requires MobHealth.show (or MobHealth.*) to show message to player.\r\n";
+		headertext += "\r\n";
+		headertext += "disablePlayers: [true|false] - disable notifications for player hits.\r\n";
+		headertext += "disableMonsters: [true|false] - disable notifications for 'monster' hits.\r\n";
+		headertext += "disableAnimals: [true|false] - disable notifications for 'animal' hits.\r\n";
+		headertext += "damageDisplayType: [1|2|3|4]\r\n";
+		headertext += "    1: display damage inflicted.  \r\n";
+		headertext += "    2: display damage taken.\r\n";
+		headertext += "    3: display damage inflicted (-amount resisted)\r\n";
+		headertext += "    4: display damage taken (+amount resisted)\r\n";
+		headertext += "hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.\r\n";
+		headertext += "debugMode: [true|false] Enable extra debug info in logs.\r\n";
+		headertext += "\r\n";
 
 		getConfig().options().header(headertext);
 		getConfig().options().copyHeader(true);
@@ -278,25 +282,33 @@ public class MobHealth extends JavaPlugin {
 		heroesSkillChatMessage = getLangConfig().getString("heroesSkillChatMessage");
 		heroesSkillChatKilledMessage = getLangConfig().getString("heroesSkillChatKilledMessage");
 
-
 		String entityName;
 
-		for(String thisEntity : entityList) {
-			entityName=getLangConfig().getString("entity"+thisEntity);
-			if (entityName == null ) { 
-				entityName=thisEntity;
+		for (String thisEntity : entityList) {
+			entityName = getLangConfig().getString("entity" + thisEntity);
+			if (entityName == null) {
+				entityName = thisEntity;
 			}
 			entityLookup.put((thisEntity), entityName);
-			//    		logger.info(thisEntity+" - "+entityName);
 		}
 
 		saveLangConfig();
+
+		try {
+			pluginEnabled = (Map<Player, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
+		} catch (Exception e) {
+			System.out.print(" toggleStates.bin error");
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
 	 * Get latest version of plugin from remote server.
 	 * 
-	 * @param VersionCurrent  String of current version to compare (returned in cases such as update server is unavailable).
+	 * @param VersionCurrent
+	 *            String of current version to compare (returned in cases such
+	 *            as update server is unavailable).
 	 * @return returns Latest version as String
 	 * @throws Exception
 	 */
@@ -307,14 +319,13 @@ public class MobHealth extends JavaPlugin {
 			URL url = new URL(urlStr);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			HttpURLConnection.setFollowRedirects(true);
-			conn.setRequestProperty ( "User-agent", "[MobHealth Plugin] "+VersionCurrent);
+			conn.setRequestProperty("User-agent", "[MobHealth Plugin] " + VersionCurrent);
 			String inStr = null;
 			inStr = convertStreamToString(conn.getInputStream());
 			return inStr;
 
-		}
-		catch (Exception localException) {
-			//			System.out.print("exp: " + localException);
+		} catch (Exception localException) {
+			// System.out.print("exp: " + localException);
 		}
 		return VersionCurrent;
 	}
@@ -324,27 +335,25 @@ public class MobHealth extends JavaPlugin {
 	 * 
 	 * One-line 'hack' to convert InputStreams to strings.
 	 * 
-	 * @param	is  The InputStream to convert
-	 * @return	returns a String version of 'is'
+	 * @param is
+	 *            The InputStream to convert
+	 * @return returns a String version of 'is'
 	 */
-	public String convertStreamToString(InputStream is) { 
+	public String convertStreamToString(InputStream is) {
 		return new Scanner(is).useDelimiter("\\A").next();
 	}
 
-
-
-
 	public void reloadLangConfig() {
-		if (LangConfigurationFile  == null) {
-			LangConfigurationFile  = new File(getDataFolder(), "lang.yml");
+		if (LangConfigurationFile == null) {
+			LangConfigurationFile = new File(getDataFolder(), "lang.yml");
 		}
-		LangConfig  = YamlConfiguration.loadConfiguration(LangConfigurationFile);
+		LangConfig = YamlConfiguration.loadConfiguration(LangConfigurationFile);
 		LangConfig.options().copyDefaults(true);
 
 		// Look for defaults in the jar
 		InputStream defConfigStream = getResource("lang.yml");
 		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+			YamlConfiguration defConfig = YamlConfiguration .loadConfiguration(defConfigStream);
 			LangConfig.setDefaults(defConfig);
 		}
 	}
@@ -367,15 +376,14 @@ public class MobHealth extends JavaPlugin {
 		}
 	}
 
-
 	/**
 	 * Get if plugin is enabled for a player.
 	 * 
 	 * @param player
 	 * @return Boolean
 	 */
-	public static Boolean getPluginState(Player player){	
-		if(pluginEnabled.containsKey(player)){
+	public static Boolean getPluginState(Player player) {
+		if (pluginEnabled.containsKey(player)) {
 			return pluginEnabled.get(player);
 		}
 		return defaultToggle;
@@ -386,9 +394,9 @@ public class MobHealth extends JavaPlugin {
 	 * 
 	 * @param player
 	 */
-	public static void togglePluginState(Player player){		
-		if(pluginEnabled.containsKey(player)){
-			if(pluginEnabled.get(player)){
+	public static void togglePluginState(Player player) {
+		if (pluginEnabled.containsKey(player)) {
+			if (pluginEnabled.get(player)) {
 				pluginEnabled.put(player, false);
 				player.sendMessage("Notifications disabled.");
 			} else {
@@ -396,13 +404,23 @@ public class MobHealth extends JavaPlugin {
 				player.sendMessage("Notifications enabled.");
 			}
 		} else { // use defaultToggle
-			pluginEnabled.put(player, !defaultToggle); //Plugin was enabled by default. - now uses defaultToggle
+			// Plugin was enabled by default. - now uses defaultToggle
+			pluginEnabled.put(player, !defaultToggle);
 			if (defaultToggle) {
 				player.sendMessage("Notifications disabled.");
 			} else {
 				player.sendMessage("Notifications enabled.");
 			}
 		}
+
+		try {
+			SaveToggle.save((HashMap<Player, Boolean>) pluginEnabled,
+					plugin.getDataFolder() + File.separator + "toggleStates.bin");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -411,13 +429,13 @@ public class MobHealth extends JavaPlugin {
 	 * @param Player
 	 * @return widget
 	 */
-	public static Widget getWidget(Player player, int widgetnumber){	
-		if (widgetnumber==3) {
+	public static Widget getWidget(Player player, int widgetnumber) {
+		if (widgetnumber == 3) {
 			return hesGotASideIcon.get(player);
-		} else if (widgetnumber==2) {
+		} else if (widgetnumber == 2) {
 			return hesGotASideWidget.get(player);
-		} else if (widgetnumber==1) {
-			return hesGotASideGradient.get(player);				
+		} else if (widgetnumber == 1) {
+			return hesGotASideGradient.get(player);
 		} else {
 			return hesGotAWidget.get(player);
 		}
@@ -426,15 +444,16 @@ public class MobHealth extends JavaPlugin {
 	/**
 	 * store the widget!
 	 * 
-	 * @param Player Widget
+	 * @param Player
+	 *            Widget
 	 */
-	public static void putWidget(Player player, Widget widget, int widgetnumber){
-		if (widgetnumber==3) {
+	public static void putWidget(Player player, Widget widget, int widgetnumber) {
+		if (widgetnumber == 3) {
 			hesGotASideIcon.put(player, widget);
-		} else if (widgetnumber==2) {
+		} else if (widgetnumber == 2) {
 			hesGotASideWidget.put(player, widget);
-		} else if (widgetnumber==1) {
-			hesGotASideGradient.put(player, widget);		
+		} else if (widgetnumber == 1) {
+			hesGotASideGradient.put(player, widget);
 		} else {
 			hesGotAWidget.put(player, widget);
 		}
@@ -445,27 +464,27 @@ public class MobHealth extends JavaPlugin {
 	 * 
 	 * @param Player
 	 */
-	public static void killWidget(Player player, int widgetnumber){
-		if (widgetnumber==3) {
+	public static void killWidget(Player player, int widgetnumber) {
+		if (widgetnumber == 3) {
 			hesGotASideIcon.remove(player);
-		} else if (widgetnumber==2) {
+		} else if (widgetnumber == 2) {
 			hesGotASideWidget.remove(player);
-		} else if (widgetnumber==1) {
-			hesGotASideGradient.remove(player);		
+		} else if (widgetnumber == 1) {
+			hesGotASideGradient.remove(player);
 		} else {
 			hesGotAWidget.remove(player);
 		}
-	}	
-
+	}
 
 	//
-
 
 	/**
 	 * Joins two arrays
 	 * 
-	 * @param first array
-	 * @param second array
+	 * @param first
+	 *            array
+	 * @param second
+	 *            array
 	 * @return Arrays joined
 	 */
 	public static <T> T[] concat(T[] first, T[] second) {

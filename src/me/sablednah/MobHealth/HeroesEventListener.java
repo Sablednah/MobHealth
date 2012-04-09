@@ -91,6 +91,11 @@ public class HeroesEventListener implements Listener {
 							}
 							if (targetMob!=null) {
 								targetHealth=targetMob.getHealth();
+
+								Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
+								if(heroes != null)  {
+									targetHealth=heroes.getDamageManager().getHealth(targetMob);
+								}
 								
 								if (MobHealth.hasLikeABoss) {
 									Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
@@ -101,7 +106,9 @@ public class HeroesEventListener implements Listener {
 											targetHealth=thisBoss.getHealth();
 										}
 									}
-								} else if (MobHealth.hasMobArena) {
+								} 
+								
+								if (MobHealth.hasMobArena) {
 									MobArenaHandler maHandler = new MobArenaHandler();
 									Arena arena = maHandler.getArenaWithPlayer(playa);
 									if (arena !=null) {
@@ -109,11 +116,6 @@ public class HeroesEventListener implements Listener {
 										if (thisBoss != null) {
 											targetHealth=thisBoss.getHealth();
 										}
-									}
-								} else { //I need a Hero!
-									Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
-									if(heroes != null)  {
-										targetHealth=heroes.getDamageManager().getHealth(targetMob);
 									}
 								}
 								
