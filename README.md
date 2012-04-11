@@ -40,6 +40,9 @@ Disable notifications for 'monster' hits.
     disableAnimals: false
 Disable notifications for 'animal' hits.
 
+    disablePets: false
+Disable notifications for hits by tamed mobs.
+
     hideNoDammage: false
 Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 
@@ -85,6 +88,9 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.0:  Displays damage inflicted by tamed mobs.
+        Player toggle state now persistent.
+
 4.7.2:  Mobs and LikeABoss updates.  
 
 4.7.1:  Swap to grownup version numbering system :)   

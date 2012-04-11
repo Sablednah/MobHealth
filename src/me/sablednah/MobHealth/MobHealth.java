@@ -41,6 +41,7 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean disablePlayers;
 	public static Boolean disableMonsters;
 	public static Boolean disableAnimals;
+	public static Boolean disablePets;
 	public static int damageDisplayType;
 	public static Boolean hideNoDammage;
 	public static Boolean defaultToggle;
@@ -183,7 +184,12 @@ public class MobHealth extends JavaPlugin {
 		} else {
 			logger.info("[" + myName + "] Animals Notifications Enabled.");
 		}
-
+		if (disablePets) {
+			logger.info("[" + myName + "] Pet Notifications Disabled.");
+		} else {
+			logger.info("[" + myName + "] Pet Notifications Enabled.");
+		}
+		
 		/**
 		 * Schedule a version check every 6 hours for update notification .
 		 */
@@ -203,7 +209,7 @@ public class MobHealth extends JavaPlugin {
 							// ignore exceptions
 						}
 					}
-				}, 0, 5184000);
+				}, 0, 432000);
 
 		logger.info("[" + myName + "] Online.");
 	}
@@ -249,6 +255,8 @@ public class MobHealth extends JavaPlugin {
 		disablePlayers = getConfig().getBoolean("disablePlayers");
 		disableMonsters = getConfig().getBoolean("disableMonsters");
 		disableAnimals = getConfig().getBoolean("disableAnimals");
+		disablePets = getConfig().getBoolean("disablePets");
+		
 		damageDisplayType = getConfig().getInt("damageDisplayType");
 
 		hideNoDammage = getConfig().getBoolean("hideNoDammage");

@@ -13,6 +13,8 @@
 # disablePlayers: [true|false] - disable notifications for player hits.
 # disableMonsters: [true|false] - disable notifications for 'monster' hits.
 # disableAnimals: [true|false] - disable notifications for 'animal' hits.
+# disablePets: [true|false] - disable notifications for hits from tamed mobs.
+#
 # damageDisplayType: [1|2|3|4]
 #    1: display damage inflicted.  
 #    2: display damage taken.
@@ -32,6 +34,7 @@ usePermissions: false
 disablePlayers: false
 disableMonsters: false
 disableAnimals: false
+disablePets: false
 
 damageDisplayType: 4
 

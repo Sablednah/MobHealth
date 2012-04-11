@@ -48,6 +48,8 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					MobHealth.disablePlayers = plugin.getConfig().getBoolean("disablePlayers");
 					MobHealth.disableMonsters = plugin.getConfig().getBoolean("disableMonsters");
 					MobHealth.disableAnimals = plugin.getConfig().getBoolean("disableAnimals");
+					MobHealth.disablePets = plugin.getConfig().getBoolean("disablePets");
+					
 					MobHealth.damageDisplayType = plugin.getConfig().getInt("damageDisplayType");
 					MobHealth.hideNoDammage = plugin.getConfig().getBoolean("hideNoDammage");
 					MobHealth.defaultToggle = plugin.getConfig().getBoolean("defaultToggle");
@@ -119,7 +121,11 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					} else {
 						MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
 					}
-	
+					if (MobHealth.disablePets) {
+						MobHealth.logger.info("[" + myName + "] Pet Notifications Disabled.");
+					} else {
+						MobHealth.logger.info("[" + myName + "] Pet Notifications Enabled.");
+					}
 					return true;
 				}
 			}

@@ -10,6 +10,7 @@ import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,6 +67,10 @@ public class ServerDamageEntityListener implements Listener {
 					}
 				}
 
+				if (damageEvent.getDamager() instanceof Tameable && !MobHealth.disablePets) {
+					playa = (Player) ((Tameable) damageEvent.getDamager()).getOwner();
+				}
+				
 				if (damageEvent.getDamager() instanceof Player) {
 					playa = (Player) damageEvent.getDamager();
 				}

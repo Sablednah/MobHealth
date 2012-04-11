@@ -12,10 +12,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import org.getspout.spoutapi.SpoutManager;
@@ -308,7 +311,16 @@ public class MessageScheduler implements Runnable {
 							}else {
 								icon = Material.ARROW;  //arrow
 							}
+						} else if (damagerMob instanceof Tameable) {
+							if (damagerMob instanceof Wolf) {
+								icon = Material.BONE;
+							} else if (damagerMob instanceof Ocelot) {
+								icon = Material.RAW_FISH;
+							}else {
+								icon = Material.BONE;  //arrow
+							}
 						} else {
+
 							icon=player.getItemInHand().getType();
 							if (icon==null || icon==Material.AIR) {
 								icon = Material.STICK; //was diamond sword 276
