@@ -3,6 +3,8 @@ package me.sablednah.MobHealth;
 import java.util.Arrays;
 
 import me.sablednah.MobHealth.SpoutNotifications;
+import me.sablednah.zombiemod.PutredineImmortui;
+import me.sablednah.zombiemod.ZombieMod;
 
 import me.coldandtired.mobs.Main;
 import me.coldandtired.mobs.Mob;
@@ -76,6 +78,27 @@ public class MessageScheduler implements Runnable {
 		int thisDamange=0, mobsHealth=0, mobsMaxHealth=0, damageTaken=0, damageResisted=0;
 		Boolean isPlayer = false, isMonster = false, isAnimal = false, isSpecial =false;
 		String damageOutput;
+		String ZMName = null;
+
+		//is entity tracked by ZombieMod.
+		if (MobHealth.hasZM) {
+
+			ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+			PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+
+			if (zomb != null) {
+				isSpecial=true;
+				thisDamange = DamageBefore;
+				mobsMaxHealth = zomb.maxHealth;
+				mobsHealth = zomb.health;
+				damageTaken = HealthBefore - mobsHealth;
+				if (damageTaken>9950) { damageTaken=thisDamange; } //heroes hacky fix
+				damageResisted = thisDamange - damageTaken;
+				ZMName = zomb.commonName;
+			}
+			zomb = null;
+			ZM = null;
+		}
 
 		//is entity tracked by mob-health.
 		if (MobHealth.hasMobs) {
@@ -188,20 +211,25 @@ public class MessageScheduler implements Runnable {
 
 		//I need a Hero!
 		if (weaponDamageEvent != null) {
-			Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
-			isSpecial=true;
-			thisDamange = weaponDamageEvent.getDamage();
-			mobsMaxHealth = heroes.getDamageManager().getMaxHealth(targetMob);
-			if (targetMob.isDead()) {
-				mobsHealth = HealthBefore-thisDamange;
-			} else {
-				mobsHealth = heroes.getDamageManager().getHealth(targetMob);
+			if (!isSpecial)  {
+				Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
+				isSpecial=true;
+				thisDamange = weaponDamageEvent.getDamage();
+				mobsMaxHealth = heroes.getDamageManager().getMaxHealth(targetMob);
+				if (targetMob.isDead()) {
+					mobsHealth = HealthBefore-thisDamange;
+				} else {
+					mobsHealth = heroes.getDamageManager().getHealth(targetMob);
+				}
+				damageTaken = HealthBefore - mobsHealth;
+				damageResisted = thisDamange - damageTaken;
+				heroes = null;
 			}
-			damageTaken = HealthBefore - mobsHealth;
-			damageResisted = thisDamange - damageTaken;
 			damagerMob = (Entity) weaponDamageEvent.getDamager().getEntity();
 
-			heroes = null;
+
+		} else {
+			damagerMob = damageEvent.getDamager();
 		}
 
 
@@ -213,8 +241,9 @@ public class MessageScheduler implements Runnable {
 			mobsHealth = targetMob.getHealth();
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;
-			damagerMob = damageEvent.getDamager();
 		}
+
+
 
 		if (MobHealth.debugMode) {
 			System.out.print("--");
@@ -229,6 +258,8 @@ public class MessageScheduler implements Runnable {
 			System.out.print("[MobHealth] " + damageTaken +" damageTaken.");
 			System.out.print("[MobHealth] " + damageResisted +" damageResisted.");
 			System.out.print("[MobHealth] " + targetMob.getLastDamage() +" targetMob.getLastDamage().");
+			System.out.print("[MobHealth] " + targetMob.getHealth() +" targetMob.getHealth().");
+			System.out.print("[MobHealth] " + damagerMob +" damagerMob.");
 		}
 
 		String mobtype = new String(targetMob.getClass().getName());
@@ -248,6 +279,7 @@ public class MessageScheduler implements Runnable {
 			if (MobHealth.entityLookup.get(mobtype) != null) {
 				mobtype=MobHealth.entityLookup.get(mobtype);
 			}
+			if (ZMName != null) { mobtype = ZMName; }
 		}
 
 		switch (MobHealth.damageDisplayType) {
@@ -281,6 +313,7 @@ public class MessageScheduler implements Runnable {
 			if (isPlayer) { System.out.print("Is Player"); } else { System.out.print("Is not Player"); }
 			if (isAnimal) { System.out.print("Is Animal"); } else { System.out.print("Is not Animal"); }
 			if (isMonster) { System.out.print("Is Monster"); } else { System.out.print("Is not Monster"); }
+			if (checkForZeroDamageHide) { System.out.print("Hide "+damageTaken+" damage"); } else { System.out.print("Show "+damageTaken+" damage"); }
 		}
 
 		if (
@@ -378,7 +411,7 @@ public class MessageScheduler implements Runnable {
 							rpg=rpg.replaceAll("%N",mobtype);
 							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
 							rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
-							
+
 							spoutUsed = SpoutNotifications.showRPG(player, rpg, icon);
 						}
 

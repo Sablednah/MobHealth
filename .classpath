@@ -22,5 +22,6 @@
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/Mobs.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/MonsterApocalypse.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/BloodMoon.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/server/plugins/ZombieMod.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

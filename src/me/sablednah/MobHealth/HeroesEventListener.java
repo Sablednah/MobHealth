@@ -1,8 +1,12 @@
 package me.sablednah.MobHealth;
 
+import me.sablednah.zombiemod.PutredineImmortui;
+import me.sablednah.zombiemod.ZombieMod;
+
 import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -95,6 +99,14 @@ public class HeroesEventListener implements Listener {
 								Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");
 								if(heroes != null)  {
 									targetHealth=heroes.getDamageManager().getHealth(targetMob);
+								}
+								
+								if (MobHealth.hasZM) {
+									ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+									PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+									if (zomb != null) {
+										targetHealth=zomb.health;
+									}
 								}
 								
 								if (MobHealth.hasLikeABoss) {

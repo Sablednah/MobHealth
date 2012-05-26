@@ -88,6 +88,10 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.1:  Stopped attempts to notify offline pet owners.
+		Support for ZombieMod for ZARP server.
+		http://www.imagicraft.net/wiki/index.php?title=Zombie_Apocalypse_RP_(ZARP)
+
 4.8.0:  Displays damage inflicted by tamed mobs.
         Player toggle state now persistent.
 

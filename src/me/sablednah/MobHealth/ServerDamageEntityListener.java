@@ -2,11 +2,15 @@ package me.sablednah.MobHealth;
 
 import me.coldandtired.mobs.Main;
 import me.coldandtired.mobs.Mob;
+import me.sablednah.zombiemod.PutredineImmortui;
+import me.sablednah.zombiemod.ZombieMod;
 
 
 import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -68,7 +72,10 @@ public class ServerDamageEntityListener implements Listener {
 				}
 
 				if (damageEvent.getDamager() instanceof Tameable && !MobHealth.disablePets) {
-					playa = (Player) ((Tameable) damageEvent.getDamager()).getOwner();
+					AnimalTamer temp = ((Tameable) damageEvent.getDamager()).getOwner();
+					if (temp instanceof Player) {
+						playa = (Player) temp;
+					}
 				}
 				
 				if (damageEvent.getDamager() instanceof Player) {
@@ -100,7 +107,13 @@ public class ServerDamageEntityListener implements Listener {
 							if (targetMob!=null) {
 								targetHealth=targetMob.getHealth();
 
-								if (MobHealth.hasMobs) {
+								if (MobHealth.hasZM) {
+									ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+									PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+									if (zomb != null) {
+										targetHealth=zomb.health;
+									}
+								} else if (MobHealth.hasMobs) {
 									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
 									Mob mob = mobs.get_mob(targetMob);
 									if (mob != null) {

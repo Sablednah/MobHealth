@@ -27,10 +27,8 @@ import org.getspout.spoutapi.gui.Widget;
 public class MobHealth extends JavaPlugin {
 
 	public static MobHealth plugin;
-	public final ServerDamageEntityListener EntityListener = new ServerDamageEntityListener(
-			this);
-	public final HeroesEventListener HeroesDamageEventListener = new HeroesEventListener(
-			this);
+	public final ServerDamageEntityListener EntityListener = new ServerDamageEntityListener(this);
+	public final HeroesEventListener HeroesDamageEventListener = new HeroesEventListener(this);
 	public final static Logger logger = Logger.getLogger("Minecraft");
 
 	public static Boolean usePermissions;
@@ -84,13 +82,8 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
 	public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
 
-	public static String[] animalList = { "Pig", "Sheep", "Cow", "Chicken",
-			"MushroomCow", "Golem", "IronGolem", "Snowman", "Squid",
-			"Villager", "Wolf", "Ocelot" };
-	public static String[] monsterList = { "Blaze", "Zombie", "Creeper",
-			"Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider",
-			"EnderDragon", "EnderMan", "Giant", "PigZombie", "SilverFish",
-			"Spider" };
+	public static String[] animalList = { "Pig", "Sheep", "Cow", "Chicken","MushroomCow", "Golem", "IronGolem", "Snowman", "Squid","Villager", "Wolf", "Ocelot" };
+	public static String[] monsterList = { "Blaze", "Zombie", "Creeper","Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider","EnderDragon", "EnderMan", "Giant", "PigZombie", "SilverFish","Spider" };
 
 	public String[] entityList = concat(animalList, monsterList);
 
@@ -99,6 +92,7 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean hasMobArena;
 	public static Boolean hasMobs;
 	public static Boolean hasMA;
+	public static Boolean hasZM;
 
 	@Override
 	public void onDisable() {
@@ -130,7 +124,8 @@ public class MobHealth extends JavaPlugin {
 		hasMobArena = this.getServer().getPluginManager().isPluginEnabled("MobArena");
 		hasMobs = this.getServer().getPluginManager().isPluginEnabled("Mobs");
 		hasMA = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
-
+		hasZM = this.getServer().getPluginManager().isPluginEnabled("ZombieMod");
+		
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
 		} else {
