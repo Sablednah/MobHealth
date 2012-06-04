@@ -14,31 +14,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class SaveToggle
-{
-	public static void save(HashMap<Player, Boolean> pluginEnabled,String path) throws Exception
-	{
+public class SaveToggle {
+	public static void save(HashMap<Player, Boolean> pluginEnabled,String path) throws Exception {
 
-		for (Entry<Player, Boolean> entry : pluginEnabled.entrySet())
-		{
-			getPlayerConfig().set("players." + entry.getKey().getName(), entry.getValue());
+		for (Entry<Player, Boolean> entry : pluginEnabled.entrySet()){
+			if (entry.getValue() != null) {
+				getPlayerConfig().set("players." + entry.getKey().getName(), entry.getValue());
+			}
 		}
 		getPlayerConfig().save(MobHealth.PlayerConfigurationFile);
 	}
 
-	public static HashMap<Player,Boolean> load(String path) throws Exception
-	{
+	public static HashMap<Player,Boolean> load(String path) throws Exception {
 		HashMap<Player, Boolean> out = new HashMap<Player,Boolean>();
 		if (getPlayerConfig().getConfigurationSection("players") != null) {
-			for (String key : getPlayerConfig().getConfigurationSection("players").getKeys(false))
-			{
+			for (String key : getPlayerConfig().getConfigurationSection("players").getKeys(false)) {
 				out.put(Bukkit.getServer().getPlayerExact(key), getPlayerConfig().getBoolean("players." + key));
 			}
 			return out;
 		} else {
 			return new HashMap<Player,Boolean>();
 		}
-
 	}
 
 	public static void reloadPlayerConfig() {

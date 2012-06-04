@@ -47,7 +47,6 @@ public class ServerDamageEntityListener implements Listener {
 
 			int targetHealth=0;
 
-
 			if (MobHealth.debugMode) {
 				if (event.getEntity()  instanceof Player) {
 					String tmpplay=((Player) event.getEntity()).getDisplayName();
