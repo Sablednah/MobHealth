@@ -121,7 +121,7 @@ public class MessageScheduler implements Runnable {
 			MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
 			healthmanager MAHealthManager = ma.getHealthManager();
 
-			if (MAHealthManager != null) { 
+			if (MAHealthManager != null) {
 				isSpecial=true;
 				thisDamange = DamageBefore;
 				mobsMaxHealth = ma.getMobHealth(targetMob);
@@ -157,7 +157,7 @@ public class MessageScheduler implements Runnable {
 			thisBoss = null;
 			BM = null;
 			LaB = null;
-		} 
+		}
 
 		//Check if target is in a MobArena.
 		if (MobHealth.hasMobArena) {
@@ -294,7 +294,7 @@ public class MessageScheduler implements Runnable {
 		case 2: //#    2: display damage taken.
 			damageOutput=Integer.toString(damageTaken);
 			break;
-		default: //#    1: display damage inflicted.  
+		default: //#    1: display damage inflicted.
 			damageOutput=Integer.toString(thisDamange);
 		}
 
@@ -317,11 +317,11 @@ public class MessageScheduler implements Runnable {
 		}
 
 		if (
-				((MobHealth.disablePlayers&&!isPlayer) || !MobHealth.disablePlayers) 
-				&& 
-				((MobHealth.disableMonsters&&!isMonster) || !MobHealth.disableMonsters) 
-				&& 
-				((MobHealth.disableAnimals&&!isAnimal) || !MobHealth.disableAnimals) 
+				((MobHealth.disablePlayers&&!isPlayer) || !MobHealth.disablePlayers)
+				&&
+				((MobHealth.disableMonsters&&!isMonster) || !MobHealth.disableMonsters)
+				&&
+				((MobHealth.disableAnimals&&!isAnimal) || !MobHealth.disableAnimals)
 				&&
 				(!checkForZeroDamageHide)
 				){
@@ -358,7 +358,7 @@ public class MessageScheduler implements Runnable {
 							if (icon==null || icon==Material.AIR) {
 								icon = Material.STICK; //was diamond sword 276
 							}
-						}				
+						}
 						if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle")==null))) {
 							title =  plugin.getLangConfig().getString("spoutEggTitle");
 						} else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballTitle")==null))) {
@@ -396,9 +396,9 @@ public class MessageScheduler implements Runnable {
 						}
 						message=message.replaceAll("%D",damageOutput);
 						message=message.replaceAll("%N",mobtype);
-						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
+						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));
 
-						if (!MobHealth.disableSpout) { 
+						if (!MobHealth.disableSpout) {
 							spoutUsed = SpoutNotifications.showAchievement(player, title, message, icon);
 						}
 
@@ -409,7 +409,7 @@ public class MessageScheduler implements Runnable {
 							}
 							rpg=rpg.replaceAll("%D",damageOutput);
 							rpg=rpg.replaceAll("%N",mobtype);
-							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
+							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));
 							rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
 
 							spoutUsed = SpoutNotifications.showRPG(player, rpg, icon);
@@ -447,8 +447,28 @@ public class MessageScheduler implements Runnable {
 				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
 					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
 				}
-				player.sendMessage(ChatMessage);
+                                if (!sendPluginMessage(player, ChatMessage)) {
+                                    player.sendMessage(ChatMessage);
+                                }
 			}
+		}
+	}
+
+	private boolean sendPluginMessage(Player player, String message) {
+		if (player == null || message == null) {
+			return false;
+		}
+                if (!player.getListeningPluginChannels().contains("SimpleNotice")) {
+			return false;
+		}
+
+
+		try {
+			player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes("UTF-8"));
+			return true;
+		} catch (Exception e) {
+			//plugin.getLogger().log(java.util.logging.Level.WARNING, "Sending PluginChannel{SimpleNotice} message to \"" + player.getName() + "\" failed", e.getCause());
+			return false;
 		}
 	}
 }
