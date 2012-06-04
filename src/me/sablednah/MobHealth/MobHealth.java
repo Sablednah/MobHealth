@@ -1,7 +1,7 @@
 /**
  * @author	sable <darren.douglas@gmail.com>
  * @version	3.2
- * 
+ *
  */
 package me.sablednah.MobHealth;
 
@@ -74,7 +74,7 @@ public class MobHealth extends JavaPlugin {
 
 	public static FileConfiguration PlayerConfig = null;
 	public static File PlayerConfigurationFile = null;
-	
+
 	public static Map<Player, Boolean> pluginEnabled = null;
 	public static Map<Player, Widget> hesGotAWidget = new HashMap<Player, Widget>();
 	public static Map<String, String> entityLookup = new HashMap<String, String>();
@@ -119,13 +119,15 @@ public class MobHealth extends JavaPlugin {
 
 		loadConfiguration();
 
+                this.getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
+
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
 		hasMobArena = this.getServer().getPluginManager().isPluginEnabled("MobArena");
 		hasMobs = this.getServer().getPluginManager().isPluginEnabled("Mobs");
 		hasMA = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
 		hasZM = this.getServer().getPluginManager().isPluginEnabled("ZombieMod");
-		
+
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
 		} else {
@@ -184,7 +186,7 @@ public class MobHealth extends JavaPlugin {
 		} else {
 			logger.info("[" + myName + "] Pet Notifications Enabled.");
 		}
-		
+
 		/**
 		 * Schedule a version check every 6 hours for update notification .
 		 */
@@ -251,7 +253,7 @@ public class MobHealth extends JavaPlugin {
 		disableMonsters = getConfig().getBoolean("disableMonsters");
 		disableAnimals = getConfig().getBoolean("disableAnimals");
 		disablePets = getConfig().getBoolean("disablePets");
-		
+
 		damageDisplayType = getConfig().getInt("damageDisplayType");
 
 		hideNoDammage = getConfig().getBoolean("hideNoDammage");
@@ -308,7 +310,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Get latest version of plugin from remote server.
-	 * 
+	 *
 	 * @param VersionCurrent
 	 *            String of current version to compare (returned in cases such
 	 *            as update server is unavailable).
@@ -335,9 +337,9 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Converts InputStream to String
-	 * 
+	 *
 	 * One-line 'hack' to convert InputStreams to strings.
-	 * 
+	 *
 	 * @param is
 	 *            The InputStream to convert
 	 * @return returns a String version of 'is'
@@ -381,7 +383,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Get if plugin is enabled for a player.
-	 * 
+	 *
 	 * @param player
 	 * @return Boolean
 	 */
@@ -394,7 +396,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Toggle if plugin is enabled for a player
-	 * 
+	 *
 	 * @param player
 	 */
 	public static void togglePluginState(Player player) {
@@ -428,7 +430,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Get widgets for a player.
-	 * 
+	 *
 	 * @param Player
 	 * @return widget
 	 */
@@ -446,7 +448,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * store the widget!
-	 * 
+	 *
 	 * @param Player
 	 *            Widget
 	 */
@@ -464,7 +466,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * remove a widget!
-	 * 
+	 *
 	 * @param Player
 	 */
 	public static void killWidget(Player player, int widgetnumber) {
@@ -483,7 +485,7 @@ public class MobHealth extends JavaPlugin {
 
 	/**
 	 * Joins two arrays
-	 * 
+	 *
 	 * @param first
 	 *            array
 	 * @param second
