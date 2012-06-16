@@ -105,10 +105,11 @@ public class MessageScheduler implements Runnable {
 			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
 			Mob mob = mobs.get_mob(targetMob);
 			if (mob != null) {
+				if (MobHealth.debugMode) { System.out.print("Using Mobs"); }
 				isSpecial=true;
 				thisDamange = DamageBefore;
-				mobsMaxHealth = mob.max_hp;
-				mobsHealth = mob.hp;
+				mobsMaxHealth = mob.max_hp.intValue();
+				mobsHealth = mob.hp.intValue();
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
 			}
@@ -237,13 +238,16 @@ public class MessageScheduler implements Runnable {
 		// if none of the above special cases for 3rd party plugins apply - get the info 'normally'.
 		if (!isSpecial) {
 			thisDamange = damageEvent.getDamage();
+			if (thisDamange>200) { thisDamange = DamageBefore; } 
 			mobsMaxHealth = targetMob.getMaxHealth();
 			mobsHealth = targetMob.getHealth();
+			//hack to deal with  mods using overkill
+			if (mobsHealth<-50) { mobsHealth=0; }
 			damageTaken = HealthBefore - mobsHealth;
 			damageResisted = thisDamange - damageTaken;
 		}
 
-
+		
 
 		if (MobHealth.debugMode) {
 			System.out.print("--");
@@ -447,8 +451,27 @@ public class MessageScheduler implements Runnable {
 				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
 					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
 				}
-				player.sendMessage(ChatMessage);
+				if (!sendPluginMessage(player, ChatMessage)) {
+                    player.sendMessage(ChatMessage);
+                }
 			}
+		}
+	}
+	
+	private boolean sendPluginMessage(Player player, String message) {
+		if (player == null || message == null) {
+			return false;
+		}
+        if (!player.getListeningPluginChannels().contains("SimpleNotice")) {
+			return false;
+		}
+
+		try {
+			player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes("UTF-8"));
+			return true;
+		} catch (Exception e) {
+			//plugin.getLogger().log(java.util.logging.Level.WARNING, "Sending PluginChannel{SimpleNotice} message to \"" + player.getName() + "\" failed", e.getCause());
+			return false;
 		}
 	}
 }

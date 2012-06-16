@@ -18,6 +18,7 @@ import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
+import com.garbagemule.MobArena.waves.WaveManager;
 
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.api.events.SkillDamageEvent;
@@ -87,8 +88,15 @@ public class SkillMessageScheduler implements Runnable {
 							
 						} else {
 							
-							Wave thisWave=arena.getWave();
-							mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							WaveManager wm = arena.getWaveManager();
+							Wave thisWave = wm.getCurrent();
+							
+							if (thisWave != null) {
+								mobsMaxHealth=(int) (targetMob.getMaxHealth()*thisWave.getHealthMultiplier());
+							} else {
+								mobsMaxHealth=targetMob.getMaxHealth();
+							}
+
 							thisDamange = skillDamageEvent.getDamage();
 							mobsHealth = targetMob.getHealth();
 							damageTaken = thisDamange; //HealthBefore - mobsHealth;
@@ -273,8 +281,27 @@ public class SkillMessageScheduler implements Runnable {
 				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
 					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
 				}
-				player.sendMessage(ChatMessage);
+				if (!sendPluginMessage(player, ChatMessage)) {
+                    player.sendMessage(ChatMessage);
+                }
 			}
+		}
+	}
+	
+	private boolean sendPluginMessage(Player player, String message) {
+		if (player == null || message == null) {
+			return false;
+		}
+        if (!player.getListeningPluginChannels().contains("SimpleNotice")) {
+			return false;
+		}
+
+		try {
+			player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes("UTF-8"));
+			return true;
+		} catch (Exception e) {
+			//plugin.getLogger().log(java.util.logging.Level.WARNING, "Sending PluginChannel{SimpleNotice} message to \"" + player.getName() + "\" failed", e.getCause());
+			return false;
 		}
 	}
 }

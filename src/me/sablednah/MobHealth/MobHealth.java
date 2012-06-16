@@ -144,7 +144,7 @@ public class MobHealth extends JavaPlugin {
 		if (hasMobs) {
 			logger.info("[" + myName + "] Mobs Support Enabled");
 		}
-		if (hasMobArena && hasMobs) {
+		if (hasHeroes && hasMobs) {
 			logger.info("[" + myName + "] Using 'Mobs' and 'Heroes' together is NOT recomended by either plugin.");
 		}
 		if (hasMA) {

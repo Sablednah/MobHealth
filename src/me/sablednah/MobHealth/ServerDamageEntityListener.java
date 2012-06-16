@@ -106,23 +106,24 @@ public class ServerDamageEntityListener implements Listener {
 							if (targetMob!=null) {
 								targetHealth=targetMob.getHealth();
 
-								if (MobHealth.hasZM) {
-									ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
-									PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
-									if (zomb != null) {
-										targetHealth=zomb.health;
-									}
-								} else if (MobHealth.hasMobs) {
+								if (MobHealth.hasMobs) {
 									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
 									Mob mob = mobs.get_mob(targetMob);
 									if (mob != null) {
-										targetHealth=mob.hp;
+										targetHealth=mob.hp.intValue();
 									}
 								} else if (MobHealth.hasMA) {
 									MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
 									healthmanager MAHealthManager = ma.getHealthManager();
 									if (MAHealthManager != null) {
 										targetHealth = MAHealthManager.getmobhp(targetMob);
+									}
+								}
+								if (MobHealth.hasZM) {
+									ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+									PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+									if (zomb != null) {
+										targetHealth=zomb.health;
 									}
 								}
 								if (MobHealth.hasLikeABoss) {

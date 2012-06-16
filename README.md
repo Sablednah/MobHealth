@@ -5,7 +5,7 @@ This is just a simple plugin to let you know the damage you just caused to a mob
 
 Now supports Spout! (_Optional_)
 
-Also now supporting Heroes (inc. skill usage), Mobs, Monster Apocalypse, MobArena and LikeABoss (_All Optional_)
+Also now supporting SimpleNotice, Heroes (inc. skill usage), Mobs, Monster Apocalypse, MobArena and LikeABoss (_All Optional_)
 
 Mob Health now has plenty of options to control how messages are shown,when they are shown (and more importantly when they are *not* shown), and what is displayed - with your own custom messages.
 
@@ -88,6 +88,10 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.2:  Added SimpleNotice support (Thanks FeildMaster)
+        Fixed Mobs support.
+        Various Heroes skills and edge case fixes.
+
 4.8.1:  Stopped attempts to notify offline pet owners.
 		Support for ZombieMod for ZARP server.
 		http://www.imagicraft.net/wiki/index.php?title=Zombie_Apocalypse_RP_(ZARP)
