@@ -119,6 +119,8 @@ public class MobHealth extends JavaPlugin {
 
 		loadConfiguration();
 
+		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
+		
 		hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
 		hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
 		hasMobArena = this.getServer().getPluginManager().isPluginEnabled("MobArena");

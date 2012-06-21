@@ -88,6 +88,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.3:  Fixed SimpleNotice Suport - sorry FeildMaster - my bad!
+
 4.8.2:  Added SimpleNotice support (Thanks FeildMaster)
         Fixed Mobs support.
         Various Heroes skills and edge case fixes.
