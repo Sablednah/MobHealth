@@ -426,8 +426,8 @@ public class MessageScheduler implements Runnable {
 				}
 			}
 
-
-			if (!spoutUsed && !MobHealth.disableChat) {
+			boolean useSimpleNotice = player.getListeningPluginChannels().contains("SimpleNotice");
+			if (!spoutUsed && (!MobHealth.disableChat || useSimpleNotice)) {
 				String ChatMessage;
 				if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg")==null))) {
 					ChatMessage =  plugin.getLangConfig().getString("chatMessageEgg");
@@ -451,27 +451,13 @@ public class MessageScheduler implements Runnable {
 				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
 					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
 				}
-				if (!sendPluginMessage(player, ChatMessage)) {
-                    player.sendMessage(ChatMessage);
-                }
+                
+				if (useSimpleNotice) {
+					player.sendPluginMessage(plugin, "SimpleNotice", ChatMessage.getBytes());
+				} else {
+					player.sendMessage(ChatMessage);
+				}
 			}
-		}
-	}
-	
-	private boolean sendPluginMessage(Player player, String message) {
-		if (player == null || message == null) {
-			return false;
-		}
-        if (!player.getListeningPluginChannels().contains("SimpleNotice")) {
-			return false;
-		}
-
-		try {
-			player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes("UTF-8"));
-			return true;
-		} catch (Exception e) {
-			//plugin.getLogger().log(java.util.logging.Level.WARNING, "Sending PluginChannel{SimpleNotice} message to \"" + player.getName() + "\" failed", e.getCause());
-			return false;
 		}
 	}
 }
