@@ -374,10 +374,7 @@ public class MessageScheduler implements Runnable {
 						title=title.replaceAll("%D",damageOutput);
 						title=title.replaceAll("%N",mobtype);
 						title=title.replaceAll("%M",Integer.toString(mobsMaxHealth));
-
-						for (int chatcntr = 0;chatcntr<16;chatcntr++){
-							title=title.replaceAll("&"+Integer.toHexString(chatcntr),(ChatColor.getByChar(Integer.toHexString(chatcntr)))+"");
-						}
+						title=ChatColor.translateAlternateColorCodes('&',title);
 
 						if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggMessage")==null))) {
 							message =  plugin.getLangConfig().getString("spoutEggMessage");
@@ -395,12 +392,10 @@ public class MessageScheduler implements Runnable {
 								}
 							}
 						}
-						for (int chatcntr2 = 0;chatcntr2<16;chatcntr2++){
-							message=message.replaceAll("&"+Integer.toHexString(chatcntr2),(ChatColor.getByChar(Integer.toHexString(chatcntr2)))+"");
-						}
+						message=ChatColor.translateAlternateColorCodes('&',message);
 						message=message.replaceAll("%D",damageOutput);
 						message=message.replaceAll("%N",mobtype);
-						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));			        
+						message=message.replaceAll("%M",Integer.toString(mobsMaxHealth));
 
 						if (!MobHealth.disableSpout) { 
 							spoutUsed = SpoutNotifications.showAchievement(player, title, message, icon);
@@ -448,10 +443,8 @@ public class MessageScheduler implements Runnable {
 				ChatMessage=ChatMessage.replaceAll("%D",damageOutput);
 				ChatMessage=ChatMessage.replaceAll("%N",mobtype);
 				ChatMessage=ChatMessage.replaceAll("%M",Integer.toString(mobsMaxHealth));
-				for (int chatcntr3 = 0;chatcntr3<16;chatcntr3++){
-					ChatMessage=ChatMessage.replaceAll("&"+Integer.toHexString(chatcntr3),(ChatColor.getByChar(Integer.toHexString(chatcntr3)))+"");
-				}
-                
+				ChatMessage=ChatColor.translateAlternateColorCodes('&',ChatMessage);
+
 				if (useSimpleNotice) {
 					player.sendPluginMessage(plugin, "SimpleNotice", ChatMessage.getBytes());
 				} else {
