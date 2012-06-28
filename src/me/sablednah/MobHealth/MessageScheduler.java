@@ -408,7 +408,7 @@ public class MessageScheduler implements Runnable {
 							}
 							rpg=rpg.replaceAll("%D",damageOutput);
 							rpg=rpg.replaceAll("%N",mobtype);
-							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));	
+							rpg=rpg.replaceAll("%M",Integer.toString(mobsMaxHealth));
 							rpg=rpg.replaceAll("%H",Integer.toString(mobsHealth));
 
 							spoutUsed = SpoutNotifications.showRPG(player, rpg, icon);

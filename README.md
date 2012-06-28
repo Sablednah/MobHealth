@@ -88,6 +88,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.5:  Improved colour handling - thanks again FeildMaster...
+
 4.8.4:  Fixed SimpleNotice Support, for reals this time!
 
 4.8.3:  Fixed SimpleNotice Support - sorry FeildMaster - my bad!
