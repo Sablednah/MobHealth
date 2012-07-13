@@ -446,7 +446,7 @@ public class MessageScheduler implements Runnable {
 				ChatMessage=ChatColor.translateAlternateColorCodes('&',ChatMessage);
 
 				if (useSimpleNotice) {
-					player.sendPluginMessage(plugin, "SimpleNotice", ChatMessage.getBytes());
+					player.sendPluginMessage(plugin, "SimpleNotice", ChatMessage.getBytes(java.nio.charset.Charset.forName("UTF-8")));
 				} else {
 					player.sendMessage(ChatMessage);
 				}
