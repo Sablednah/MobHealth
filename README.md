@@ -88,6 +88,9 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.6:  UTF-8 fix for Simple notice.
+		Reworked mobs support for latest Mobs Beta
+		
 4.8.5:  Improved colour handling - thanks again FeildMaster...
 
 4.8.4:  Fixed SimpleNotice Support, for reals this time!

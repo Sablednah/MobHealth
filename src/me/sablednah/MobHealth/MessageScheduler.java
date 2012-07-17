@@ -7,7 +7,7 @@ import me.sablednah.zombiemod.PutredineImmortui;
 import me.sablednah.zombiemod.ZombieMod;
 
 import me.coldandtired.mobs.Main;
-import me.coldandtired.mobs.Mob;
+import me.coldandtired.api.Mob;
 
 import org.bukkit.Material;
 import org.bukkit.ChatColor;
@@ -103,13 +103,13 @@ public class MessageScheduler implements Runnable {
 		//is entity tracked by mob-health.
 		if (MobHealth.hasMobs) {
 			Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-			Mob mob = mobs.get_mob(targetMob);
+			Mob mob = mobs.get_mob((Entity) targetMob);
 			if (mob != null) {
 				if (MobHealth.debugMode) { System.out.print("Using Mobs"); }
 				isSpecial=true;
 				thisDamange = DamageBefore;
-				mobsMaxHealth = mob.max_hp.intValue();
-				mobsHealth = mob.hp.intValue();
+				mobsMaxHealth = mob.getMax_hp().intValue();
+				mobsHealth = mob.getHp().intValue();
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
 			}

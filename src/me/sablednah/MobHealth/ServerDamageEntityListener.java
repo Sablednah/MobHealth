@@ -1,10 +1,10 @@
 package me.sablednah.MobHealth;
 
 import me.coldandtired.mobs.Main;
-import me.coldandtired.mobs.Mob;
+import me.coldandtired.api.Mob;
+
 import me.sablednah.zombiemod.PutredineImmortui;
 import me.sablednah.zombiemod.ZombieMod;
-
 
 import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
 import org.bukkit.entity.AnimalTamer;
@@ -81,7 +81,7 @@ public class ServerDamageEntityListener implements Listener {
 					playa = (Player) damageEvent.getDamager();
 				}
 
-				if (playa != null) {	
+				if (playa != null) {
 
 					if (MobHealth.debugMode) {
 						//event.setDamage(200);
@@ -91,7 +91,7 @@ public class ServerDamageEntityListener implements Listener {
 						System.out.print("Damage class  " + event.getClass());
 						System.out.print("Entity Damage  " + event.getDamage());
 						System.out.print("Damage Cause  " + event.getCause());
-						if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");				
+						if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
 					}
 
 					if(MobHealth.getPluginState(playa)){	
@@ -108,9 +108,9 @@ public class ServerDamageEntityListener implements Listener {
 
 								if (MobHealth.hasMobs) {
 									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-									Mob mob = mobs.get_mob(targetMob);
+									Mob mob = mobs.get_mob((Entity) targetMob);
 									if (mob != null) {
-										targetHealth=mob.hp.intValue();
+										targetHealth=mob.getHp().intValue();
 									}
 								} else if (MobHealth.hasMA) {
 									MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
