@@ -129,6 +129,10 @@ public class MessageScheduler implements Runnable {
 				mobsHealth = MAHealthManager.getmobhp(targetMob);
 				damageTaken = HealthBefore - mobsHealth;
 				damageResisted = thisDamange - damageTaken;
+				if (MobHealth.debugMode) {
+                    System.out.print("MA: mobsMaxHealth = " + mobsMaxHealth);
+                    System.out.print("MA: mobsHealth = " + mobsHealth);
+                }
 			} else {
 				if (MobHealth.debugMode) {
 					System.out.print("MAHealthManager is null");

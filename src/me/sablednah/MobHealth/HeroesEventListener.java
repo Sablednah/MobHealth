@@ -189,7 +189,18 @@ public class HeroesEventListener implements Listener {
 							if(heroes != null)  {
 								targetHealth=heroes.getDamageManager().getHealth(targetMob);
 							}
-							
+
+                            if (MobHealth.hasZM) {
+                                ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+                                PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+                                if (zomb != null) {
+                                    targetHealth=zomb.health;
+                                }
+                            }
+                            
+                            // System.out.print("heroes skill - health before = " + targetHealth);
+                            // System.out.print("heroes skill - dmg before = " + event.getDamage());
+                            
 							plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new SkillMessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 1L);
 
 						} else {

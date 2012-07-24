@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/sable/workspace/craftbukkit-1.2.4-R1.0.jar">
+	<classpathentry kind="lib" path="C:/Users/sable/server/craftbukkit-dev.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
 		</attributes>
@@ -21,7 +21,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/MonsterApocalypse.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/BloodMoon.jar"/>
-	<classpathentry kind="lib" path="C:/Users/sable/server/plugins/ZombieMod.jar"/>
-	<classpathentry kind="lib" path="C:/Users/sable/server/plugins/Mobs.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/ZombieMod.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/Mobs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
