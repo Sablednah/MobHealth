@@ -87,7 +87,10 @@ Give player MobHealth reload command.
 
 
 ### Changelog
-4.8.6:  UTF-8 fix for Simple notice.
+4.8.7:  Heroes Skill improvements.  
+        Beginning of improved MA support.
+
+4.8.6:  UTF-8 fix for Simple notice.  
 		Reworked mobs support for latest Mobs Beta
 		
 4.8.5:  Improved colour handling - thanks again FeildMaster...
