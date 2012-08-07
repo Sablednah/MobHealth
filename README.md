@@ -87,6 +87,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.8.8:  Added support for Mobs used with Heroes.
+
 4.8.7:  Heroes Skill improvements.  
         Yet another Mobs fix ;)  
         Beginning of improved MA support.

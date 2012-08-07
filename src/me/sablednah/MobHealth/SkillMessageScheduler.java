@@ -140,6 +140,7 @@ public class SkillMessageScheduler implements Runnable {
             ZM = null;
         }
 
+        
         //I need a Hero!
         if (!isSpecial) {
             Heroes heroes = (Heroes) plugin.getServer().getPluginManager().getPlugin("Heroes");

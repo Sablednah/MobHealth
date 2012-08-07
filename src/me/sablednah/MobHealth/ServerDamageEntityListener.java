@@ -34,129 +34,131 @@ import cam.boss.Boss;
 
 
 public class ServerDamageEntityListener implements Listener {
-	public MobHealth plugin;
+    public MobHealth plugin;
 
-	public ServerDamageEntityListener(MobHealth instance) {
-		this.plugin=instance;
-	}
+    public ServerDamageEntityListener(MobHealth instance) {
+        this.plugin=instance;
+    }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDamage(EntityDamageEvent event){
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityDamage(EntityDamageEvent event){
 
-		if (!event.isCancelled()) {
+        if (!event.isCancelled()) {
 
-			int targetHealth=0;
+            int targetHealth=0;
 
-			if (MobHealth.debugMode) {
-				if (event.getEntity()  instanceof Player) {
-					String tmpplay=((Player) event.getEntity()).getDisplayName();
-					tmpplay=tmpplay.toLowerCase().toString();
-					if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
-						event.setCancelled(true); event.setDamage(0);return;
-					}
-				}
-			}
+            if (MobHealth.debugMode) {
+                if (event.getEntity()  instanceof Player) {
+                    String tmpplay=((Player) event.getEntity()).getDisplayName();
+                    tmpplay=tmpplay.toLowerCase().toString();
+                    if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
+                        event.setCancelled(true); event.setDamage(0);return;
+                    }
+                }
+            }
 
 
-			Player playa = null;
+            Player playa = null;
 
-			if(event instanceof EntityDamageByEntityEvent) {
-				EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            if(event instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
 
-				if(damageEvent.getDamager() instanceof Projectile) {
-					Projectile bullit = (Projectile) damageEvent.getDamager();
-					if (bullit.getShooter() instanceof Player) {
-						playa = (Player) bullit.getShooter();
-					}
-				}
+                if(damageEvent.getDamager() instanceof Projectile) {
+                    Projectile bullit = (Projectile) damageEvent.getDamager();
+                    if (bullit.getShooter() instanceof Player) {
+                        playa = (Player) bullit.getShooter();
+                    }
+                }
 
-				if (damageEvent.getDamager() instanceof Tameable && !MobHealth.disablePets) {
-					AnimalTamer temp = ((Tameable) damageEvent.getDamager()).getOwner();
-					if (temp instanceof Player) {
-						playa = (Player) temp;
-					}
-				}
-				
-				if (damageEvent.getDamager() instanceof Player) {
-					playa = (Player) damageEvent.getDamager();
-				}
+                if (damageEvent.getDamager() instanceof Tameable && !MobHealth.disablePets) {
+                    AnimalTamer temp = ((Tameable) damageEvent.getDamager()).getOwner();
+                    if (temp instanceof Player) {
+                        playa = (Player) temp;
+                    }
+                }
 
-				if (playa != null) {
+                if (damageEvent.getDamager() instanceof Player) {
+                    playa = (Player) damageEvent.getDamager();
+                }
 
-					if (MobHealth.debugMode) {
-						//event.setDamage(200);
-						System.out.print("----");
-						System.out.print("Entity Damaged " + event.getEntity());
-						System.out.print("Event getEventName  " + event.getEventName());
-						System.out.print("Damage class  " + event.getClass());
-						System.out.print("Entity Damage  " + event.getDamage());
-						System.out.print("Damage Cause  " + event.getCause());
-						if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
-					}
+                if (playa != null) {
 
-					if(MobHealth.getPluginState(playa)){	
-						if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+                    if (MobHealth.debugMode) {
+                        //event.setDamage(200);
+                        System.out.print("----");
+                        System.out.print("Entity Damaged " + event.getEntity());
+                        System.out.print("Event getEventName  " + event.getEventName());
+                        System.out.print("Damage class  " + event.getClass());
+                        System.out.print("Entity Damage  " + event.getDamage());
+                        System.out.print("Damage Cause  " + event.getCause());
+                        if (event.getEntity() instanceof ComplexLivingEntity) System.out.print("Entity Damaged is ComplexLivingEntity ");
+                    }
 
-							LivingEntity targetMob = null; //(LivingEntity) event.getEntity();
-							if (event.getEntity() instanceof ComplexEntityPart) {
-								targetMob = ((CraftEnderDragonPart) event.getEntity()).getParent();
-							} else if (event.getEntity() instanceof LivingEntity) {
-								targetMob = (LivingEntity) event.getEntity();
-							}
-							if (targetMob!=null) {
-								targetHealth=targetMob.getHealth();
+                    if(MobHealth.getPluginState(playa)){	
+                        if((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
 
-								if (MobHealth.hasMobs) {
-									Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-									Mob mob = mobs.get_mob((Entity) targetMob);
-									if (mob != null) {
-										targetHealth=mob.getHp().intValue();
-									}
-								} else if (MobHealth.hasMA) {
-									MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
-									healthmanager MAHealthManager = ma.getHealthManager();
-									if (MAHealthManager != null) {
-										targetHealth = MAHealthManager.getmobhp(targetMob);
-									}
-								}
-								if (MobHealth.hasZM) {
-									ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
-									PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
-									if (zomb != null) {
-										targetHealth=zomb.health;
-									}
-								}
-								if (MobHealth.hasLikeABoss) {
-									Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
-									BossManager BM=LaB.getBossManager();
-									if(BM != null)  {
-										Boss thisBoss = BM.getBoss(targetMob);
-										if(thisBoss != null)  {
-											targetHealth=thisBoss.getHealth();
-										}
-									}
-								} 
-								if (MobHealth.hasMobArena) {
-									MobArenaHandler maHandler = new MobArenaHandler();
-									Arena arena = maHandler.getArenaWithPlayer(playa);
-									if (arena !=null) {
-										MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
-										if (thisBoss != null) {
-											targetHealth=thisBoss.getHealth();
-										}
-									}
-								} 	
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
-							}
-						} else {
-							if (MobHealth.debugMode) {
-								System.out.print("Not allowed - mobhealth.show is "+playa.hasPermission("mobhealth.show")+" - usePermissions set to "+MobHealth.usePermissions);
-							}
-						}
-					}
-				} 
-			}
-		}
-	}	
+                            LivingEntity targetMob = null; //(LivingEntity) event.getEntity();
+                            if (event.getEntity() instanceof ComplexEntityPart) {
+                                targetMob = ((CraftEnderDragonPart) event.getEntity()).getParent();
+                            } else if (event.getEntity() instanceof LivingEntity) {
+                                targetMob = (LivingEntity) event.getEntity();
+                            }
+                            if (targetMob!=null) {
+                                targetHealth=targetMob.getHealth();
+
+                                if (MobHealth.hasMobs) {
+                                    Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
+                                    Mob mob = mobs.get_mob((Entity) targetMob);
+                                    if (mob != null) {
+                                        if (mob.getHp() != null) {
+                                            targetHealth=mob.getHp().intValue();
+                                        }
+                                    }
+                                } else if (MobHealth.hasMA) {
+                                    MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
+                                    healthmanager MAHealthManager = ma.getHealthManager();
+                                    if (MAHealthManager != null) {
+                                        targetHealth = MAHealthManager.getmobhp(targetMob);
+                                    }
+                                }
+                                if (MobHealth.hasZM) {
+                                    ZombieMod ZM=(ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+                                    PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+                                    if (zomb != null) {
+                                        targetHealth=zomb.health;
+                                    }
+                                }
+                                if (MobHealth.hasLikeABoss) {
+                                    Likeaboss LaB=(Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
+                                    BossManager BM=LaB.getBossManager();
+                                    if(BM != null)  {
+                                        Boss thisBoss = BM.getBoss(targetMob);
+                                        if(thisBoss != null)  {
+                                            targetHealth=thisBoss.getHealth();
+                                        }
+                                    }
+                                } 
+                                if (MobHealth.hasMobArena) {
+                                    MobArenaHandler maHandler = new MobArenaHandler();
+                                    Arena arena = maHandler.getArenaWithPlayer(playa);
+                                    if (arena !=null) {
+                                        MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
+                                        if (thisBoss != null) {
+                                            targetHealth=thisBoss.getHealth();
+                                        }
+                                    }
+                                } 	
+                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(),plugin), 2L);
+                            }
+                        } else {
+                            if (MobHealth.debugMode) {
+                                System.out.print("Not allowed - mobhealth.show is "+playa.hasPermission("mobhealth.show")+" - usePermissions set to "+MobHealth.usePermissions);
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+    }	
 }
 

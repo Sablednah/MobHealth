@@ -6,9 +6,6 @@ import me.sablednah.MobHealth.SpoutNotifications;
 import me.sablednah.zombiemod.PutredineImmortui;
 import me.sablednah.zombiemod.ZombieMod;
 
-import me.coldandtired.mobs.Main;
-import me.coldandtired.api.Mob;
-
 import org.bukkit.Material;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Egg;
@@ -82,6 +79,7 @@ public class MessageScheduler implements Runnable {
 
 
         //is entity tracked by mob-health.
+/*
         if (MobHealth.hasMobs) {
             Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
             Mob mob = mobs.get_mob((Entity) targetMob);
@@ -99,7 +97,7 @@ public class MessageScheduler implements Runnable {
             mob = null;
             mobs = null;
         }
-
+*/
         //is entity tracked by ZombieMod.
         if (MobHealth.hasZM) {
 

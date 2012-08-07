@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/sable/server/craftbukkit-dev.jar">
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/craftbukkit-1.3.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
 		</attributes>
