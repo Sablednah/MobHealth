@@ -94,6 +94,8 @@ public class MobHealth extends JavaPlugin {
     public static Boolean hasMA;
     public static Boolean hasZM;
 
+    public static int notifications = 0;
+
     @Override
     public void onDisable() {
         this.getServer().getScheduler().cancelTasks(this);
@@ -187,6 +189,26 @@ public class MobHealth extends JavaPlugin {
             logger.info("[" + myName + "] Pet Notifications Disabled.");
         } else {
             logger.info("[" + myName + "] Pet Notifications Enabled.");
+        }
+
+
+        // Enable Metrics
+        try {
+            Metrics metrics = new Metrics(this);
+
+            // Plot the total amount of Notifications
+            metrics.addCustomData(new Metrics.Plotter("Notifications") {
+
+                @Override
+                public int getValue() {
+                    return MobHealth.notifications;
+                }
+
+            });
+
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
         }
 
         /**

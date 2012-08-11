@@ -288,7 +288,8 @@ public class SkillMessageScheduler implements Runnable {
                 }
             }
 
-
+            if (spoutUsed) { MobHealth.notifications++; } 
+            
             if (!spoutUsed) {
                 String ChatMessage;
 
@@ -313,6 +314,7 @@ public class SkillMessageScheduler implements Runnable {
                 if (!sendPluginMessage(player, ChatMessage)) {
                     player.sendMessage(ChatMessage);
                 }
+                MobHealth.notifications++; 
             }
         }
     }

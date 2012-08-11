@@ -79,7 +79,7 @@ public class MessageScheduler implements Runnable {
 
 
         //is entity tracked by mob-health.
-/*
+        /*
         if (MobHealth.hasMobs) {
             Main mobs=(Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
             Mob mob = mobs.get_mob((Entity) targetMob);
@@ -97,7 +97,7 @@ public class MessageScheduler implements Runnable {
             mob = null;
             mobs = null;
         }
-*/
+         */
         //is entity tracked by ZombieMod.
         if (MobHealth.hasZM) {
 
@@ -117,7 +117,7 @@ public class MessageScheduler implements Runnable {
             zomb = null;
             ZM = null;
         }
-        
+
         // tracked by MonsterApocalypse
         if (MobHealth.hasMA) {
             MonsterApocalypse ma=(MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
@@ -426,6 +426,8 @@ public class MessageScheduler implements Runnable {
                 }
             }
 
+            if (spoutUsed) { MobHealth.notifications++; } 
+            
             boolean useSimpleNotice = player.getListeningPluginChannels().contains("SimpleNotice");
             if (!spoutUsed && (!MobHealth.disableChat || useSimpleNotice)) {
                 String ChatMessage;
@@ -455,6 +457,7 @@ public class MessageScheduler implements Runnable {
                 } else {
                     player.sendMessage(ChatMessage);
                 }
+                MobHealth.notifications++;
             }
         }
     }
