@@ -87,6 +87,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+4.9.1:  Fixed NPE when using /mobhealth toggle for first time  
+   
 4.9.0:  New plugin metrics  
 
 4.8.8:  Added support for Mobs used with Heroes.

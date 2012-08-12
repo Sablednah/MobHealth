@@ -18,7 +18,7 @@ public class SaveToggle {
 	public static void save(HashMap<Player, Boolean> pluginEnabled,String path) throws Exception {
 
 		for (Entry<Player, Boolean> entry : pluginEnabled.entrySet()){
-			if (entry.getValue() != null) {
+			if (entry.getValue() != null && entry.getKey() != null) {
 				getPlayerConfig().set("players." + entry.getKey().getName(), entry.getValue());
 			}
 		}
