@@ -1,6 +1,6 @@
 name: MobHealth
-version: 4.9.1
-description: Displays Mob health in chat when damaged by players.
+version: 5.0.0
+description: Displays Mob health in chat when damaged by players.  Now with 100% more API!
 author: SableDnah
 website: http://dev.bukkit.org/server-mods/mobhealth/
 
@@ -24,7 +24,7 @@ permissions:
         default: true
 
     mobhealth.command.*:
-        description: Allows user to use MobHealth commands. (Also MobHealth.commands for legacy support).
+        description: Allows user to use MobHealth commands.
         default: op
         children:
             mobhealth.command.reload: true

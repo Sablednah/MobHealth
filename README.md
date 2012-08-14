@@ -10,6 +10,14 @@ Also now supporting SimpleNotice, Heroes (inc. skill usage), Mobs, Monster Apoca
 Mob Health now has plenty of options to control how messages are shown,when they are shown (and more importantly when they are *not* shown), and what is displayed - with your own custom messages.
 
 
+API
+===
+
+MobHealth Now has its own API! 
+You can trigger damage notifications, and get the health and maxhealth of any mob, regardless of which plugin is responsible for tracking it.
+
+Think of it as Vault for mob health levels ;)  You code for one plugin - I sort out the mess behind the scenes.
+
 
 	usePermissions: false
 If true then the permission node MobHealth.show is needed to enable for a player.
