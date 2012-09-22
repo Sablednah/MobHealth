@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.coldandtired.api.Mob;
 import me.coldandtired.mobs.Main;
+import me.sablednah.MobHealth.BloodClass;
 import me.sablednah.MobHealth.MobHealth;
 import me.sablednah.MobHealth.SpoutNotifications;
 import me.sablednah.zombiemod.PutredineImmortui;
@@ -11,7 +12,6 @@ import me.sablednah.zombiemod.ZombieMod;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -24,8 +24,6 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.SpoutManager;
-
-import uk.co.jacekk.bukkit.bloodmoon.BloodMoon;
 
 import blainicus.MonsterApocalypse.MonsterApocalypse;
 import blainicus.MonsterApocalypse.healthmanager;
@@ -296,15 +294,11 @@ public class MobHealthAPI {
 
 		
 		if (MobHealth.hasBloodMoon) {
-			BloodMoon BM = (BloodMoon) plugin.getServer().getPluginManager().getPlugin("BloodMoon");
-			if (BM.isActive(targetMob.getWorld().getName())) {
-				if (BM.config.getBoolean(uk.co.jacekk.bukkit.bloodmoon.Config.FEATURE_DOUBLE_HEALTH_ENABLED)) {
-					if (targetMob instanceof Creature && ((Creature) targetMob).getTarget() instanceof Player) {
-						targetHealth = targetMob.getHealth() * 2;
-					}
-				}
+			int newhealth;
+			newhealth = BloodClass.health(targetMob);
+			if (newhealth>-1) {
+				targetHealth = newhealth; 
 			}
-			BM = null;
 		}
 		return targetHealth;
 	}
@@ -392,15 +386,11 @@ public class MobHealthAPI {
 			ZM = null;
 		}
 		if (MobHealth.hasBloodMoon) {
-			BloodMoon BM = (BloodMoon) plugin.getServer().getPluginManager().getPlugin("BloodMoon");
-			if (BM.isActive(targetMob.getWorld().getName())) {
-				if (BM.config.getBoolean(uk.co.jacekk.bukkit.bloodmoon.Config.FEATURE_DOUBLE_HEALTH_ENABLED)) {
-					if (targetMob instanceof Creature && ((Creature) targetMob).getTarget() instanceof Player) {
-						targetMaxHealth = targetMob.getMaxHealth() * 2;
-					}
-				}
+			int newhealth;
+			newhealth = BloodClass.maxhealth(targetMob);
+			if (newhealth>-1) {
+				targetMaxHealth = newhealth; 
 			}
-			BM = null;
 		}
 		return targetMaxHealth;
 	}
