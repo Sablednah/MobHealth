@@ -71,6 +71,7 @@ public class ServerDamageEntityListener implements Listener {
 						// event.setDamage(200);
 						System.out.print("----");
 						System.out.print("Entity Damaged " + event.getEntity());
+						System.out.print("Entity class " + event.getEntity().getClass().getName());
 						System.out.print("Event getEventName  " + event.getEventName());
 						System.out.print("Damage class  " + event.getClass());
 						System.out.print("Entity Damage  " + event.getDamage());

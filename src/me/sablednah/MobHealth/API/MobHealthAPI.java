@@ -11,6 +11,7 @@ import me.sablednah.zombiemod.ZombieMod;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,6 +24,8 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.SpoutManager;
+
+import uk.co.jacekk.bukkit.bloodmoon.BloodMoon;
 
 import blainicus.MonsterApocalypse.MonsterApocalypse;
 import blainicus.MonsterApocalypse.healthmanager;
@@ -140,7 +143,14 @@ public class MobHealthAPI {
 					message = ChatColor.translateAlternateColorCodes('&', message);
 
 					if (!MobHealth.disableSpout) {
+						if (MobHealth.debugMode) {
+							System.out.print("attempting notification");
+						}
 						spoutUsed = SpoutNotifications.showAchievement(player, title, message, icon);
+						if (MobHealth.debugMode) {
+							System.out.print("spoutUsed = " + spoutUsed);
+						}
+
 					}
 
 					if (MobHealth.showRPG) {
@@ -283,14 +293,27 @@ public class MobHealthAPI {
 			zomb = null;
 			ZM = null;
 		}
+
+		
+		if (MobHealth.hasBloodMoon) {
+			BloodMoon BM = (BloodMoon) plugin.getServer().getPluginManager().getPlugin("BloodMoon");
+			if (BM.isActive(targetMob.getWorld().getName())) {
+				if (BM.config.getBoolean(uk.co.jacekk.bukkit.bloodmoon.Config.FEATURE_DOUBLE_HEALTH_ENABLED)) {
+					if (targetMob instanceof Creature && ((Creature) targetMob).getTarget() instanceof Player) {
+						targetHealth = targetMob.getHealth() * 2;
+					}
+				}
+			}
+			BM = null;
+		}
 		return targetHealth;
 	}
 
 	public int getMobMaxHealth(LivingEntity targetMob) {
 		int targetMaxHealth = 0;
-		
+
 		targetMaxHealth = targetMob.getMaxHealth();
-		
+
 		if (MobHealth.hasMobs) {
 			Main mobs = (Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
 			Mob mob = mobs.get_mob((Entity) targetMob);
@@ -367,6 +390,17 @@ public class MobHealthAPI {
 			}
 			zomb = null;
 			ZM = null;
+		}
+		if (MobHealth.hasBloodMoon) {
+			BloodMoon BM = (BloodMoon) plugin.getServer().getPluginManager().getPlugin("BloodMoon");
+			if (BM.isActive(targetMob.getWorld().getName())) {
+				if (BM.config.getBoolean(uk.co.jacekk.bukkit.bloodmoon.Config.FEATURE_DOUBLE_HEALTH_ENABLED)) {
+					if (targetMob instanceof Creature && ((Creature) targetMob).getTarget() instanceof Player) {
+						targetMaxHealth = targetMob.getMaxHealth() * 2;
+					}
+				}
+			}
+			BM = null;
 		}
 		return targetMaxHealth;
 	}

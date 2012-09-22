@@ -16,16 +16,14 @@ public class SpoutNotifications {
 
 		try {
 			spoutUsed=true;
-			if (icon.getId()==373) {
-				SpoutManager.getPlayer(player).sendNotification(title, message, new ItemStack(icon), 16396);
-			} else {
-				SpoutManager.getPlayer(player).sendNotification(title, message, icon);
-			}
+			
+			SpoutManager.getPlayer(player).sendNotification(title, message, icon);
+
 			if (MobHealth.debugMode) { 
-				System.out.print("---");
+				System.out.print("---+---");
 				System.out.print("Title: "+title); 
 				System.out.print("Message: "+message); 
-				System.out.print("---");
+				System.out.print("---+---");
 				System.out.print(" ");
 			}
 		}
