@@ -119,8 +119,8 @@ public class SpoutNotifications {
 			gradient.shiftXPos(-145).shiftYPos(10);  //40
 			gradient.setAnchor(WidgetAnchor.CENTER_RIGHT);
 
-			Widget item = new GenericItemWidget(new ItemStack(icon,1)).setDepth(8);
-			item.setHeight(8).setWidth(8).setPriority(RenderPriority.Normal).setMargin(0);
+			Widget item = new GenericItemWidget(new ItemStack(icon,1)).setDepth(16);
+			item.setHeight(16).setWidth(16).setPriority(RenderPriority.Normal).setMargin(0);
 			item.shiftXPos(-140).shiftYPos(16);  //40
 			item.setAnchor(WidgetAnchor.CENTER_RIGHT);
 

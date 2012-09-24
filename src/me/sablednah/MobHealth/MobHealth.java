@@ -98,7 +98,7 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean					hasMA;
 	public static Boolean					hasZM;
 	public static Boolean					hasBloodMoon;
-	
+
 	public static int						notifications				= 0;
 
 	@Override
@@ -167,7 +167,7 @@ public class MobHealth extends JavaPlugin {
 		if (hasBloodMoon) {
 			logger.info("[" + myName + "] BloodMoon Support Enabled");
 		}
-		
+
 		if (debugMode) {
 			logger.info("[" + myName + "] DebugMode Enabled.");
 		}

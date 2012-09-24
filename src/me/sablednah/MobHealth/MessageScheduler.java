@@ -55,20 +55,18 @@ public class MessageScheduler implements Runnable {
 		 * thisDamange = damageEvent.getDamage(); if (thisDamange > 200) { thisDamange = DamageBefore; }
 		 */
 		thisDamange = DamageBefore;
-		
+
 		mobsMaxHealth = API.getMobMaxHealth(targetMob);
 		mobsHealth = API.getMobHealth(targetMob);
 		if (mobsHealth < -50) { // hack to deal with mods using overkill
 			mobsHealth = 0;
 		}
-		
+
 		damageTaken = HealthBefore - mobsHealth;
 		if (damageTaken > 9950) { // heroes hacky fix
 			damageTaken = thisDamange;
 		}
 		damageResisted = thisDamange - damageTaken;
-
-		
 
 		// I need a Hero!
 		if (weaponDamageEvent != null) {

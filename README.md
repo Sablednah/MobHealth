@@ -95,6 +95,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+5.1.1:  Start of Side Widget Clean up.
+
 5.1.0:  Dev version now 'stable' version.  
         Added support for BloodMoon.  
         Confirmed compatibility with Mob Stats. 
