@@ -41,6 +41,9 @@ public class SkillMessageScheduler implements Runnable {
 		/*
 		 * thisDamange = damageEvent.getDamage(); if (thisDamange > 200) { thisDamange = DamageBefore; }
 		 */
+		mobsMaxHealth = API.getMobMaxHealth(targetMob);
+		mobsHealth = API.getMobHealth(targetMob);
+		
 		thisDamange = DamageBefore;
 		damageTaken = HealthBefore - mobsHealth;
 		if (damageTaken > 9950) { // heroes hacky fix
@@ -48,8 +51,7 @@ public class SkillMessageScheduler implements Runnable {
 		}
 		damageResisted = thisDamange - damageTaken;
 
-		mobsMaxHealth = API.getMobMaxHealth(targetMob);
-		mobsHealth = API.getMobHealth(targetMob);
+		
 		if (mobsHealth < -50) { // hack to deal with mods using overkill
 			mobsHealth = 0;
 		}

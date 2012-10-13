@@ -1,9 +1,8 @@
 package me.sablednah.MobHealth.API;
 
 import java.util.List;
+import java.util.Map;
 
-import me.coldandtired.api.Mob;
-import me.coldandtired.mobs.Main;
 import me.sablednah.MobHealth.BloodClass;
 import me.sablednah.MobHealth.MobHealth;
 import me.sablednah.MobHealth.SpoutNotifications;
@@ -156,10 +155,16 @@ public class MobHealthAPI {
 						for (int chatcntr2 = 0; chatcntr2 < 16; chatcntr2++) {
 							rpg = rpg.replaceAll("&" + Integer.toHexString(chatcntr2), (ChatColor.getByChar(Integer.toHexString(chatcntr2))) + "");
 						}
+						if (skillName != null) {
+							rpg = rpg.replaceAll("%S", skillName);
+						} else {
+							rpg = rpg.replaceAll("%S", "");
+						}
 						rpg = rpg.replaceAll("%D", damageOutput);
 						rpg = rpg.replaceAll("%N", mobtype);
 						rpg = rpg.replaceAll("%M", Integer.toString(mobsMaxHealth));
 						rpg = rpg.replaceAll("%H", Integer.toString(mobsHealth));
+						rpg = rpg.trim();
 						rpg = ChatColor.translateAlternateColorCodes('&', rpg);
 
 						spoutUsed = SpoutNotifications.showRPG(player, rpg, icon);
@@ -229,15 +234,16 @@ public class MobHealthAPI {
 		targetHealth = targetMob.getHealth();
 
 		if (MobHealth.hasMobs) {
-			Main mobs = (Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-			Mob mob = mobs.get_mob((Entity) targetMob);
-			if (mob != null) {
-				if (mob.getHp() != null) {
-					targetHealth = mob.getHp().intValue();
+			@SuppressWarnings("unchecked")
+			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
+
+			// HP" and "MAX_HP", both of which are ints
+			if (mobs_data != null) {
+				if (mobs_data.containsKey("HP")) {
+					targetHealth = ((Integer) mobs_data.get("HP")).intValue();
 				}
 			}
-			mob = null;
-			mobs = null;
+			mobs_data = null;
 		}
 		if (MobHealth.hasMA) {
 			MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
@@ -292,12 +298,11 @@ public class MobHealthAPI {
 			ZM = null;
 		}
 
-		
 		if (MobHealth.hasBloodMoon) {
 			int newhealth;
 			newhealth = BloodClass.health(targetMob);
-			if (newhealth>-1) {
-				targetHealth = newhealth; 
+			if (newhealth > -1) {
+				targetHealth = newhealth;
 			}
 		}
 		return targetHealth;
@@ -309,15 +314,16 @@ public class MobHealthAPI {
 		targetMaxHealth = targetMob.getMaxHealth();
 
 		if (MobHealth.hasMobs) {
-			Main mobs = (Main) plugin.getServer().getPluginManager().getPlugin("Mobs");
-			Mob mob = mobs.get_mob((Entity) targetMob);
-			if (mob != null) {
-				if (mob.getHp() != null) {
-					targetMaxHealth = mob.getMax_hp().intValue();
+			@SuppressWarnings("unchecked")
+			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
+
+			// HP" and "MAX_HP", both of which are ints
+			if (mobs_data != null) {
+				if (mobs_data.containsKey("HP")) {
+					targetMaxHealth = ((Integer) mobs_data.get("MAX_HP")).intValue();
 				}
 			}
-			mob = null;
-			mobs = null;
+			mobs_data = null;
 		}
 		if (MobHealth.hasMA) {
 			MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
@@ -388,8 +394,8 @@ public class MobHealthAPI {
 		if (MobHealth.hasBloodMoon) {
 			int newhealth;
 			newhealth = BloodClass.maxhealth(targetMob);
-			if (newhealth>-1) {
-				targetMaxHealth = newhealth; 
+			if (newhealth > -1) {
+				targetMaxHealth = newhealth;
 			}
 		}
 		return targetMaxHealth;
