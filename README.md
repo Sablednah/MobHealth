@@ -31,8 +31,8 @@ Set to true to disable the achievement notification.
 	showRPG: false
 show RPG style notification (requires SpoutCraft).
 
-	showRPG: false
-show RPG style notification (requires SpoutCraft).
+	showSideNotification: false
+show Side style notification (requires SpoutCraft).
 
 
 _Note:_ If disableChat and disableSpout are true with showRPG and showSideNotification set to false then nothing will ever show!!!

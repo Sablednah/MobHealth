@@ -1,5 +1,5 @@
 name: MobHealth
-version: 5.1.2
+version: 5.1.3
 description: Displays Mob health in chat when damaged by players.  Now with 100% more API!
 author: SableDnah
 website: http://dev.bukkit.org/server-mods/mobhealth/
@@ -42,3 +42,4 @@ permissions:
     mobhealth.command.toggle.others:
         description: Allows user to toggle others with the MobHealth toggle command.
         default: op
+
