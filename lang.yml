@@ -34,10 +34,17 @@ entityOcelot: Cat
 entityGolem: Golem
 entitySnowman: Snow Golem
 entityIronGolem: Iron Golem
+entityBat: Bat
 
+entityWitch: Witch
+entityWither: Wither
 entityZombie: Zombie
+entityZombieBaby: Baby Zombie
+entityZombieVillager: Zombie Villager
+entityZombieVillagerBaby: Baby Zombie Villager
 entityCreeper: Creeper
 entitySkeleton: Skeleton
+entitySkeletonWither: Wither Skeleton
 entitySlime: Slime
 entitySpider: Spider
 entityCaveSpider: Cave Spider

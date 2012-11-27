@@ -95,6 +95,13 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+5.2.0:  Update to suport 1.4 mob types - inc Baby/Villager Zombies and WitherSkellies.
+
+5.1.3:  Allow %S usage for skill name in RPG notification.
+        Update Mobs Support for latest beta's
+
+5.1.2:  Begin rework of side notification.
+
 5.1.1:  Start of Side Widget Clean up.
 
 5.1.0:  Dev version now 'stable' version.  

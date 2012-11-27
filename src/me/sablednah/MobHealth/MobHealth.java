@@ -85,9 +85,9 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Widget>		hesGotASideGradient			= new HashMap<Player, Widget>();
 	public static Map<Player, Widget>		hesGotASideIcon				= new HashMap<Player, Widget>();
 
-	public static String[]					animalList					= { "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
-	public static String[]					monsterList					= { "Blaze", "Zombie", "Creeper", "Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "EnderMan", "Giant", "PigZombie", "SilverFish",
-			"Spider"													};
+	public static String[]					animalList					= { "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
+	public static String[]					monsterList					= { "Witch", "Wither", "Blaze", "Zombie","ZombieVillagerBaby","ZombieVillager","ZombieBaby", "Creeper", "Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "EnderMan", "Giant", "PigZombie",
+			"SilverFish", "Spider"										};
 
 	public String[]							entityList					= concat(animalList, monsterList);
 

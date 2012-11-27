@@ -9,6 +9,9 @@ import me.sablednah.zombiemod.ZombieMod;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
+import org.bukkit.entity.Skeleton.SkeletonType;
 
 import com.herocraftonline.heroes.api.events.SkillDamageEvent;
 
@@ -81,7 +84,17 @@ public class SkillMessageScheduler implements Runnable {
 				mobtype = "unKn0wn";
 			}
 		} else {
-			mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
+			if  (targetMob instanceof Zombie) {
+				mobtype = "Zombie";
+				if (((Zombie)targetMob).isVillager()) { mobtype = mobtype + "Vilager";}
+				if (((Zombie)targetMob).isBaby()) { mobtype = mobtype + "Baby";}
+			} else if (targetMob instanceof Skeleton) {
+				mobtype = "Skeleton";
+				if (((Skeleton)targetMob).getSkeletonType() == SkeletonType.WITHER) {mobtype = mobtype + "Wither";}
+			} else {
+				mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
+			}
+			
 			if (Arrays.asList(MobHealth.animalList).contains(mobtype))
 				isAnimal = true;
 			if (Arrays.asList(MobHealth.monsterList).contains(mobtype))
