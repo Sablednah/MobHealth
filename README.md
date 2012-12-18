@@ -95,6 +95,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+5.3.1:  Fixed player names not showing sometimes.
+
 5.3.0:  Fixed Endermen and WithSkelly names.
         Update to support LikeAboss 1.6.6
         update to support Bloodmoon 0.19

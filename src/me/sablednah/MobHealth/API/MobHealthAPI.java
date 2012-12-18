@@ -378,13 +378,13 @@ public class MobHealthAPI {
 			}
 			mobs_data = null;
 		}
-		
+
 		if (MobHealth.hasLikeABoss) {
 			if (LabAPI.isBoss(targetMob)) {
 				targetMaxHealth = LabAPI.getMaxHealth(targetMob);
 			}
 		}
-		
+
 		if (MobHealth.hasBloodMoon) {
 			int newhealth;
 			newhealth = BloodClass.maxhealth(targetMob);
@@ -403,60 +403,61 @@ public class MobHealthAPI {
 	}
 
 	public String getMobName(LivingEntity targetMob) {
-		String mobtype = new String(targetMob.getClass().getName());
+		String mobtype;
 
-		if (mobtype.indexOf("org.bukkit.craftbukkit.entity.Craft") == -1) {
-			if (targetMob instanceof Player) {
-				mobtype = ((Player) targetMob).getDisplayName();
+		if (targetMob instanceof Player) {
+			mobtype = ((Player) targetMob).getDisplayName();
+		} else if (targetMob instanceof Zombie) {
+			if (targetMob instanceof PigZombie) {
+				mobtype = "PigZombie";
 			} else {
-				mobtype = "unKn0wn";
+				mobtype = "Zombie";
+			}
+			if (((Zombie) targetMob).isVillager()) {
+				mobtype = mobtype + "Vilager";
+			}
+			if (((Zombie) targetMob).isBaby()) {
+				mobtype = mobtype + "Baby";
+			}
+		} else if (targetMob instanceof Skeleton) {
+			mobtype = "Skeleton";
+			if (((Skeleton) targetMob).getSkeletonType() == SkeletonType.WITHER) {
+				mobtype = mobtype + "Wither";
 			}
 		} else {
-			if  (targetMob instanceof Zombie) {
-				if  (targetMob instanceof PigZombie) {
-					mobtype = "PigZombie";
-				} else {
-					mobtype = "Zombie";
-				}
-				if (((Zombie)targetMob).isVillager()) { mobtype = mobtype + "Vilager";}
-				if (((Zombie)targetMob).isBaby()) { mobtype = mobtype + "Baby";}
-			} else if (targetMob instanceof Skeleton) {
-				mobtype = "Skeleton";
-				if (((Skeleton)targetMob).getSkeletonType() == SkeletonType.WITHER) {mobtype = mobtype + "Wither";}
-			} else {
-				mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
-			}
-			
-			if (MobHealth.entityLookup.get(mobtype) != null) {
-				mobtype = MobHealth.entityLookup.get(mobtype);
-			}
-
-			// is entity tracked by plugin.
-			if (MobHealth.hasZM) {
-				ZombieMod ZM = (ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
-				PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
-				if (zomb != null) {
-					mobtype = zomb.commonName;
-				}
-				zomb = null;
-				ZM = null;
-			}
-
-			if (MobHealth.hasEpicBoss) {
-				EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBoss");
-				API EBAPI = new API(EB);
-				if (EBAPI.entityBoss(targetMob)) {
-					mobtype = EBAPI.GetBossName(targetMob);
-				}
-			}
-			
-			if (MobHealth.hasLikeABoss) {
-				if (LabAPI.isBoss(targetMob)) {
-					mobtype = LabAPI.getName(targetMob);
-				}
-			}
-			
+			mobtype = new String(targetMob.getClass().getName());
+			mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
 		}
+
+		if (MobHealth.entityLookup.get(mobtype) != null) {
+			mobtype = MobHealth.entityLookup.get(mobtype);
+		}
+
+		// is entity tracked by plugin.
+		if (MobHealth.hasZM) {
+			ZombieMod ZM = (ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+			PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+			if (zomb != null) {
+				mobtype = zomb.commonName;
+			}
+			zomb = null;
+			ZM = null;
+		}
+
+		if (MobHealth.hasEpicBoss) {
+			EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBoss");
+			API EBAPI = new API(EB);
+			if (EBAPI.entityBoss(targetMob)) {
+				mobtype = EBAPI.GetBossName(targetMob);
+			}
+		}
+
+		if (MobHealth.hasLikeABoss) {
+			if (LabAPI.isBoss(targetMob)) {
+				mobtype = LabAPI.getName(targetMob);
+			}
+		}
+
 		return mobtype;
 	}
 }
