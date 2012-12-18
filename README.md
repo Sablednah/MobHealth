@@ -95,7 +95,12 @@ Give player MobHealth reload command.
 
 
 ### Changelog
-5.2.0:  Update to suport 1.4 mob types - inc Baby/Villager Zombies and WitherSkellies.
+5.3.0:  Fixed Endermen and WithSkelly names.
+        Update to support LikeAboss 1.6.6
+        update to support Bloodmoon 0.19
+        NEW Support for EpicBoss 2.3.8
+
+5.2.0:  Update to support 1.4 mob types - inc Baby/Villager Zombies and WitherSkellies.
 
 5.1.3:  Allow %S usage for skill name in RPG notification.
         Update Mobs Support for latest beta's

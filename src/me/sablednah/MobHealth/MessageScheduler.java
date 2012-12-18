@@ -1,19 +1,17 @@
 package me.sablednah.MobHealth;
 
-import java.util.Arrays;
-
 import me.sablednah.MobHealth.API.MobHealthAPI;
-import me.sablednah.zombiemod.PutredineImmortui;
-import me.sablednah.zombiemod.ZombieMod;
 
+import org.bukkit.entity.Ambient;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Snowball;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.WaterMob;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.herocraftonline.heroes.api.events.*;
@@ -99,47 +97,18 @@ public class MessageScheduler implements Runnable {
 			System.out.print("[MobHealth] " + damagerMob + " damagerMob.");
 		}
 
-		String mobtype = new String(targetMob.getClass().getName());
+		String mobtype = API.getMobName(targetMob);
 
-		if (mobtype.indexOf("org.bukkit.craftbukkit.entity.Craft") == -1) {
-			if (targetMob instanceof Player) {
-				isPlayer = true;
-				mobtype = ((Player) targetMob).getDisplayName();
-			} else {
-				System.out.print("[MobHealth] " + mobtype + " unknown.");
-				mobtype = "unKn0wn";
-			}
+		if (targetMob instanceof Player) {
+			isPlayer = true;
 		} else {
-			if  (targetMob instanceof Zombie) {
-				mobtype = "Zombie";
-				if (((Zombie)targetMob).isVillager()) { mobtype = mobtype + "Vilager";}
-				if (((Zombie)targetMob).isBaby()) { mobtype = mobtype + "Baby";}
-			} else if (targetMob instanceof Skeleton) {
-				mobtype = "Skeleton";
-				if (((Skeleton)targetMob).getSkeletonType() == SkeletonType.WITHER) {mobtype = mobtype + "Wither";}
-			} else {
-				mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
-			}
-			
-			if (Arrays.asList(MobHealth.animalList).contains(mobtype))
+			if (targetMob instanceof Animals || targetMob instanceof Ambient || targetMob instanceof WaterMob || targetMob instanceof Golem  || targetMob instanceof NPC ) {
 				isAnimal = true;
-			if (Arrays.asList(MobHealth.monsterList).contains(mobtype))
+			} else {
 				isMonster = true;
-			if (MobHealth.entityLookup.get(mobtype) != null) {
-				mobtype = MobHealth.entityLookup.get(mobtype);
-			}
-			// is entity tracked by ZombieMod.
-			if (MobHealth.hasZM) {
-				ZombieMod ZM = (ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
-				PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
-				if (zomb != null) {
-					mobtype = zomb.commonName;
-				}
-				zomb = null;
-				ZM = null;
 			}
 		}
-
+		
 		switch (MobHealth.damageDisplayType) {
 			case 4: // # 4: display damage taken (+amount resisted)
 				damageOutput = Integer.toString(damageTaken);

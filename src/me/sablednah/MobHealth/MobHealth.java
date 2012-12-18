@@ -86,7 +86,7 @@ public class MobHealth extends JavaPlugin {
 	public static Map<Player, Widget>		hesGotASideIcon				= new HashMap<Player, Widget>();
 
 	public static String[]					animalList					= { "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
-	public static String[]					monsterList					= { "Witch", "Wither", "Blaze", "Zombie","ZombieVillagerBaby","ZombieVillager","ZombieBaby", "Creeper", "Skeleton", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "EnderMan", "Giant", "PigZombie",
+	public static String[]					monsterList					= { "Witch", "Wither", "Blaze", "Zombie","ZombieVillagerBaby","ZombieVillager","ZombieBaby", "Creeper", "Skeleton", "SkeletonWither", "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie",
 			"SilverFish", "Spider"										};
 
 	public String[]							entityList					= concat(animalList, monsterList);
@@ -98,6 +98,7 @@ public class MobHealth extends JavaPlugin {
 	public static Boolean					hasMA;
 	public static Boolean					hasZM;
 	public static Boolean					hasBloodMoon;
+	public static Boolean					hasEpicBoss;
 
 	public static int						notifications				= 0;
 
@@ -135,13 +136,12 @@ public class MobHealth extends JavaPlugin {
 		hasMA = this.getServer().getPluginManager().isPluginEnabled("Monster Apocalypse");
 		hasZM = this.getServer().getPluginManager().isPluginEnabled("ZombieMod");
 		hasBloodMoon = this.getServer().getPluginManager().isPluginEnabled("BloodMoon");
+		hasEpicBoss = this.getServer().getPluginManager().isPluginEnabled("EpicBoss");
 
+		pm.registerEvents(this.EntityListener, this);
 		if (hasHeroes) {
 			pm.registerEvents(this.HeroesDamageEventListener, this);
-		} else {
-			pm.registerEvents(this.EntityListener, this);
 		}
-
 		if (hasLikeABoss) {
 			logger.info("[" + myName + "] Likeaboss Support Enabled");
 		}
@@ -167,7 +167,9 @@ public class MobHealth extends JavaPlugin {
 		if (hasBloodMoon) {
 			logger.info("[" + myName + "] BloodMoon Support Enabled");
 		}
-
+		if (hasEpicBoss) {
+			logger.info("[" + myName + "] EpicBoss Support Enabled");
+		}
 		if (debugMode) {
 			logger.info("[" + myName + "] DebugMode Enabled.");
 		}

@@ -3,6 +3,8 @@ package me.sablednah.MobHealth.API;
 import java.util.List;
 import java.util.Map;
 
+import me.ThaH3lper.EpicBoss.API;
+import me.ThaH3lper.EpicBoss.EpicBoss;
 import me.sablednah.MobHealth.BloodClass;
 import me.sablednah.MobHealth.MobHealth;
 import me.sablednah.MobHealth.SpoutNotifications;
@@ -15,27 +17,31 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.plugin.Plugin;
+
 import org.getspout.spoutapi.SpoutManager;
 
 import blainicus.MonsterApocalypse.MonsterApocalypse;
 import blainicus.MonsterApocalypse.healthmanager;
-import cam.Likeaboss;
-import cam.boss.Boss;
-import cam.boss.BossData;
-import cam.boss.BossManager;
+
+import cam.LabAPI;
 
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.waves.MABoss;
 import com.garbagemule.MobArena.waves.Wave;
 import com.garbagemule.MobArena.waves.WaveManager;
+
 import com.herocraftonline.heroes.Heroes;
 
 public class MobHealthAPI {
@@ -233,18 +239,6 @@ public class MobHealthAPI {
 
 		targetHealth = targetMob.getHealth();
 
-		if (MobHealth.hasMobs) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
-
-			// HP" and "MAX_HP", both of which are ints
-			if (mobs_data != null) {
-				if (mobs_data.containsKey("HP")) {
-					targetHealth = ((Integer) mobs_data.get("HP")).intValue();
-				}
-			}
-			mobs_data = null;
-		}
 		if (MobHealth.hasMA) {
 			MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
 			healthmanager MAHealthManager = ma.getHealthManager();
@@ -253,19 +247,6 @@ public class MobHealthAPI {
 			}
 			MAHealthManager = null;
 			ma = null;
-		}
-		if (MobHealth.hasLikeABoss) {
-			Likeaboss LaB = (Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
-			BossManager BM = LaB.getBossManager();
-			if (BM != null) {
-				Boss thisBoss = BM.getBoss(targetMob);
-				if (thisBoss != null) {
-					targetHealth = thisBoss.getHealth();
-				}
-				thisBoss = null;
-			}
-			BM = null;
-			LaB = null;
 		}
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
@@ -297,12 +278,35 @@ public class MobHealthAPI {
 			zomb = null;
 			ZM = null;
 		}
+		if (MobHealth.hasMobs) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
 
+			// HP" and "MAX_HP", both of which are ints
+			if (mobs_data != null) {
+				if (mobs_data.containsKey("HP")) {
+					targetHealth = ((Integer) mobs_data.get("HP")).intValue();
+				}
+			}
+			mobs_data = null;
+		}
+		if (MobHealth.hasLikeABoss) {
+			if (LabAPI.isBoss(targetMob)) {
+				targetHealth = LabAPI.getHealth(targetMob);
+			}
+		}
 		if (MobHealth.hasBloodMoon) {
 			int newhealth;
 			newhealth = BloodClass.health(targetMob);
 			if (newhealth > -1) {
 				targetHealth = newhealth;
+			}
+		}
+		if (MobHealth.hasEpicBoss) {
+			EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBoss");
+			API EBAPI = new API(EB);
+			if (EBAPI.entityBoss(targetMob)) {
+				targetHealth = EBAPI.GetHealth(targetMob);
 			}
 		}
 		return targetHealth;
@@ -313,18 +317,6 @@ public class MobHealthAPI {
 
 		targetMaxHealth = targetMob.getMaxHealth();
 
-		if (MobHealth.hasMobs) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
-
-			// HP" and "MAX_HP", both of which are ints
-			if (mobs_data != null) {
-				if (mobs_data.containsKey("HP")) {
-					targetMaxHealth = ((Integer) mobs_data.get("MAX_HP")).intValue();
-				}
-			}
-			mobs_data = null;
-		}
 		if (MobHealth.hasMA) {
 			MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
 			if (ma != null) {
@@ -335,23 +327,6 @@ public class MobHealthAPI {
 				worldlist = null;
 			}
 			ma = null;
-		}
-		if (MobHealth.hasLikeABoss) {
-			Likeaboss LaB = (Likeaboss) plugin.getServer().getPluginManager().getPlugin("Likeaboss");
-			BossManager BM = LaB.getBossManager();
-			if (BM != null) {
-				Boss thisBoss = BM.getBoss(targetMob);
-				if (thisBoss != null) {
-					targetMaxHealth = targetMob.getMaxHealth();
-					BossData bd = thisBoss.getBossData();
-					double hc = bd.getHealthCoef();
-					targetMaxHealth = (int) (hc * targetMaxHealth);
-					bd = null;
-				}
-				thisBoss = null;
-			}
-			BM = null;
-			LaB = null;
 		}
 		if (MobHealth.hasMobArena) {
 			MobArenaHandler maHandler = new MobArenaHandler();
@@ -391,6 +366,25 @@ public class MobHealthAPI {
 			zomb = null;
 			ZM = null;
 		}
+		if (MobHealth.hasMobs) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
+
+			// HP" and "MAX_HP", both of which are ints
+			if (mobs_data != null) {
+				if (mobs_data.containsKey("HP")) {
+					targetMaxHealth = ((Integer) mobs_data.get("MAX_HP")).intValue();
+				}
+			}
+			mobs_data = null;
+		}
+		
+		if (MobHealth.hasLikeABoss) {
+			if (LabAPI.isBoss(targetMob)) {
+				targetMaxHealth = LabAPI.getMaxHealth(targetMob);
+			}
+		}
+		
 		if (MobHealth.hasBloodMoon) {
 			int newhealth;
 			newhealth = BloodClass.maxhealth(targetMob);
@@ -398,6 +392,71 @@ public class MobHealthAPI {
 				targetMaxHealth = newhealth;
 			}
 		}
+		if (MobHealth.hasEpicBoss) {
+			EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBoss");
+			API EBAPI = new API(EB);
+			if (EBAPI.entityBoss(targetMob)) {
+				targetMaxHealth = EBAPI.GetMaxHealth(targetMob);
+			}
+		}
 		return targetMaxHealth;
+	}
+
+	public String getMobName(LivingEntity targetMob) {
+		String mobtype = new String(targetMob.getClass().getName());
+
+		if (mobtype.indexOf("org.bukkit.craftbukkit.entity.Craft") == -1) {
+			if (targetMob instanceof Player) {
+				mobtype = ((Player) targetMob).getDisplayName();
+			} else {
+				mobtype = "unKn0wn";
+			}
+		} else {
+			if  (targetMob instanceof Zombie) {
+				if  (targetMob instanceof PigZombie) {
+					mobtype = "PigZombie";
+				} else {
+					mobtype = "Zombie";
+				}
+				if (((Zombie)targetMob).isVillager()) { mobtype = mobtype + "Vilager";}
+				if (((Zombie)targetMob).isBaby()) { mobtype = mobtype + "Baby";}
+			} else if (targetMob instanceof Skeleton) {
+				mobtype = "Skeleton";
+				if (((Skeleton)targetMob).getSkeletonType() == SkeletonType.WITHER) {mobtype = mobtype + "Wither";}
+			} else {
+				mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
+			}
+			
+			if (MobHealth.entityLookup.get(mobtype) != null) {
+				mobtype = MobHealth.entityLookup.get(mobtype);
+			}
+
+			// is entity tracked by plugin.
+			if (MobHealth.hasZM) {
+				ZombieMod ZM = (ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
+				PutredineImmortui zomb = ZM.getZombie((Entity) targetMob);
+				if (zomb != null) {
+					mobtype = zomb.commonName;
+				}
+				zomb = null;
+				ZM = null;
+			}
+
+			if (MobHealth.hasEpicBoss) {
+				EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBoss");
+				API EBAPI = new API(EB);
+				if (EBAPI.entityBoss(targetMob)) {
+					mobtype = EBAPI.GetBossName(targetMob);
+				}
+			}
+			
+			if (MobHealth.hasLikeABoss) {
+				if (LabAPI.isBoss(targetMob)) {
+					mobtype = LabAPI.getName(targetMob);
+				}
+			}
+			
+		}
+		return mobtype;
 	}
 }
