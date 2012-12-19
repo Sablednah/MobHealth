@@ -425,8 +425,8 @@ public class MobHealthAPI {
 				mobtype = mobtype + "Wither";
 			}
 		} else {
-			mobtype = new String(targetMob.getClass().getName());
-			mobtype = mobtype.replaceAll("org.bukkit.craftbukkit.entity.Craft", "");
+			mobtype = new String(targetMob.getClass().getSimpleName());
+			mobtype = mobtype.replaceAll("Craft", "");
 		}
 
 		if (MobHealth.entityLookup.get(mobtype) != null) {

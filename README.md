@@ -95,7 +95,7 @@ Give player MobHealth reload command.
 
 
 ### Changelog
-5.3.2:  1.4.5 RB 1 Update.  Removed depreciated methods.
+5.3.2:  1.4.5 RB 1 Update.  Removed depreciated methods. Fixed Entity Name Detection.
 
 5.3.1:  Fixed player names not showing sometimes.
 
