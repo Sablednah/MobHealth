@@ -23,6 +23,6 @@
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/bloodmoon-0.19.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/zarp/Minecraft/plugins/ZombieMod.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sable/workspace/Mobs.jar"/>
-	<classpathentry kind="lib" path="C:/Users/sable/zarp/Minecraft/plugins/EpicBoss.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sable/workspace/EpicBoss.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

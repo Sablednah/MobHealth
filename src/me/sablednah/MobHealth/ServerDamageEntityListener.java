@@ -2,7 +2,6 @@ package me.sablednah.MobHealth;
 
 import me.sablednah.MobHealth.API.MobHealthAPI;
 
-import org.bukkit.craftbukkit.entity.CraftEnderDragonPart;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
@@ -85,7 +84,7 @@ public class ServerDamageEntityListener implements Listener {
 
 							LivingEntity targetMob = null; // (LivingEntity) event.getEntity();
 							if (event.getEntity() instanceof ComplexEntityPart) {
-								targetMob = ((CraftEnderDragonPart) event.getEntity()).getParent();
+								targetMob = ((ComplexEntityPart) event.getEntity()).getParent();
 							} else if (event.getEntity() instanceof LivingEntity) {
 								targetMob = (LivingEntity) event.getEntity();
 							}

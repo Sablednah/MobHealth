@@ -224,9 +224,9 @@ public class MobHealth extends JavaPlugin {
 		}
 
 		/**
-		 * Schedule a version check every 6 hours for update notification .
+		 * Schedule a version check every 6 hours for update notification.  First check 10 seconds after init. (gives server chance to start
 		 */
-		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+		this.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -241,7 +241,7 @@ public class MobHealth extends JavaPlugin {
 					// ignore exceptions
 				}
 			}
-		}, 0, 432000);
+		}, 100, 432000);
 
 		logger.info("[" + myName + "] Online.");
 	}
