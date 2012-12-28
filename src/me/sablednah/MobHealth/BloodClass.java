@@ -5,7 +5,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import uk.co.jacekk.bukkit.baseplugin.v5.config.PluginConfigKey;
+import uk.co.jacekk.bukkit.baseplugin.v6.config.PluginConfigKey;
 import uk.co.jacekk.bukkit.bloodmoon.BloodMoon;
 import uk.co.jacekk.bukkit.bloodmoon.Config;
 
