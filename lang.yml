@@ -12,6 +12,8 @@ spoutKilledMessage: "%N: &4Killed."
 
 chatMessage:  "&f%N took %D damage.  %H/%M health."
 chatKilledMessage:  "&f%N took %D damage.  &4Killed."
+playerLabel: "Health"
+playerLabelPercent: "% Health"
 
 heroesSkillSpoutDamageTitle: "%S: &f%D damage."
 heroesSkillSpoutDamageMessage: "%N: %H/%M."
@@ -52,7 +54,7 @@ entityEnderDragon: Ender Dragon
 entityEnderman: Enderman
 entityGiant: Giant
 entityPigZombie: Zombie Pigman
-entitySilverFish: silverFish
+entitySilverfish: silverFish
 entityBlaze: Blaze
 entityMagmaCube: MagmaCube
 entityGhast: Ghast

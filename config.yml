@@ -29,6 +29,11 @@ disableChat: false
 showRPG: false
 showSideNotification: false
 
+showPlayerHeadHealth: true
+showMobHeadHealth: true
+usePercentForPlayer: true
+useBarForMobs: true
+
 usePermissions: false
 
 disablePlayers: false
@@ -42,4 +47,7 @@ hideNoDammage: true
 
 defaultToggle: true
 
+updateCheck: true
+doUpdate: true
 debugMode: false
+

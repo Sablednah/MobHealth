@@ -6,8 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
-
 
 public class MobHealthCommandExecutor implements CommandExecutor {
 	public MobHealth plugin;
@@ -19,9 +17,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("mobhealth")){
-
-			PluginDescriptionFile pdfFile = plugin.getDescription();
-			String myName=pdfFile.getName();
 
 			if (args.length > 0 && args[0].toLowerCase().equals("reload")) {
 				Boolean doReload = false;
@@ -94,37 +89,37 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					}
 	
 					if (MobHealth.debugMode) {
-						MobHealth.logger.info("[" + myName + "] DebugMode enabled.");
+						MobHealth.logger.info("DebugMode enabled.");
 					}
 					if (MobHealth.usePermissions) {
-						MobHealth.logger.info("[" + myName + "] Using Permissions.");
+						MobHealth.logger.info("Using Permissions.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Permissions Disabled.");
+						MobHealth.logger.info("Permissions Disabled.");
 					}
 					if (MobHealth.disableSpout) {
-						MobHealth.logger.info("[" + myName + "] Spout Disabled.");
+						MobHealth.logger.info("Spout Disabled.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Spout Enabled.");
+						MobHealth.logger.info("Spout Enabled.");
 					}
 					if (MobHealth.disablePlayers) {
-						MobHealth.logger.info("[" + myName + "] Player Notifications Disabled.");
+						MobHealth.logger.info("Player Notifications Disabled.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Player Notifications Enabled.");
+						MobHealth.logger.info("Player Notifications Enabled.");
 					}
 					if (MobHealth.disableMonsters) {
-						MobHealth.logger.info("[" + myName + "] Monster Notifications Disabled.");
+						MobHealth.logger.info("Monster Notifications Disabled.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Monster Notifications Enabled.");
+						MobHealth.logger.info("Monster Notifications Enabled.");
 					}
 					if (MobHealth.disableAnimals) {
-						MobHealth.logger.info("[" + myName + "] Animals Notifications Disabled.");
+						MobHealth.logger.info("Animals Notifications Disabled.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Animals Notifications Enabled.");
+						MobHealth.logger.info("Animals Notifications Enabled.");
 					}
 					if (MobHealth.disablePets) {
-						MobHealth.logger.info("[" + myName + "] Pet Notifications Disabled.");
+						MobHealth.logger.info("Pet Notifications Disabled.");
 					} else {
-						MobHealth.logger.info("[" + myName + "] Pet Notifications Enabled.");
+						MobHealth.logger.info("Pet Notifications Enabled.");
 					}
 					return true;
 				}

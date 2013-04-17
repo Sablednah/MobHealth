@@ -95,6 +95,19 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+6.1.1:  Detect scoreboard API and disable new health bars if not found.
+        Configurable player health label.
+        Fix for Villager Trade crash.
+
+6.1.0:  New healthbars and player health counters - requires 1.5.1 r0.2+ (build #2754+)
+
+6.0.0:  Update for 1.5.1 - mainly Compatibility fixes for new Heroes LaB and corruption code.  
+        Auto updater added.
+
+5.3.4:  Fixed lang.yml for Zombie villagers and silverfish.  
+        Update for latest LaB, BlodMoon and EpicBoss  
+        Added toggle to update checker  
+        
 5.3.3:  Updated for BloodMoon 0.20.2
 
 5.3.2:  1.4.5 RB 1 Update.  Removed depreciated methods. Fixed Entity Name Detection.
