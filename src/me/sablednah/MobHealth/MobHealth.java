@@ -42,6 +42,9 @@ public class MobHealth extends JavaPlugin {
     public static Boolean showMobHeadHealth;
     public static Boolean usePercentForPlayer;
     public static Boolean useBarForMobs;
+    public static Boolean hideBarForNPC;
+    public static Boolean hideBarForAnimal;
+    public static Boolean cleanDeathMessages;
     public static Boolean disablePlayers;
     public static Boolean disableMonsters;
     public static Boolean disableAnimals;
@@ -52,11 +55,15 @@ public class MobHealth extends JavaPlugin {
     public static Boolean updateCheck;
     public static Boolean doUpdate;
     public static Boolean debugMode;
+    public static String healthPrefix;
     
     public static String chatMessage;
     public static String chatKilledMessage;
     public static String playerLabel;
     public static String playerLabelPercent;
+    public static String healthBarCharacter = "|";
+    public static int healthBarSize = 20;
+    
     public static String chatMessageEgg;
     public static String chatMessageSnowball;
     
@@ -109,6 +116,7 @@ public class MobHealth extends JavaPlugin {
     public static int notifications = 0;
     
     public static SetHealth setHealths = null;
+   
     
     @Override
     public void onDisable() {
@@ -331,6 +339,12 @@ public class MobHealth extends JavaPlugin {
         showMobHeadHealth = getConfig().getBoolean("showMobHeadHealth");
         usePercentForPlayer = getConfig().getBoolean("usePercentForPlayer");
         useBarForMobs = getConfig().getBoolean("useBarForMobs");
+        hideBarForNPC = getConfig().getBoolean("hideBarForNPC");
+        hideBarForAnimal = getConfig().getBoolean("hideBarForAnimal");
+        healthBarSize = getConfig().getInt("healthBarSize",healthBarSize);
+        if (healthBarSize <5) { healthBarSize = 5; }
+
+        cleanDeathMessages = getConfig().getBoolean("cleanDeathMessages");
         
         disablePlayers = getConfig().getBoolean("disablePlayers");
         disableMonsters = getConfig().getBoolean("disableMonsters");
@@ -373,8 +387,15 @@ public class MobHealth extends JavaPlugin {
         heroesSkillChatKilledMessage = getLangConfig().getString("heroesSkillChatKilledMessage");
         
         playerLabel = getLangConfig().getString("playerLabel");
+        healthBarCharacter = getLangConfig().getString("healthBarCharacter");
+        healthBarCharacter = healthBarCharacter.replace("<3", "❤");
         playerLabelPercent = getLangConfig().getString("playerLabelPercent");
         
+        healthPrefix = getLangConfig().getString("healthPrefix","&r&f&r");
+//        logger.info("healthPrefix is:" + healthPrefix);
+        healthPrefix = ChatColor.translateAlternateColorCodes('&', healthPrefix);
+        logger.info("healthPrefix is:" + healthPrefix);
+        logger.info("Example monster bar:" + barGraph(5, 10, MobHealth.healthBarSize, "Mob"+MobHealth.healthPrefix, ""));
         String entityName;
         
         for (String thisEntity : entityList) {
@@ -567,11 +588,11 @@ public class MobHealth extends JavaPlugin {
         mesage.append(prefix).append(": [");
         mesage.append(ChatColor.GREEN);
         if (percent > 0) {
-            mesage.append(stringRepeat("|", percent));
+            mesage.append(stringRepeat(MobHealth.healthBarCharacter, percent));
         }
         mesage.append(ChatColor.RED);
         if (percent < scale) {
-            mesage.append(stringRepeat("|", (scale - percent)));
+            mesage.append(stringRepeat(MobHealth.healthBarCharacter, (scale - percent)));
         }
         mesage.append(ChatColor.WHITE);
         mesage.append("]").append(suffix);
@@ -589,5 +610,23 @@ public class MobHealth extends JavaPlugin {
     public MobHealthAPI getAPI(Plugin p) {
         return new MobHealthAPI(p);
     }
+
+    public static String cleanName(String name) {
+        String newname = name;
+        String searchcode = MobHealth.healthPrefix;
+        if (newname.contains(searchcode)) {
+            int loc = newname.indexOf(searchcode);
+            int start = 0;
+            if (newname.startsWith("§f")) {
+                start = 2;
+            }
+            if (loc > -1) {
+                newname = newname.substring(start, loc);
+            }
+        }
+        
+        return newname;
+    }
     
 }
+

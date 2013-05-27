@@ -28,11 +28,15 @@ disableChat: false
 
 showRPG: false
 showSideNotification: false
-
+healthBarSize: 10
 showPlayerHeadHealth: true
 showMobHeadHealth: true
 usePercentForPlayer: true
 useBarForMobs: true
+cleanDeathMessages: true
+
+hideBarForAnimal: false
+hideBarForNPC: true
 
 usePermissions: false
 

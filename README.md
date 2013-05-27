@@ -95,6 +95,14 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+6.1.3:  Command alias' /mh /mobh and /mhealth to cope with other plugins using /mobhealh
+        Made "Bar character" editable
+        Made bar length configurable.
+        Options to not show bars on NPCs and animals.
+        Fixed Minor ScoreBoard bugs.
+
+6.1.2:  Maintain Custom Mob names
+
 6.1.1:  Detect scoreboard API and disable new health bars if not found.
         Configurable player health label.
         Fix for Villager Trade crash.

@@ -13,6 +13,7 @@ spoutKilledMessage: "%N: &4Killed."
 chatMessage:  "&f%N took %D damage.  %H/%M health."
 chatKilledMessage:  "&f%N took %D damage.  &4Killed."
 playerLabel: "Health"
+healthBarCharacter: "❤"
 playerLabelPercent: "% Health"
 
 heroesSkillSpoutDamageTitle: "%S: &f%D damage."

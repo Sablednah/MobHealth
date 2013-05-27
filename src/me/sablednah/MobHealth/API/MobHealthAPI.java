@@ -12,6 +12,7 @@ import me.sablednah.zombiemod.ZombieMod;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.Skeleton.SkeletonType;
@@ -381,6 +383,10 @@ public class MobHealthAPI {
             mobtype = MobHealth.entityLookup.get(mobtype);
         }
         
+        if (targetMob.getCustomName() != null) {
+            mobtype = MobHealth.cleanName(targetMob.getCustomName());
+        }
+        
         // is entity tracked by plugin.
         if (MobHealth.hasZM) {
             ZombieMod ZM = (ZombieMod) plugin.getServer().getPluginManager().getPlugin("ZombieMod");
@@ -422,22 +428,39 @@ public class MobHealthAPI {
     }
     
     public void showBar(LivingEntity targetMob) {
-        if (targetMob instanceof Player) {
-            if (MobHealth.showPlayerHeadHealth) {
-                MobHealth.setHealths.setPlayer((Player) targetMob);
-            }
-        } else {
-            if (MobHealth.showMobHeadHealth) {
-                String headText = null;
-                int maxHealth = getMobMaxHealth(targetMob);
-                int health = getMobHealth(targetMob);
-                if (MobHealth.useBarForMobs) {
-                    headText = MobHealth.barGraph(health, maxHealth, 20, getMobName(targetMob), "");
-                } else {
-                    headText = getMobName(targetMob) + " " + health + "/" + maxHealth;
+        if (targetMob != null) {
+            if (targetMob instanceof Player) {
+                if (MobHealth.showPlayerHeadHealth) {
+                    if (MobHealth.setHealths != null) { 
+                        MobHealth.setHealths.setPlayer((Player) targetMob);
+                    }
                 }
-                targetMob.setCustomName(headText);
-                targetMob.setCustomNameVisible(true);
+            } else {
+                if (MobHealth.showMobHeadHealth) {
+                    Boolean showBar = true;
+                    if (targetMob instanceof Villager) {
+                        if (MobHealth.hideBarForNPC) {
+                            showBar=false;
+                        }
+                    } else if (targetMob instanceof Animals) {
+                        if (MobHealth.hideBarForAnimal) {
+                            showBar=false;
+                        }
+                    }
+                    if (showBar) {
+                        String headText = null;
+                        int maxHealth = getMobMaxHealth(targetMob);
+                        int health = getMobHealth(targetMob);
+                        if (MobHealth.useBarForMobs) {
+                            headText = MobHealth.barGraph(health, maxHealth, MobHealth.healthBarSize, getMobName(targetMob) + MobHealth.healthPrefix, "");
+                            
+                        } else {
+                            headText = getMobName(targetMob) + MobHealth.healthPrefix + " " + health + "/" + maxHealth;
+                        }
+                        targetMob.setCustomName(headText);
+                        targetMob.setCustomNameVisible(true);
+                    }
+                }
             }
         }
     }

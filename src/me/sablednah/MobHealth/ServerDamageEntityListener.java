@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -36,16 +37,10 @@ public class ServerDamageEntityListener implements Listener {
                 String villagerName = v.getCustomName();
                 if (villagerName != null) {
                     if (villagerName.length() > 32) {
-                        int trimAt = 32;
-                        if (villagerName.contains("[")) {  // trim at [ if found (removes health bar)
-                            trimAt = villagerName.indexOf("[");
-                            if (trimAt > 32) {
-                                trimAt = 32;
-                            }
-                            v.setCustomName(villagerName.substring(0, trimAt));
-                            
-                            //now set a timer to put it back.
-                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar((LivingEntity)v), 2L);
+                        if (villagerName.contains(MobHealth.healthPrefix)) {  // trim at [ if found (removes health bar)
+                            v.setCustomName(MobHealth.cleanName(villagerName));
+                            // now set a timer to put it back.
+                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar((LivingEntity) v), 2L);
                         }
                     }
                 }
@@ -137,26 +132,27 @@ public class ServerDamageEntityListener implements Listener {
                             System.out.print("Entity Damaged is ComplexLivingEntity ");
                     }
                     
-                    if (MobHealth.getPluginState(playa)) {
-                        if ((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions) || (!MobHealth.usePermissions)) {
-                            
-                            LivingEntity targetMob = null; // (LivingEntity) event.getEntity();
-                            if (event.getEntity() instanceof ComplexEntityPart) {
-                                targetMob = ((ComplexEntityPart) event.getEntity()).getParent();
-                            } else if (event.getEntity() instanceof LivingEntity) {
-                                targetMob = (LivingEntity) event.getEntity();
-                            }
-                            if (targetMob != null) {
+                    LivingEntity targetMob = null; // (LivingEntity) event.getEntity();
+                    if (event.getEntity() instanceof ComplexEntityPart) {
+                        targetMob = ((ComplexEntityPart) event.getEntity()).getParent();
+                    } else if (event.getEntity() instanceof LivingEntity) {
+                        targetMob = (LivingEntity) event.getEntity();
+                    }
+                    
+                    if (targetMob != null) {
+                        
+                        if (MobHealth.getPluginState(playa)) {
+                            if ((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions) || (!MobHealth.usePermissions)) {
                                 targetHealth = API.getMobHealth(targetMob);
-                                
                                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(), plugin), 2L);
-                            }
-                        } else {
-                            if (MobHealth.debugMode) {
-                                System.out.print("Not allowed - mobhealth.show is " + playa.hasPermission("mobhealth.show") + " - usePermissions set to "
-                                        + MobHealth.usePermissions);
+                                return;
+                            } else {
+                                if (MobHealth.debugMode) {
+                                    System.out.print("Not allowed - mobhealth.show is " + playa.hasPermission("mobhealth.show") + " - usePermissions set to " + MobHealth.usePermissions);
+                                }
                             }
                         }
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(targetMob), 2L);
                     }
                 }
             }
@@ -170,9 +166,21 @@ public class ServerDamageEntityListener implements Listener {
         }
     }
     
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (MobHealth.showPlayerHeadHealth) {
             MobHealth.setHealths.removePlayer(event.getPlayer());
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        if (MobHealth.cleanDeathMessages) {
+            String dm = e.getDeathMessage();
+            if (e != null) {
+                dm = MobHealth.cleanName(dm);
+                e.setDeathMessage(dm);
+            }
         }
     }
     
