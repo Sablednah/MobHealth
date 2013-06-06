@@ -1,7 +1,7 @@
 /**
  * @author	sable <darren.douglas@gmail.com>
  * @version	3.2
- * 
+ *
  */
 package me.sablednah.MobHealth;
 
@@ -27,12 +27,12 @@ import org.bukkit.entity.Player;
 import org.getspout.spoutapi.gui.Widget;
 
 public class MobHealth extends JavaPlugin {
-    
+
     public static MobHealth plugin;
     public final ServerDamageEntityListener EntityListener = new ServerDamageEntityListener(this);
     public final HeroesEventListener HeroesDamageEventListener = new HeroesEventListener(this);
     public static Logger logger;
-    
+
     public static Boolean usePermissions;
     public static Boolean disableSpout;
     public static Boolean disableChat;
@@ -56,17 +56,21 @@ public class MobHealth extends JavaPlugin {
     public static Boolean doUpdate;
     public static Boolean debugMode;
     public static String healthPrefix;
-    
+
+	// Paril
+	public static boolean showMobPrefix;
+	// Paril
+
     public static String chatMessage;
     public static String chatKilledMessage;
     public static String playerLabel;
     public static String playerLabelPercent;
     public static String healthBarCharacter = "|";
     public static int healthBarSize = 20;
-    
+
     public static String chatMessageEgg;
     public static String chatMessageSnowball;
-    
+
     public static String spoutDamageTitle;
     public static String spoutDamageMessage;
     public static String spoutKilledMessage;
@@ -75,34 +79,34 @@ public class MobHealth extends JavaPlugin {
     public static String spoutSnowballTitle;
     public static String spoutSnowballMessage;
     public static String RPGnotify;
-    
+
     public static String heroesSkillSpoutDamageTitle;
     public static String heroesSkillSpoutDamageMessage;
     public static String heroesSkillSpoutKilledMessage;
     public static String heroesSkillChatMessage;
     public static String heroesSkillChatKilledMessage;
-    
+
     private MobHealthCommandExecutor myExecutor;
-    
+
     private FileConfiguration LangConfig = null;
     private File LangConfigurationFile = null;
-    
+
     public static FileConfiguration PlayerConfig = null;
     public static File PlayerConfigurationFile = null;
-    
+
     public static Map<Player, Boolean> pluginEnabled = null;
     public static Map<Player, Widget> hesGotAWidget = new HashMap<Player, Widget>();
     public static Map<String, String> entityLookup = new HashMap<String, String>();
     public static Map<Player, Widget> hesGotASideWidget = new HashMap<Player, Widget>();
     public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
     public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
-    
+
     public static String[] animalList = { "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
     public static String[] monsterList = { "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither",
             "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie", "Silverfish", "Spider" };
-    
+
     public String[] entityList = concat(animalList, monsterList);
-    
+
     public static Boolean hasLikeABoss;
     public static Boolean hasCorruption;
     public static Boolean hasHeroes;
@@ -112,34 +116,33 @@ public class MobHealth extends JavaPlugin {
     public static Boolean hasZM;
     public static Boolean hasBloodMoon;
     public static Boolean hasEpicBoss;
-    
+
     public static int notifications = 0;
-    
+
     public static SetHealth setHealths = null;
-   
-    
+
     @Override
     public void onDisable() {
         this.getServer().getScheduler().cancelTasks(this);
         PluginDescriptionFile pdfFile = this.getDescription();
         logger.info("[" + pdfFile.getName() + "] --- END OF LINE ---");
     }
-    
+
     @Override
     public void onEnable() {
         plugin = this;
         logger = getLogger();
         String VersionCurrent = getDescription().getVersion();
-        
+
         PluginManager pm = getServer().getPluginManager();
-        
+
         myExecutor = new MobHealthCommandExecutor(this);
         getCommand("MobHealth").setExecutor(myExecutor);
-        
+
         loadConfiguration();
-        
+
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
-        
+
         hasLikeABoss = this.getServer().getPluginManager().isPluginEnabled("Likeaboss");
         hasCorruption = this.getServer().getPluginManager().isPluginEnabled("Corruption");
         hasHeroes = this.getServer().getPluginManager().isPluginEnabled("Heroes");
@@ -149,7 +152,7 @@ public class MobHealth extends JavaPlugin {
         hasZM = this.getServer().getPluginManager().isPluginEnabled("ZombieMod");
         hasBloodMoon = this.getServer().getPluginManager().isPluginEnabled("BloodMoon");
         hasEpicBoss = this.getServer().getPluginManager().isPluginEnabled("EpicBossRecoded");
-        
+
         pm.registerEvents(this.EntityListener, this);
         if (hasHeroes) {
             pm.registerEvents(this.HeroesDamageEventListener, this);
@@ -214,7 +217,7 @@ public class MobHealth extends JavaPlugin {
         } else {
             logger.info("Pet Notifications Enabled.");
         }
-        
+
         if (showPlayerHeadHealth || showMobHeadHealth) {
             // Santity check: - is the score board actually available?
             try {
@@ -228,43 +231,43 @@ public class MobHealth extends JavaPlugin {
                 showMobHeadHealth = false;
             }
         }
-        
+
         // Enable Metrics
         try {
             Metrics metrics = new Metrics(this);
-            
+
             // Plot the total amount of Notifications
             metrics.addCustomData(new Metrics.Plotter("Notifications") {
-                
+
                 @Override
                 public int getValue() {
                     return MobHealth.notifications;
                 }
-                
+
             });
-            
+
             metrics.start();
         } catch (IOException e) {
             // Failed to submit the stats :-(
         }
-        
+
         /**
          * Schedule a version check every 6 hours for update notification. First check 10 seconds after init. (gives
          * server chance to start
          */
         if (updateCheck) {
             UpdateType upd = Updater.UpdateType.NO_DOWNLOAD;
-            
+
             if (doUpdate) {
                 upd = Updater.UpdateType.DEFAULT;
             }
-            
+
             Updater updater = new Updater(this, "mobhealth", this.getFile(), upd, true);
             Updater.UpdateResult result = updater.getResult();
-            
+
             String name;
             long size;
-            
+
             switch (result) {
                 case SUCCESS:
                     // Success: The updater found an update, and has readied it to be loaded the next time the server restarts/reloads
@@ -297,13 +300,13 @@ public class MobHealth extends JavaPlugin {
             }
         }
     }
-    
+
     /**
      * Initialise config file
      */
     public void loadConfiguration() {
         getConfig().options().copyDefaults(true);
-        
+
         String headertext;
         headertext = "Default MobHealth Config file\r\n\r\n";
         headertext += "disableSpout: [true|false] - force messages to display in chat even if spout is present.\r\n";
@@ -325,12 +328,12 @@ public class MobHealth extends JavaPlugin {
         headertext += "hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.\r\n";
         headertext += "debugMode: [true|false] Enable extra debug info in logs.\r\n";
         headertext += "\r\n";
-        
+
         getConfig().options().header(headertext);
         getConfig().options().copyHeader(true);
-        
+
         usePermissions = getConfig().getBoolean("usePermissions");
-        
+
         disableSpout = getConfig().getBoolean("disableSpout");
         disableChat = getConfig().getBoolean("disableChat");
         showRPG = getConfig().getBoolean("showRPG");
@@ -345,59 +348,60 @@ public class MobHealth extends JavaPlugin {
         if (healthBarSize <5) { healthBarSize = 5; }
 
         cleanDeathMessages = getConfig().getBoolean("cleanDeathMessages");
-        
+
         disablePlayers = getConfig().getBoolean("disablePlayers");
         disableMonsters = getConfig().getBoolean("disableMonsters");
         disableAnimals = getConfig().getBoolean("disableAnimals");
         disablePets = getConfig().getBoolean("disablePets");
-        
+
         damageDisplayType = getConfig().getInt("damageDisplayType");
         hideNoDammage = getConfig().getBoolean("hideNoDammage");
-        
+
         defaultToggle = getConfig().getBoolean("defaultToggle");
-        
+
         updateCheck = getConfig().getBoolean("updateCheck", true);
         doUpdate = getConfig().getBoolean("doUpdate", true);
-        
+
         debugMode = getConfig().getBoolean("debugMode");
-        
+		showMobPrefix = getConfig().getBoolean("showMobPrefix");
+
         saveConfig();
-        
+
         getLangConfig();
-        
+
         chatMessage = getLangConfig().getString("chatMessage");
         chatKilledMessage = getLangConfig().getString("chatKilledMessage");
         spoutKilledMessage = getLangConfig().getString("spoutKilledMessage");
         spoutDamageMessage = getLangConfig().getString("spoutDamageMessage");
         spoutDamageTitle = getLangConfig().getString("spoutDamageTitle");
-        
+
         chatMessageEgg = getLangConfig().getString("chatMessageEgg");
         chatMessageSnowball = getLangConfig().getString("chatMessageSnowball");
         spoutEggTitle = getLangConfig().getString("spoutEggTitle");
         spoutEggMessage = getLangConfig().getString("spoutEggMessage");
         spoutSnowballTitle = getLangConfig().getString("spoutSnowballTitle");
         spoutSnowballMessage = getLangConfig().getString("spoutSnowballMessage");
-        
+
         RPGnotify = getLangConfig().getString("RPGnotify");
-        
+
         heroesSkillSpoutDamageTitle = getLangConfig().getString("heroesSkillSpoutDamageTitle");
         heroesSkillSpoutDamageMessage = getLangConfig().getString("heroesSkillSpoutDamageMessage");
         heroesSkillSpoutKilledMessage = getLangConfig().getString("heroesSkillSpoutKilledMessage");
         heroesSkillChatMessage = getLangConfig().getString("heroesSkillChatMessage");
         heroesSkillChatKilledMessage = getLangConfig().getString("heroesSkillChatKilledMessage");
-        
+
         playerLabel = getLangConfig().getString("playerLabel");
         healthBarCharacter = getLangConfig().getString("healthBarCharacter");
         healthBarCharacter = healthBarCharacter.replace("<3", "❤");
         playerLabelPercent = getLangConfig().getString("playerLabelPercent");
-        
+
         healthPrefix = getLangConfig().getString("healthPrefix","&r&f&r");
 //        logger.info("healthPrefix is:" + healthPrefix);
         healthPrefix = ChatColor.translateAlternateColorCodes('&', healthPrefix);
         logger.info("healthPrefix is:" + healthPrefix);
         logger.info("Example monster bar:" + barGraph(5, 10, MobHealth.healthBarSize, "Mob"+MobHealth.healthPrefix, ""));
         String entityName;
-        
+
         for (String thisEntity : entityList) {
             entityName = getLangConfig().getString("entity" + thisEntity);
             if (entityName == null) {
@@ -405,22 +409,22 @@ public class MobHealth extends JavaPlugin {
             }
             entityLookup.put((thisEntity), entityName);
         }
-        
+
         saveLangConfig();
-        
+
         try {
             pluginEnabled = (Map<Player, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             System.out.print(" toggleStates.bin error");
             e.printStackTrace();
         }
-        
+
     }
-    
+
     /**
      * Converts InputStream to String
      * One-line 'hack' to convert InputStreams to strings.
-     * 
+     *
      * @param is
      *            The InputStream to convert
      * @return returns a String version of 'is'
@@ -428,14 +432,14 @@ public class MobHealth extends JavaPlugin {
     public String convertStreamToString(InputStream is) {
         return new Scanner(is).useDelimiter("\\A").next();
     }
-    
+
     public void reloadLangConfig() {
         if (LangConfigurationFile == null) {
             LangConfigurationFile = new File(getDataFolder(), "lang.yml");
         }
         LangConfig = YamlConfiguration.loadConfiguration(LangConfigurationFile);
         LangConfig.options().copyDefaults(true);
-        
+
         // Look for defaults in the jar
         InputStream defConfigStream = getResource("lang.yml");
         if (defConfigStream != null) {
@@ -443,14 +447,14 @@ public class MobHealth extends JavaPlugin {
             LangConfig.setDefaults(defConfig);
         }
     }
-    
+
     public FileConfiguration getLangConfig() {
         if (LangConfig == null) {
             reloadLangConfig();
         }
         return LangConfig;
     }
-    
+
     public void saveLangConfig() {
         if (LangConfig == null || LangConfigurationFile == null) {
             return;
@@ -461,10 +465,10 @@ public class MobHealth extends JavaPlugin {
             logger.severe("Could not save Lang config to " + LangConfigurationFile + " " + ex);
         }
     }
-    
+
     /**
      * Get if plugin is enabled for a player.
-     * 
+     *
      * @param player
      * @return Boolean
      */
@@ -474,10 +478,10 @@ public class MobHealth extends JavaPlugin {
         }
         return defaultToggle;
     }
-    
+
     /**
      * Toggle if plugin is enabled for a player
-     * 
+     *
      * @param player
      */
     public static void togglePluginState(Player player) {
@@ -498,19 +502,19 @@ public class MobHealth extends JavaPlugin {
                 player.sendMessage("Notifications enabled.");
             }
         }
-        
+
         try {
             SaveToggle.save((HashMap<Player, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
     }
-    
+
     /**
      * Get widgets for a player.
-     * 
+     *
      * @param Player
      * @return widget
      */
@@ -525,10 +529,10 @@ public class MobHealth extends JavaPlugin {
             return hesGotAWidget.get(player);
         }
     }
-    
+
     /**
      * store the widget!
-     * 
+     *
      * @param Player
      *            Widget
      */
@@ -543,10 +547,10 @@ public class MobHealth extends JavaPlugin {
             hesGotAWidget.put(player, widget);
         }
     }
-    
+
     /**
      * remove a widget!
-     * 
+     *
      * @param Player
      */
     public static void killWidget(Player player, int widgetnumber) {
@@ -560,12 +564,12 @@ public class MobHealth extends JavaPlugin {
             hesGotAWidget.remove(player);
         }
     }
-    
+
     //
-    
+
     /**
      * Joins two arrays
-     * 
+     *
      * @param first
      *            array
      * @param second
@@ -577,28 +581,33 @@ public class MobHealth extends JavaPlugin {
         System.arraycopy(second, 0, result, first.length, second.length);
         return result;
     }
-    
+
     public static String barGraph(final int x, final int y, final int scale, final String prefix, final String suffix) {
         final int percent = (int) ((x / (float) y) * scale);
         if (MobHealth.debugMode) {
             System.out.print("head percent: " + percent);
         }
-        final StringBuilder mesage = new StringBuilder(12 + scale + prefix.length() + suffix.length());
-        mesage.append(ChatColor.WHITE);
-        mesage.append(prefix).append(": [");
-        mesage.append(ChatColor.GREEN);
+        final StringBuilder message = new StringBuilder(12 + scale + prefix.length() + suffix.length());
+		message.append(ChatColor.WHITE);
+
+		// Paril
+		if (MobHealth.showMobPrefix)
+			message.append(prefix).append(": ");
+		// Paril
+
+		message.append("[").append(ChatColor.GREEN);
         if (percent > 0) {
-            mesage.append(stringRepeat(MobHealth.healthBarCharacter, percent));
+            message.append(stringRepeat(MobHealth.healthBarCharacter, percent));
         }
-        mesage.append(ChatColor.RED);
+        message.append(ChatColor.RED);
         if (percent < scale) {
-            mesage.append(stringRepeat(MobHealth.healthBarCharacter, (scale - percent)));
+            message.append(stringRepeat(MobHealth.healthBarCharacter, (scale - percent)));
         }
-        mesage.append(ChatColor.WHITE);
-        mesage.append("]").append(suffix);
-        return mesage.toString();
+        message.append(ChatColor.WHITE);
+        message.append("]").append(suffix);
+        return message.toString();
     }
-    
+
     public static String stringRepeat(final String newString, final int n) {
         final StringBuilder builder = new StringBuilder(n * newString.length());
         for (int x = 0; x < n; x++) {
@@ -606,7 +615,7 @@ public class MobHealth extends JavaPlugin {
         }
         return builder.toString();
     }
-    
+
     public MobHealthAPI getAPI(Plugin p) {
         return new MobHealthAPI(p);
     }
@@ -624,9 +633,9 @@ public class MobHealth extends JavaPlugin {
                 newname = newname.substring(start, loc);
             }
         }
-        
+
         return newname;
     }
-    
+
 }
 

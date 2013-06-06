@@ -22,6 +22,7 @@
 #    4: display damage taken (+amount resisted)
 # hideNoDammage: [true|false] Hide notifications that inflict 0 damage.  Custom Egg and Snowball notifications are exempt.
 # debugMode: [true|false] Enable extra debugging messages in server logs.
+# showMobPrefix: [true|false] Whether or not to show the mob prefix.
 
 disableSpout: false
 disableChat: false
@@ -55,3 +56,4 @@ updateCheck: true
 doUpdate: true
 debugMode: false
 
+showMobPrefix: true
