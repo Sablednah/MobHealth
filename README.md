@@ -95,6 +95,12 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+7.0.1:  Bugfix for 7.0.0 bugfix. 
+
+7.0.0:  1.6.2 update.  Bugfix for horse errors.
+
+6.1.4:  Bugfix - remove special character from lang.yml
+
 6.1.3:  Command alias' /mh /mobh and /mhealth to cope with other plugins using /mobhealh
         Made "Bar character" editable
         Made bar length configurable.

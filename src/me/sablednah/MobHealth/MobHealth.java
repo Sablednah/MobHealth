@@ -38,12 +38,19 @@ public class MobHealth extends JavaPlugin {
     public static Boolean disableChat;
     public static Boolean showRPG;
     public static Boolean showSideNotification;
+    
     public static Boolean showPlayerHeadHealth;
     public static Boolean showMobHeadHealth;
     public static Boolean usePercentForPlayer;
+    
     public static Boolean useBarForMobs;
     public static Boolean hideBarForNPC;
     public static Boolean hideBarForAnimal;
+    
+    public static Boolean hideBarForVillager;
+    public static Boolean showbarCustomNameOnly;
+    public static List<String> forceBarHide = null;
+    
     public static Boolean cleanDeathMessages;
     public static Boolean disablePlayers;
     public static Boolean disableMonsters;
@@ -56,6 +63,7 @@ public class MobHealth extends JavaPlugin {
     public static Boolean doUpdate;
     public static Boolean debugMode;
     public static String healthPrefix;
+    public static Boolean alwaysVisable;
     
     public static String chatMessage;
     public static String chatKilledMessage;
@@ -97,7 +105,8 @@ public class MobHealth extends JavaPlugin {
     public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
     public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
     
-    public static String[] animalList = { "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
+    public static String[] animalList = { "Donkey", "Mule", "Horse", "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager",
+            "Wolf", "Ocelot" };
     public static String[] monsterList = { "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither",
             "Spider", "Ghast", "MagmaCube", "Slime", "CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie", "Silverfish", "Spider" };
     
@@ -116,7 +125,6 @@ public class MobHealth extends JavaPlugin {
     public static int notifications = 0;
     
     public static SetHealth setHealths = null;
-   
     
     @Override
     public void onDisable() {
@@ -149,6 +157,7 @@ public class MobHealth extends JavaPlugin {
         hasZM = this.getServer().getPluginManager().isPluginEnabled("ZombieMod");
         hasBloodMoon = this.getServer().getPluginManager().isPluginEnabled("BloodMoon");
         hasEpicBoss = this.getServer().getPluginManager().isPluginEnabled("EpicBossRecoded");
+//        hasCitizens = this.getServer().getPluginManager().isPluginEnabled("Citizens");
         
         pm.registerEvents(this.EntityListener, this);
         if (hasHeroes) {
@@ -341,15 +350,25 @@ public class MobHealth extends JavaPlugin {
         useBarForMobs = getConfig().getBoolean("useBarForMobs");
         hideBarForNPC = getConfig().getBoolean("hideBarForNPC");
         hideBarForAnimal = getConfig().getBoolean("hideBarForAnimal");
-        healthBarSize = getConfig().getInt("healthBarSize",healthBarSize);
-        if (healthBarSize <5) { healthBarSize = 5; }
-
+        
+        hideBarForVillager = getConfig().getBoolean("hideBarForVillager");
+        showbarCustomNameOnly = getConfig().getBoolean("showbarCustomNameOnly");
+        @SuppressWarnings("unchecked")
+        List<String> fbh = (List<String>) getConfig().getList("forceBarHide");
+        fbh.add("Horse");
+        forceBarHide = fbh;
+        healthBarSize = getConfig().getInt("healthBarSize", healthBarSize);
+        if (healthBarSize < 5) {
+            healthBarSize = 5;
+        }
+        
         cleanDeathMessages = getConfig().getBoolean("cleanDeathMessages");
         
         disablePlayers = getConfig().getBoolean("disablePlayers");
         disableMonsters = getConfig().getBoolean("disableMonsters");
         disableAnimals = getConfig().getBoolean("disableAnimals");
         disablePets = getConfig().getBoolean("disablePets");
+        alwaysVisable = getConfig().getBoolean("alwaysVisable");
         
         damageDisplayType = getConfig().getInt("damageDisplayType");
         hideNoDammage = getConfig().getBoolean("hideNoDammage");
@@ -391,13 +410,12 @@ public class MobHealth extends JavaPlugin {
         healthBarCharacter = healthBarCharacter.replace("<3", "❤");
         playerLabelPercent = getLangConfig().getString("playerLabelPercent");
         
-        healthPrefix = getLangConfig().getString("healthPrefix","&r&f&r");
+        healthPrefix = getLangConfig().getString("healthPrefix", "&r&f&r");
 //        logger.info("healthPrefix is:" + healthPrefix);
         healthPrefix = ChatColor.translateAlternateColorCodes('&', healthPrefix);
         logger.info("healthPrefix is:" + healthPrefix);
-        logger.info("Example monster bar:" + barGraph(5, 10, MobHealth.healthBarSize, "Mob"+MobHealth.healthPrefix, ""));
+        logger.info("Example monster bar:" + barGraph(5, 10, MobHealth.healthBarSize, "Mob" + MobHealth.healthPrefix, ""));
         String entityName;
-        
         for (String thisEntity : entityList) {
             entityName = getLangConfig().getString("entity" + thisEntity);
             if (entityName == null) {
@@ -405,16 +423,13 @@ public class MobHealth extends JavaPlugin {
             }
             entityLookup.put((thisEntity), entityName);
         }
-        
         saveLangConfig();
-        
         try {
             pluginEnabled = (Map<Player, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             System.out.print(" toggleStates.bin error");
             e.printStackTrace();
         }
-        
     }
     
     /**
@@ -498,14 +513,12 @@ public class MobHealth extends JavaPlugin {
                 player.sendMessage("Notifications enabled.");
             }
         }
-        
         try {
             SaveToggle.save((HashMap<Player, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
     }
     
     /**
@@ -610,8 +623,9 @@ public class MobHealth extends JavaPlugin {
     public MobHealthAPI getAPI(Plugin p) {
         return new MobHealthAPI(p);
     }
-
+    
     public static String cleanName(String name) {
+        if (name == null) { return name; }
         String newname = name;
         String searchcode = MobHealth.healthPrefix;
         if (newname.contains(searchcode)) {
@@ -624,9 +638,6 @@ public class MobHealth extends JavaPlugin {
                 newname = newname.substring(start, loc);
             }
         }
-        
         return newname;
     }
-    
 }
-

@@ -15,6 +15,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.PigZombie;
@@ -242,7 +244,7 @@ public class MobHealthAPI {
     public int getMobHealth(LivingEntity targetMob) {
         int targetHealth = 0;
         
-        targetHealth = targetMob.getHealth();
+        targetHealth = (int) targetMob.getHealth();
         
         if (MobHealth.hasMA) {
             MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
@@ -260,7 +262,7 @@ public class MobHealthAPI {
             if (arena != null) {
                 MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
                 if (thisBoss != null) {
-                    targetHealth = thisBoss.getHealth();
+                    targetHealth = (int) thisBoss.getHealth();
                 }
                 thisBoss = null;
             }
@@ -294,7 +296,7 @@ public class MobHealthAPI {
     public int getMobMaxHealth(LivingEntity targetMob) {
         int targetMaxHealth = 0;
         
-        targetMaxHealth = targetMob.getMaxHealth();
+        targetMaxHealth = (int) targetMob.getMaxHealth();
         
         if (MobHealth.hasMA) {
             MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
@@ -314,14 +316,14 @@ public class MobHealthAPI {
             if (arena != null) {
                 MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
                 if (thisBoss != null) {
-                    targetMaxHealth = thisBoss.getMaxHealth();
+                    targetMaxHealth = (int) thisBoss.getMaxHealth();
                 } else {
                     WaveManager wm = arena.getWaveManager();
                     Wave thisWave = wm.getCurrent();
                     if (thisWave != null) {
                         targetMaxHealth = (int) (targetMob.getMaxHealth() * thisWave.getHealthMultiplier());
                     } else {
-                        targetMaxHealth = targetMob.getMaxHealth();
+                        targetMaxHealth = (int) targetMob.getMaxHealth();
                     }
                 }
                 thisBoss = null;
@@ -374,6 +376,27 @@ public class MobHealthAPI {
             if (((Skeleton) targetMob).getSkeletonType() == SkeletonType.WITHER) {
                 mobtype = mobtype + "Wither";
             }
+        } else if (targetMob instanceof Horse) {
+            mobtype = "Horse";
+            Variant typ = ((Horse)targetMob).getVariant();
+            switch (typ) {
+                case HORSE:
+                    mobtype = "Horse";
+                    break;
+                case SKELETON_HORSE:
+                    mobtype = "Skeleton Horse";
+                    break;
+                case UNDEAD_HORSE:
+                    mobtype = "Undead Horse";
+                    break;                
+                case DONKEY:
+                    mobtype = "Doney";
+                    break;                
+                case MULE:
+                    mobtype = "Mule";
+                    break;
+            }
+            
         } else {
             mobtype = new String(targetMob.getClass().getSimpleName());
             mobtype = mobtype.replaceAll("Craft", "");
@@ -439,7 +462,7 @@ public class MobHealthAPI {
                 if (MobHealth.showMobHeadHealth) {
                     Boolean showBar = true;
                     if (targetMob instanceof Villager) {
-                        if (MobHealth.hideBarForNPC) {
+                        if (MobHealth.hideBarForVillager) {
                             showBar=false;
                         }
                     } else if (targetMob instanceof Animals) {
@@ -447,6 +470,16 @@ public class MobHealthAPI {
                             showBar=false;
                         }
                     }
+                    if (targetMob.hasMetadata("NPC")){
+                        if (MobHealth.hideBarForNPC){
+                            showBar = false;
+                        }
+                    }
+                    String thisType = targetMob.getType().getName();
+                    if (MobHealth.forceBarHide.contains(thisType)) {
+                        showBar = false;
+                    }
+                    
                     if (showBar) {
                         String headText = null;
                         int maxHealth = getMobMaxHealth(targetMob);
@@ -458,7 +491,11 @@ public class MobHealthAPI {
                             headText = getMobName(targetMob) + MobHealth.healthPrefix + " " + health + "/" + maxHealth;
                         }
                         targetMob.setCustomName(headText);
-                        targetMob.setCustomNameVisible(true);
+                        if (MobHealth.alwaysVisable) {
+                            targetMob.setCustomNameVisible(true);
+                        } else {
+                            targetMob.setCustomNameVisible(false);                            
+                        }
                     }
                 }
             }

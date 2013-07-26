@@ -5,11 +5,11 @@ import me.sablednah.MobHealth.API.MobHealthAPI;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,15 +32,15 @@ public class ServerDamageEntityListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityInteract(PlayerInteractEntityEvent event) {
         if (MobHealth.showPlayerHeadHealth || MobHealth.showMobHeadHealth) {
-            if ((event.getRightClicked() instanceof Villager)) {
-                Villager v = (Villager) event.getRightClicked();
-                String villagerName = v.getCustomName();
-                if (villagerName != null) {
-                    if (villagerName.length() > 32) {
-                        if (villagerName.contains(MobHealth.healthPrefix)) {  // trim at [ if found (removes health bar)
-                            v.setCustomName(MobHealth.cleanName(villagerName));
+            if ((event.getRightClicked() instanceof LivingEntity)) {
+                LivingEntity le = (LivingEntity) event.getRightClicked();
+                String customName = le.getCustomName();
+                if (customName != null) {
+                    if (customName.length() > 32) {
+                        if (customName.contains(MobHealth.healthPrefix)) {  // trim at [ if found (removes health bar)
+                            le.setCustomName(MobHealth.cleanName(customName));
                             // now set a timer to put it back.
-                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar((LivingEntity) v), 2L);
+                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(le), 2L);
                         }
                     }
                 }
@@ -81,7 +81,7 @@ public class ServerDamageEntityListener implements Listener {
                     tmpplay = tmpplay.toLowerCase().toString();
                     if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
                         event.setCancelled(true);
-                        event.setDamage(0);
+                        event.setDamage(0.0D);
                         return;
                     }
                 }
@@ -90,7 +90,15 @@ public class ServerDamageEntityListener implements Listener {
             if (MobHealth.showPlayerHeadHealth || MobHealth.showMobHeadHealth) {
                 if (event.getEntity() instanceof LivingEntity) {
                     LivingEntity tm = (LivingEntity) event.getEntity();
-                    API.showBar(tm);
+                    if (tm instanceof Horse) {
+                        String horsename = MobHealth.cleanName(tm.getCustomName());
+                        if (horsename.length() > 32) {
+                            horsename = horsename.substring(0, 32);
+                        }
+                        tm.setCustomName(horsename);
+                    } else {
+                        API.showBar(tm);
+                    }
                 }
             }
             
@@ -144,11 +152,12 @@ public class ServerDamageEntityListener implements Listener {
                         if (MobHealth.getPluginState(playa)) {
                             if ((playa.hasPermission("mobhealth.show") && MobHealth.usePermissions) || (!MobHealth.usePermissions)) {
                                 targetHealth = API.getMobHealth(targetMob);
-                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(), plugin), 2L);
+                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new MessageScheduler(playa, damageEvent, targetMob, targetHealth, (int) event.getDamage(), plugin), 2L);
                                 return;
                             } else {
                                 if (MobHealth.debugMode) {
-                                    System.out.print("Not allowed - mobhealth.show is " + playa.hasPermission("mobhealth.show") + " - usePermissions set to " + MobHealth.usePermissions);
+                                    System.out.print("Not allowed - mobhealth.show is " + playa.hasPermission("mobhealth.show") + " - usePermissions set to "
+                                            + MobHealth.usePermissions);
                                 }
                             }
                         }
@@ -195,7 +204,17 @@ public class ServerDamageEntityListener implements Listener {
         @Override
         public void run() {
             MobHealthAPI API = new MobHealthAPI(plugin);
-            API.showBar(this.tm);
+            if (tm instanceof Horse) {
+                if (tm.getCustomName() != null) {
+                    String horsename = MobHealth.cleanName(tm.getCustomName());
+                    if (horsename.length() > 32) {
+                        horsename = horsename.substring(0, 32);
+                    }
+                    tm.setCustomName(horsename);
+                }
+            } else {
+                API.showBar(this.tm);
+            }
         }
     }
     

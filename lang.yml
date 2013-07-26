@@ -13,7 +13,7 @@ spoutKilledMessage: "%N: &4Killed."
 chatMessage:  "&f%N took %D damage.  %H/%M health."
 chatKilledMessage:  "&f%N took %D damage.  &4Killed."
 playerLabel: "Health"
-healthBarCharacter: "❤"
+healthBarCharacter: "|"
 playerLabelPercent: "% Health"
 
 heroesSkillSpoutDamageTitle: "%S: &f%D damage."
@@ -38,6 +38,12 @@ entityGolem: Golem
 entitySnowman: Snow Golem
 entityIronGolem: Iron Golem
 entityBat: Bat
+
+entityHorse: Horse
+entitySkeletal: Horse
+entityUndead: Horse
+entityMule: Mule
+entityDonkey: Donkey
 
 entityWitch: Witch
 entityWither: Wither

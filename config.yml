@@ -36,7 +36,10 @@ useBarForMobs: true
 cleanDeathMessages: true
 
 hideBarForAnimal: false
+hideBarForVillager: true
 hideBarForNPC: true
+forceBarHide: [EnderDragon,Wither]
+showbarCustomNameOnly: false
 
 usePermissions: false
 
