@@ -28,6 +28,7 @@ disableChat: false
 
 showRPG: false
 showSideNotification: false
+
 healthBarSize: 10
 showPlayerHeadHealth: true
 showMobHeadHealth: true

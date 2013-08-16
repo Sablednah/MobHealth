@@ -63,6 +63,40 @@ Enable extra debugging messages in server logs.
 4. display damage taken (+amount resisted)
 
 
+    showPlayerHeadHealth: true
+Enable Health info above player heads
+
+    showMobHeadHealth: true
+Show Health info above players
+
+    useBarForMobs: true
+If true then mob health will be shown in a bar like "[||||     ]"
+If false then mob health with be displayed like "12/30"
+
+    usePercentForPlayer: true
+If true playes heal will be expressed as a %age - not as x/y
+
+    healthBarSize: 10
+If using bar format, this is the number of characters in the bar
+
+    cleanDeathMessages: true
+If true bars and health info will be removed from death messages
+
+    hideBarForAnimal: false
+Hide bars for animal mobs
+
+    hideBarForVillager: true
+Hide bars for villagers (useful for shopkeeper plugins)
+
+    hideBarForNPC: true
+Hide bar on Citizens NPCs
+
+    forceBarHide: [EnderDragon,Wither]
+Hide the bar for the listed mob types
+
+    showbarCustomNameOnly: false
+Only use the bar if a mob has a custom name
+
 ### Commands
 
 	/MobHealth reload
@@ -95,6 +129,12 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+7.1.0:  Clean up and release.
+
+7.0.3:  Update for 1.6.2 Heroes Build.
+
+7.0.2:  Bugfix for 7.0.1 bugfix.  Bugception. 
+
 7.0.1:  Bugfix for 7.0.0 bugfix. 
 
 7.0.0:  1.6.2 update.  Bugfix for horse errors.

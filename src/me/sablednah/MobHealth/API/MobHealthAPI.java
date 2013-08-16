@@ -250,7 +250,7 @@ public class MobHealthAPI {
             MonsterApocalypse ma = (MonsterApocalypse) plugin.getServer().getPluginManager().getPlugin("Monster Apocalypse");
             healthmanager MAHealthManager = ma.getHealthManager();
             if (MAHealthManager != null) {
-                targetHealth = MAHealthManager.getmobhp(targetMob);
+                targetHealth = (int) MAHealthManager.getmobhp(targetMob);
             }
             MAHealthManager = null;
             ma = null;

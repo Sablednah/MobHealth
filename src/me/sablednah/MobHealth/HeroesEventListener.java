@@ -63,8 +63,8 @@ public class HeroesEventListener implements Listener {
 							if (targetMob != null) {
 								MobHealthAPI API = new MobHealthAPI(plugin);
 								targetHealth = API.getMobHealth(targetMob);
-
-								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new SkillMessageScheduler(playa, damageEvent, targetMob, targetHealth, event.getDamage(), plugin), 1L);
+								int thisdmg = (int)event.getDamage();
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new SkillMessageScheduler(playa, damageEvent, targetMob, targetHealth, thisdmg, plugin), 1L);
 							}
 						} else {
 							if (MobHealth.debugMode) {

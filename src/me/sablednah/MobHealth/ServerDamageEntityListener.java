@@ -92,10 +92,12 @@ public class ServerDamageEntityListener implements Listener {
                     LivingEntity tm = (LivingEntity) event.getEntity();
                     if (tm instanceof Horse) {
                         String horsename = MobHealth.cleanName(tm.getCustomName());
-                        if (horsename.length() > 32) {
-                            horsename = horsename.substring(0, 32);
+                        if(horsename != null) {
+                            if (horsename.length() > 32) {
+                                horsename = horsename.substring(0, 32);
+                            }
+                            tm.setCustomName(horsename);
                         }
-                        tm.setCustomName(horsename);
                     } else {
                         API.showBar(tm);
                     }
@@ -125,8 +127,7 @@ public class ServerDamageEntityListener implements Listener {
                     playa = (Player) damageEvent.getDamager();
                 }
                 
-                if (playa != null) {
-                    
+                if (playa != null) {                    
                     if (MobHealth.debugMode) {
                         // event.setDamage(200);
                         System.out.print("----");
@@ -217,5 +218,4 @@ public class ServerDamageEntityListener implements Listener {
             }
         }
     }
-    
 }
