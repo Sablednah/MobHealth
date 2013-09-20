@@ -10,6 +10,7 @@ Also now supporting SimpleNotice, Heroes (inc. skill usage), Mobs, Monster Apoca
 Mob Health now has plenty of options to control how messages are shown,when they are shown (and more importantly when they are *not* shown), and what is displayed - with your own custom messages.
 
 
+
 API
 ===
 
