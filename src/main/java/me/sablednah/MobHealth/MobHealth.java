@@ -3,7 +3,7 @@
  * @version	3.2
  * 
  */
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +12,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
 
-import me.sablednah.MobHealth.Updater.UpdateType;
-import me.sablednah.MobHealth.API.MobHealthAPI;
+import main.java.me.sablednah.MobHealth.Updater.UpdateType;
+import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -407,7 +407,7 @@ public class MobHealth extends JavaPlugin {
         
         playerLabel = getLangConfig().getString("playerLabel");
         healthBarCharacter = getLangConfig().getString("healthBarCharacter");
-        healthBarCharacter = healthBarCharacter.replace("<3", "❤");
+        healthBarCharacter = healthBarCharacter.replace("<3", "â�¤");
         playerLabelPercent = getLangConfig().getString("playerLabelPercent");
         
         healthPrefix = getLangConfig().getString("healthPrefix", "&r&f&r");
@@ -631,7 +631,7 @@ public class MobHealth extends JavaPlugin {
         if (newname.contains(searchcode)) {
             int loc = newname.indexOf(searchcode);
             int start = 0;
-            if (newname.startsWith("§f")) {
+            if (newname.startsWith("Â§f")) {
                 start = 2;
             }
             if (loc > -1) {

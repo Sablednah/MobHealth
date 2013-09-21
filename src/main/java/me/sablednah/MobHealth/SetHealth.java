@@ -1,6 +1,6 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
-import me.sablednah.MobHealth.API.MobHealthAPI;
+import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;

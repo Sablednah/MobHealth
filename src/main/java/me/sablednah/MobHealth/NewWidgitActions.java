@@ -1,4 +1,4 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
@@ -19,7 +19,6 @@ public class NewWidgitActions implements Runnable {
         this.widget = widget;
     }
     
-    @Override
     public void run() {
         SpoutPlayer splayer = SpoutManager.getPlayer(player);
         MobHealth.killWidget(player, action);

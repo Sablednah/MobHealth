@@ -1,4 +1,4 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
 /*
  * Updater for Bukkit.

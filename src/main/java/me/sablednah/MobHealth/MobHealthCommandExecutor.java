@@ -1,4 +1,4 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +14,6 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 		this.plugin=instance;
 	}
 
-	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("mobhealth")){
 

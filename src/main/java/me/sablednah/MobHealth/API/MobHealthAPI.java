@@ -1,12 +1,12 @@
-package me.sablednah.MobHealth.API;
+package main.java.me.sablednah.MobHealth.API;
 
 import java.util.List;
 import java.util.Map;
 
 import me.ThaH3lper.com.Api.Api;
 import me.ThaH3lper.com.EpicBoss;
-import me.sablednah.MobHealth.MobHealth;
-import me.sablednah.MobHealth.SpoutNotifications;
+import main.java.me.sablednah.MobHealth.MobHealth;
+import main.java.me.sablednah.MobHealth.SpoutNotifications;
 import me.sablednah.zombiemod.PutredineImmortui;
 import me.sablednah.zombiemod.ZombieMod;
 
@@ -83,7 +83,7 @@ public class MobHealthAPI {
                     Material icon;
                     
                     if (skillName != null) {
-                        icon = Material.getMaterial(377);
+                        icon = Material.BLAZE_POWDER;
                         title = plugin.getLangConfig().getString("heroesSkillSpoutDamageTitle");
                         title = title.replaceAll("%S", skillName);
                         
@@ -475,7 +475,7 @@ public class MobHealthAPI {
                             showBar = false;
                         }
                     }
-                    String thisType = targetMob.getType().getName();
+                    String thisType = targetMob.getType().toString();
                     if (MobHealth.forceBarHide.contains(thisType)) {
                         showBar = false;
                     }

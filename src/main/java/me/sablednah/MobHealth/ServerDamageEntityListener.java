@@ -1,6 +1,6 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
-import me.sablednah.MobHealth.API.MobHealthAPI;
+import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.ComplexEntityPart;
@@ -202,7 +202,6 @@ public class ServerDamageEntityListener implements Listener {
             this.tm = t;
         }
         
-        @Override
         public void run() {
             MobHealthAPI API = new MobHealthAPI(plugin);
             if (tm instanceof Horse) {

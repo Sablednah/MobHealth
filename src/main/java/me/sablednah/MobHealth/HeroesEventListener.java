@@ -1,6 +1,6 @@
-package me.sablednah.MobHealth;
+package main.java.me.sablednah.MobHealth;
 
-import me.sablednah.MobHealth.API.MobHealthAPI;
+import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.ComplexLivingEntity;

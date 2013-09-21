@@ -4,7 +4,7 @@ description: Displays Mob health in chat when damaged by players.  Now with 100%
 author: SableDnah
 website: http://dev.bukkit.org/server-mods/mobhealth/
 
-main: me.sablednah.MobHealth.MobHealth
+main: main.java.me.sablednah.MobHealth.MobHealth
 softdepend: [ Spout, Heroes, MobArena, Mobs, Likeaboss, Monster Apocalypse, ZombieMod, BloodMoon, Corruption ]
 
 commands:
