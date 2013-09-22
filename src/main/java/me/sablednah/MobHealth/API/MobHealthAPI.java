@@ -316,7 +316,7 @@ public class MobHealthAPI {
             if (arena != null) {
                 MABoss thisBoss = arena.getMonsterManager().getBoss(targetMob);
                 if (thisBoss != null) {
-                    targetMaxHealth = (int) thisBoss.getMaxHealth();
+                    targetMaxHealth = (int) targetMob.getMaxHealth();
                 } else {
                     WaveManager wm = arena.getWaveManager();
                     Wave thisWave = wm.getCurrent();
