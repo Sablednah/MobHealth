@@ -130,7 +130,7 @@ Give player MobHealth reload command.
 
 
 ### Changelog
-7.1.2:  Fix for MobArena
+7.1.2:  Test Fix for MobArena
 
 7.1.1:  Convert Project to Maven
 
@@ -323,3 +323,17 @@ Known Bugs/Conflicts
 ====================
 
 * Plugins that alter mobs health levels usually aren't detected by my plugin, unless listed above as supported.
+
+
+License & Copyright
+====================
+
+Copyright (C) 2012-2013 Darren Douglas (http://sabletopia.co.uk)
+
+Licensed under the GNU General Public License, Version 3
+
+MobHealth is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+MobHealth is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License along with MobHealth.  If not, see <http://www.gnu.org/licenses/>.
