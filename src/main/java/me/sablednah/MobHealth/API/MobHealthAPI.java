@@ -20,8 +20,6 @@ package main.java.me.sablednah.MobHealth.API;
 
 import java.util.List;
 
-import me.ThaH3lper.com.Api.Api;
-import me.ThaH3lper.com.EpicBoss;
 import main.java.me.sablednah.MobHealth.MobHealth;
 import main.java.me.sablednah.MobHealth.SpoutNotifications;
 import me.sablednah.zombiemod.PutredineImmortui;
@@ -397,14 +395,6 @@ public class MobHealthAPI {
             }
             zomb = null;
             ZM = null;
-        }
-        
-        if (MobHealth.hasEpicBoss) {
-            EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBossRecoded");
-            Api EBAPI = new Api(EB);
-            if (EBAPI.isBoss(targetMob)) {
-                mobtype = EBAPI.getBossName(targetMob);
-            }
         }
         
         if (MobHealth.hasLikeABoss) {
