@@ -394,8 +394,8 @@ public class MobHealth extends JavaPlugin {
         
         defaultToggle = getConfig().getBoolean("defaultToggle");
         
-        updateCheck = getConfig().getBoolean("updateCheck", true);
-        doUpdate = getConfig().getBoolean("doUpdate", true);
+        updateCheck = getConfig().getBoolean("updateCheck");
+        doUpdate = getConfig().getBoolean("doUpdate");
         
         debugMode = getConfig().getBoolean("debugMode");
         

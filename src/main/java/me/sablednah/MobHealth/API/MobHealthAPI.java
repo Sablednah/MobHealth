@@ -19,7 +19,6 @@
 package main.java.me.sablednah.MobHealth.API;
 
 import java.util.List;
-import java.util.Map;
 
 import me.ThaH3lper.com.Api.Api;
 import me.ThaH3lper.com.EpicBoss;
@@ -287,27 +286,7 @@ public class MobHealthAPI {
             arena = null;
             maHandler = null;
         }
-        
-        if (MobHealth.hasMobs) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
-            
-            // HP" and "MAX_HP", both of which are ints
-            if (mobs_data != null) {
-                if (mobs_data.containsKey("HP")) {
-                    targetHealth = ((Integer) mobs_data.get("HP")).intValue();
-                }
-            }
-            mobs_data = null;
-        }
-        
-        if (MobHealth.hasEpicBoss) {
-            EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBossRecoded");
-            Api EBAPI = new Api(EB);
-            if (EBAPI.isBoss(targetMob)) {
-                targetHealth = EBAPI.getHealth(targetMob);
-            }
-        }
+                
         return targetHealth;
     }
     
@@ -349,26 +328,7 @@ public class MobHealthAPI {
             arena = null;
             maHandler = null;
         }
-        if (MobHealth.hasMobs) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> mobs_data = targetMob.hasMetadata("mobs_data") ? (Map<String, Object>) targetMob.getMetadata("mobs_data").get(0).value() : null;
-            
-            // HP" and "MAX_HP", both of which are ints
-            if (mobs_data != null) {
-                if (mobs_data.containsKey("HP")) {
-                    targetMaxHealth = ((Integer) mobs_data.get("MAX_HP")).intValue();
-                }
-            }
-            mobs_data = null;
-        }
         
-        if (MobHealth.hasEpicBoss) {
-            EpicBoss EB = (EpicBoss) plugin.getServer().getPluginManager().getPlugin("EpicBossRecoded");
-            Api EBAPI = new Api(EB);
-            if (EBAPI.isBoss(targetMob)) {
-                targetMaxHealth = EBAPI.getMaxHealth(targetMob);
-            }
-        }
         return targetMaxHealth;
     }
     

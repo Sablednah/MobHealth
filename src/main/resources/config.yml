@@ -41,6 +41,7 @@ hideBarForVillager: true
 hideBarForNPC: true
 forceBarHide: [EnderDragon,Wither]
 showbarCustomNameOnly: false
+alwaysVisable: false
 
 usePermissions: false
 
