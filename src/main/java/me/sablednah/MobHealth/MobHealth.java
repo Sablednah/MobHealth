@@ -1,6 +1,6 @@
 /**
- * @author	sable <darren.douglas@gmail.com>
- * @version	3.2
+ * @author      sable <darren.douglas@gmail.com>
+ * @version     3.2
  * 
  */
 
@@ -244,7 +244,7 @@ public class MobHealth extends JavaPlugin {
         }
         
         if (showPlayerHeadHealth || showMobHeadHealth) {
-            // Santity check: - is the score board actually available?
+            // Sanity check: - is the score board actually available?
             try {
                 Class.forName("org.bukkit.scoreboard.Scoreboard");
                 setHealths = new SetHealth(this);
@@ -284,14 +284,16 @@ public class MobHealth extends JavaPlugin {
             UpdateType upd = Updater.UpdateType.NO_DOWNLOAD;
             
             if (doUpdate) {
+                logger.info("Auto updater enabled.");
                 upd = Updater.UpdateType.DEFAULT;
+            } else {
+                logger.info("Auto updater enable disabled.");
             }
             
-            Updater updater = new Updater(this, "mobhealth", this.getFile(), upd, true);
+            Updater updater = new Updater(this, 35545, this.getFile(), upd, true);
             Updater.UpdateResult result = updater.getResult();
             
             String name;
-            long size;
             
             switch (result) {
                 case SUCCESS:
@@ -299,30 +301,30 @@ public class MobHealth extends JavaPlugin {
                     break;
                 case NO_UPDATE:
                     // No Update: The updater did not find an update, and nothing was downloaded.
-                    name = updater.getLatestVersionString(); // Get the latest version
+                    name = updater.getLatestName(); // Get the latest version
                     logger.info(name + " is upto date.");
                     logger.info("http://dev.bukkit.org/server-mods/mobhealth/");
                     break;
                 case FAIL_DOWNLOAD:
                     // Download Failed: The updater found an update, but was unable to download it.
-                    name = updater.getLatestVersionString(); // Get the latest version
-                    size = updater.getFileSize(); // Get latest size
-                    logger.info(name + " is available (" + size + " bytes) (You're using " + VersionCurrent + ")");
+                    name = updater.getLatestName(); // Get the latest version
+                    logger.info(name + " is available (You're using " + VersionCurrent + ")");
                     logger.warning("Automatic Download Failed please visit");
                     logger.info("http://dev.bukkit.org/server-mods/mobhealth/");
                     break;
                 case FAIL_DBO:
                 case FAIL_NOVERSION:
-                case FAIL_BADSLUG:
+                case FAIL_APIKEY:
                     logger.warning("Error during version check - " + result.toString());
                     break;
                 case UPDATE_AVAILABLE:
-                    name = updater.getLatestVersionString(); // Get the latest version
-                    size = updater.getFileSize(); // Get latest size
-                    logger.warning(name + " is available (" + size + " bytes) (You're using " + VersionCurrent + ")");
+                    name = updater.getLatestName(); // Get the latest version
+                    logger.warning(name + " is available (You're using " + VersionCurrent + ")");
                     logger.info("http://dev.bukkit.org/server-mods/mobhealth/");
                     break;
             }
+        } else {
+            logger.info("Update check disabled.");
         }
     }
     
@@ -394,8 +396,8 @@ public class MobHealth extends JavaPlugin {
         
         defaultToggle = getConfig().getBoolean("defaultToggle");
         
-        updateCheck = getConfig().getBoolean("updateCheck");
-        doUpdate = getConfig().getBoolean("doUpdate");
+        updateCheck = getConfig().getBoolean("updateCheck",true);
+        doUpdate = getConfig().getBoolean("doUpdate",true);
         
         debugMode = getConfig().getBoolean("debugMode");
         
@@ -426,7 +428,12 @@ public class MobHealth extends JavaPlugin {
         
         playerLabel = getLangConfig().getString("playerLabel");
         healthBarCharacter = getLangConfig().getString("healthBarCharacter");
-        healthBarCharacter = healthBarCharacter.replace("<3", "â�¤");
+        healthBarCharacter = healthBarCharacter.replace("<3", "❤");
+        healthBarCharacter = healthBarCharacter.replace("[X]", "█");
+        healthBarCharacter = healthBarCharacter.replace("[x]", "▌");
+        healthBarCharacter = healthBarCharacter.replace("[o]", "●");
+        healthBarCharacter = healthBarCharacter.replace("[*]", "★");
+        
         playerLabelPercent = getLangConfig().getString("playerLabelPercent");
         
         healthPrefix = getLangConfig().getString("healthPrefix", "&r&f&r");

@@ -65,7 +65,9 @@ public class HeroesEventListener implements Listener {
 					playa = (Player) damageEvent.getDamager().getEntity();
 				}
 
-				System.out.print("playa - " + playa);
+				if (MobHealth.debugMode) {
+				        System.out.print("playa - " + playa);
+				}
 
 				if (playa != null) {
 					if (MobHealth.getPluginState(playa)) {
