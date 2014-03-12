@@ -377,6 +377,12 @@ public class MobHealth extends JavaPlugin {
         @SuppressWarnings("unchecked")
         List<String> fbh = (List<String>) getConfig().getList("forceBarHide");
         fbh.add("Horse");
+        
+        HashSet<String> hs = new HashSet<String>();
+        hs.addAll(fbh);
+        fbh.clear();
+        fbh.addAll(hs);
+        
         forceBarHide = fbh;
         healthBarSize = getConfig().getInt("healthBarSize", healthBarSize);
         if (healthBarSize < 5) {
