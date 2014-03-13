@@ -68,6 +68,7 @@ public class SkillMessageScheduler implements Runnable {
         
         if (MobHealth.debugMode) {
             System.out.print("--");
+            System.out.print("[MobHealth] " + skillName + " : skillName"); 
             System.out.print("[MobHealth] " + skillDamageEvent.getDamage() + " skillDamageEvent.getDamage();.");
             System.out.print("[MobHealth] " + DamageBefore + " DamageBefore.");
             System.out.print("[MobHealth] " + thisDamange + " thisDamange.");

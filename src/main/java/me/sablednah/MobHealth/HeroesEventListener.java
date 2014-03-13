@@ -61,7 +61,14 @@ public class HeroesEventListener implements Listener {
 
 			if (event instanceof SkillDamageEvent) {
 				SkillDamageEvent damageEvent = event;
+				
+				String skillName = damageEvent.getSkill().getName();
 
+				 if (MobHealth.debugMode) {
+				            System.out.print("--");
+				            System.out.print("[MobHealth] " + skillName + " : skillName"); 
+				 }
+				
 				if (damageEvent.getDamager().getEntity() instanceof Player) {
 					playa = (Player) damageEvent.getDamager().getEntity();
 				}

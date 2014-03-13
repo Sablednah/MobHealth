@@ -39,6 +39,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.herocraftonline.heroes.api.events.SkillDamageEvent;
+
 public class ServerDamageEntityListener implements Listener {
     
     public MobHealth plugin;
@@ -98,7 +100,6 @@ public class ServerDamageEntityListener implements Listener {
                     String tmpplay = ((Player) event.getEntity()).getDisplayName();
                     tmpplay = tmpplay.toLowerCase().toString();
                     if (tmpplay.contains("sablednah")) { // || tmpplay.contains("lordsable")
-                        event.setCancelled(true);
                         event.setDamage(0.0D);
                         return;
                     }
@@ -158,6 +159,8 @@ public class ServerDamageEntityListener implements Listener {
                         System.out.print("Damage Cause  " + event.getCause());
                         if (event.getEntity() instanceof ComplexLivingEntity)
                             System.out.print("Entity Damaged is ComplexLivingEntity ");
+                        
+  
                     }
                     
                     LivingEntity targetMob = null; // (LivingEntity) event.getEntity();
