@@ -149,6 +149,7 @@ public class ServerDamageEntityListener implements Listener {
                     if (MobHealth.debugMode) {
                         // event.setDamage(200);
                         System.out.print("----");
+                        System.out.print("-damage event-");
                         System.out.print("Entity Damaged " + event.getEntity());
                         System.out.print("Entity class " + event.getEntity().getClass().getName());
                         System.out.print("Event getEventName  " + event.getEventName());
@@ -181,6 +182,9 @@ public class ServerDamageEntityListener implements Listener {
                             }
                         }
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(targetMob), 2L);
+                    }
+                    if (MobHealth.debugMode) {
+                        System.out.print("/----");
                     }
                 }
             }

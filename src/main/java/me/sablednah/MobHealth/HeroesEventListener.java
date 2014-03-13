@@ -48,6 +48,7 @@ public class HeroesEventListener implements Listener {
 			if (MobHealth.debugMode) {
 				// event.setDamage(200);
 				System.out.print("----");
+				System.out.print("-Skillevent-");
 				System.out.print("Entity Damaged " + event.getEntity());
 				System.out.print("Entity getEventName  " + event.getEventName());
 				System.out.print("Entity Damage class  " + event.getClass());
@@ -93,6 +94,9 @@ public class HeroesEventListener implements Listener {
 						}
 					}
 				}
+			}
+			if (MobHealth.debugMode) {
+                            System.out.print("/----");
 			}
 		}
 	}
