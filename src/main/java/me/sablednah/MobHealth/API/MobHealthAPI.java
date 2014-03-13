@@ -99,13 +99,13 @@ public class MobHealthAPI {
                     
                     if (skillName != null) {
                         icon = Material.BLAZE_POWDER;
-                        title = plugin.getLangConfig().getString("heroesSkillSpoutDamageTitle");
+                        title = MobHealth.heroesSkillSpoutDamageTitle;
                         title = title.replaceAll("%S", skillName);
                         
                         if (mobsHealth < 1) { // was "targetMob.isDead()" removed to avoid handing target entity over.
-                            message = plugin.getLangConfig().getString("heroesSkillSpoutKilledMessage");
+                            message = MobHealth.heroesSkillSpoutKilledMessage;
                         } else {
-                            message = plugin.getLangConfig().getString("heroesSkillSpoutDamageMessage");
+                            message = MobHealth.heroesSkillSpoutDamageMessage;
                         }
                         
                     } else {
@@ -135,18 +135,18 @@ public class MobHealthAPI {
                                 icon = Material.STICK; // was diamond sword 276
                             }
                         }
-                        if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("spoutEggTitle") == null))) {
-                            title = plugin.getLangConfig().getString("spoutEggTitle");
-                            message = plugin.getLangConfig().getString("spoutEggMessage");
-                        } else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("spoutSnowballTitle") == null))) {
-                            title = plugin.getLangConfig().getString("spoutSnowballTitle");
-                            message = plugin.getLangConfig().getString("spoutSnowballMessage");
+                        if (damagerMob instanceof Egg && (!(MobHealth.spoutEggTitle == null))) {
+                            title = MobHealth.spoutEggTitle;
+                            message = MobHealth.spoutEggMessage;
+                        } else if (damagerMob instanceof Snowball && (!(MobHealth.spoutSnowballTitle == null))) {
+                            title = MobHealth.spoutSnowballTitle;
+                            message = MobHealth.spoutSnowballMessage;
                         } else {
-                            title = plugin.getLangConfig().getString("spoutDamageTitle");
+                            title = MobHealth.spoutDamageTitle;
                             if (mobsHealth < 1) { // was "targetMob.isDead()"
-                                message = plugin.getLangConfig().getString("spoutKilledMessage");
+                                message = MobHealth.spoutKilledMessage;
                             } else {
-                                message = plugin.getLangConfig().getString("spoutDamageMessage");
+                                message = MobHealth.spoutDamageMessage;
                             }
                         }
                     }
@@ -211,15 +211,23 @@ public class MobHealthAPI {
         boolean useSimpleNotice = player.getListeningPluginChannels().contains("SimpleNotice");
         if (!spoutUsed && (!MobHealth.disableChat || useSimpleNotice)) {
             String ChatMessage;
-            if (damagerMob instanceof Egg && (!(plugin.getLangConfig().getString("chatMessageEgg") == null))) {
-                ChatMessage = plugin.getLangConfig().getString("chatMessageEgg");
-            } else if (damagerMob instanceof Snowball && (!(plugin.getLangConfig().getString("chatMessageSnowball") == null))) {
-                ChatMessage = plugin.getLangConfig().getString("chatMessageSnowball");
+            if (damagerMob instanceof Egg && (!(MobHealth.chatMessageEgg == null))) {
+                ChatMessage = MobHealth.chatMessageEgg;
+            } else if (damagerMob instanceof Snowball && (!(MobHealth.chatMessageSnowball == null))) {
+                ChatMessage = MobHealth.chatMessageSnowball;
             } else {
                 if (mobsHealth < 1) { // was "targetMob.isDead()"
-                    ChatMessage = plugin.getLangConfig().getString("chatKilledMessage");
+                    if (skillName == null) {
+                        ChatMessage = MobHealth.chatKilledMessage;
+                    } else {
+                        ChatMessage = MobHealth.heroesSkillChatKilledMessage;
+                    }
                 } else {
-                    ChatMessage = plugin.getLangConfig().getString("chatMessage");
+                    if (skillName == null) {
+                        ChatMessage = MobHealth.chatMessage;
+                    } else {
+                        ChatMessage = MobHealth.heroesSkillChatMessage;
+                    }
                     if ((mobsHealth < 2) || (mobsHealth <= (mobsMaxHealth / 4))) {
                         ChatMessage = ChatMessage.replaceAll("%H", (ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
                     } else {

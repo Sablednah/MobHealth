@@ -28,6 +28,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,7 +40,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.herocraftonline.heroes.api.events.SkillDamageEvent;
 
 public class ServerDamageEntityListener implements Listener {
     
@@ -90,6 +90,14 @@ public class ServerDamageEntityListener implements Listener {
     
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamage(EntityDamageEvent event) {
+        
+        if (MobHealth.hasHeroes && HeroesUtils.isHeroesEvent((Event)event)) { // skip heroes events.
+            if (MobHealth.debugMode) {
+                System.out.print("-cancelling EntityDamageEvent event as is Skill event-");
+            }
+            return;
+        }
+        
         
         if (!event.isCancelled()) {
             
