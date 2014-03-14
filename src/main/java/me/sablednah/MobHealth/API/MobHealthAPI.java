@@ -221,12 +221,14 @@ public class MobHealthAPI {
                         ChatMessage = MobHealth.chatKilledMessage;
                     } else {
                         ChatMessage = MobHealth.heroesSkillChatKilledMessage;
+                        ChatMessage = ChatMessage.replaceAll("%S", skillName);
                     }
                 } else {
                     if (skillName == null) {
                         ChatMessage = MobHealth.chatMessage;
                     } else {
                         ChatMessage = MobHealth.heroesSkillChatMessage;
+                        ChatMessage = ChatMessage.replaceAll("%S", skillName);
                     }
                     if ((mobsHealth < 2) || (mobsHealth <= (mobsMaxHealth / 4))) {
                         ChatMessage = ChatMessage.replaceAll("%H", (ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));

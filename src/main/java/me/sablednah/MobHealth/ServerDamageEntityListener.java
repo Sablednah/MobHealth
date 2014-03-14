@@ -28,18 +28,17 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 
 public class ServerDamageEntityListener implements Listener {
     
@@ -91,13 +90,14 @@ public class ServerDamageEntityListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamage(EntityDamageEvent event) {
         
-        if (MobHealth.hasHeroes && HeroesUtils.isHeroesEvent((Event)event)) { // skip heroes events.
-            if (MobHealth.debugMode) {
-                System.out.print("-cancelling EntityDamageEvent event as is Skill event-");
+        if (MobHealth.hasHeroes) { // skip weird custom heroes event
+            if (event.getDamage()==0.0D && event.getCause()==DamageCause.CUSTOM) {
+                if (MobHealth.debugMode) {
+                    System.out.print("-cancelling EntityDamageEvent event as is ~probably~ a Skill event-");
+                }
+                return;
             }
-            return;
         }
-        
         
         if (!event.isCancelled()) {
             
@@ -119,7 +119,7 @@ public class ServerDamageEntityListener implements Listener {
                     LivingEntity tm = (LivingEntity) event.getEntity();
                     if (tm instanceof Horse) {
                         String horsename = MobHealth.cleanName(tm.getCustomName());
-                        if(horsename != null) {
+                        if (horsename != null) {
                             if (horsename.length() > 32) {
                                 horsename = horsename.substring(0, 32);
                             }
@@ -154,7 +154,7 @@ public class ServerDamageEntityListener implements Listener {
                     playa = (Player) damageEvent.getDamager();
                 }
                 
-                if (playa != null) {                    
+                if (playa != null) {
                     if (MobHealth.debugMode) {
                         // event.setDamage(200);
                         System.out.print("----");
@@ -168,7 +168,6 @@ public class ServerDamageEntityListener implements Listener {
                         if (event.getEntity() instanceof ComplexLivingEntity)
                             System.out.print("Entity Damaged is ComplexLivingEntity ");
                         
-  
                     }
                     
                     LivingEntity targetMob = null; // (LivingEntity) event.getEntity();

@@ -625,9 +625,6 @@ public class MobHealth extends JavaPlugin {
     
     public static String barGraph(final int x, final int y, final int scale, final String prefix, final String suffix) {
         final int percent = (int) ((x / (float) y) * scale);
-        if (MobHealth.debugMode) {
-            System.out.print("head percent: " + percent);
-        }
         final StringBuilder mesage = new StringBuilder(12 + scale + prefix.length() + suffix.length());
         mesage.append(ChatColor.WHITE);
         mesage.append(prefix).append(": [");

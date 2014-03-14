@@ -125,6 +125,12 @@ public class MessageScheduler implements Runnable {
                 isMonster = true;
             }
         }
+        String skillname = null;
+        
+        if(targetMob.hasMetadata("HeroesSkillDamaged")) {
+            skillname = targetMob.getMetadata("HeroesSkillDamaged").get(0).asString();
+            targetMob.removeMetadata("HeroesSkillDamaged", plugin);
+        }
         
         switch (MobHealth.damageDisplayType) {
             case 4: // # 4: display damage taken (+amount resisted)
@@ -179,7 +185,7 @@ public class MessageScheduler implements Runnable {
         
         if (((MobHealth.disablePlayers && !isPlayer) || !MobHealth.disablePlayers) && ((MobHealth.disableMonsters && !isMonster) || !MobHealth.disableMonsters)
                 && ((MobHealth.disableAnimals && !isAnimal) || !MobHealth.disableAnimals) && (!checkForZeroDamageHide)) {            
-            API.showNotification(player, damageOutput, mobtype, mobsHealth, mobsMaxHealth, damagerMob);
+            API.showNotification(player, damageOutput, mobtype, mobsHealth, mobsMaxHealth, skillname, damagerMob);
         }
         
         if (MobHealth.showPlayerHeadHealth || MobHealth.showMobHeadHealth) {
