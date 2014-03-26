@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
 
+import main.java.me.sablednah.MobHealth.Metrics.Graph;
 import main.java.me.sablednah.MobHealth.Updater.UpdateType;
 import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
@@ -262,7 +263,9 @@ public class MobHealth extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             
             // Plot the total amount of Notifications
-            metrics.addCustomData(new Metrics.Plotter("Notifications") {
+            Graph notificationsGraph = metrics.createGraph("Total amount of Notifications");
+
+            notificationsGraph.addPlotter(new Metrics.Plotter("Notifications") {
                 
                 @Override
                 public int getValue() {

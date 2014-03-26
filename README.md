@@ -130,6 +130,10 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+8.0.1:  Cleanup - remove unused class, update metrics to V7
+
+8.0.0:  Reworked Heroes integration. 1.7.2 compatibility fixes.
+
 7.1.2:  Test Fix for MobArena
 
 7.1.1:  Convert Project to Maven
