@@ -24,34 +24,39 @@ import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class SaveToggle {
-	public static void save(HashMap<Player, Boolean> pluginEnabled,String path) throws Exception {
+	public static void save(HashMap<UUID, Boolean> pluginEnabled,String path) throws Exception {
 
-		for (Entry<Player, Boolean> entry : pluginEnabled.entrySet()){
+		for (Entry<UUID, Boolean> entry : pluginEnabled.entrySet()){
 			if (entry.getValue() != null && entry.getKey() != null) {
-				getPlayerConfig().set("players." + entry.getKey().getName(), entry.getValue());
+				getPlayerConfig().set("players." + entry.getKey(), entry.getValue());
 			}
 		}
 		getPlayerConfig().save(MobHealth.PlayerConfigurationFile);
 	}
 
-	public static HashMap<Player,Boolean> load(String path) throws Exception {
-		HashMap<Player, Boolean> out = new HashMap<Player,Boolean>();
+	@SuppressWarnings("deprecation")
+    public static HashMap<UUID,Boolean> load(String path) throws Exception {
+		HashMap<UUID, Boolean> out = new HashMap<UUID, Boolean>();
 		if (getPlayerConfig().getConfigurationSection("players") != null) {
 			for (String key : getPlayerConfig().getConfigurationSection("players").getKeys(false)) {
-				out.put(Bukkit.getServer().getPlayerExact(key), getPlayerConfig().getBoolean("players." + key));
+			    if (key.length()==32) {
+				out.put(UUID.fromString(key), getPlayerConfig().getBoolean("players." + key));
+			    } else {
+                                out.put(Bukkit.getServer().getOfflinePlayer(key).getUniqueId(), getPlayerConfig().getBoolean("players." + key));   
+			    }
 			}
 			return out;
 		} else {
-			return new HashMap<Player,Boolean>();
+			return new HashMap<UUID,Boolean>();
 		}
 	}
 

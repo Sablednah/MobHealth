@@ -151,6 +151,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "You need to specify a player to toggle!");
 					return true;
 				}
+				@SuppressWarnings("deprecation")
 				Player other = (Bukkit.getServer().getPlayer(args[1]));
 				if (other == null) {
 					sender.sendMessage(ChatColor.RED + args[1] + " is not online!");
@@ -167,6 +168,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 				}
 			} else {
 				if(((sender.hasPermission("mobhealth.command.toggle.others") || sender.hasPermission("mobhealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
+					@SuppressWarnings("deprecation")
 					Player other = (Bukkit.getServer().getPlayer(args[1]));
 					if (other == null) {
 						sender.sendMessage(ChatColor.RED + args[1] + " is not online!");

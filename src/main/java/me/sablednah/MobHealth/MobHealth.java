@@ -118,12 +118,12 @@ public class MobHealth extends JavaPlugin {
     public static FileConfiguration PlayerConfig = null;
     public static File PlayerConfigurationFile = null;
     
-    public static Map<Player, Boolean> pluginEnabled = null;
-    public static Map<Player, Widget> hesGotAWidget = new HashMap<Player, Widget>();
+    public static Map<UUID, Boolean> pluginEnabled = null;
+    public static Map<UUID, Widget> hesGotAWidget = new HashMap<UUID, Widget>();
     public static Map<String, String> entityLookup = new HashMap<String, String>();
-    public static Map<Player, Widget> hesGotASideWidget = new HashMap<Player, Widget>();
-    public static Map<Player, Widget> hesGotASideGradient = new HashMap<Player, Widget>();
-    public static Map<Player, Widget> hesGotASideIcon = new HashMap<Player, Widget>();
+    public static Map<UUID, Widget> hesGotASideWidget = new HashMap<UUID, Widget>();
+    public static Map<UUID, Widget> hesGotASideGradient = new HashMap<UUID, Widget>();
+    public static Map<UUID, Widget> hesGotASideIcon = new HashMap<UUID, Widget>();
     
     public static String[] animalList = { "Donkey", "Mule", "Horse", "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager",
             "Wolf", "Ocelot" };
@@ -460,7 +460,7 @@ public class MobHealth extends JavaPlugin {
         }
         saveLangConfig();
         try {
-            pluginEnabled = (Map<Player, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
+            pluginEnabled = (Map<UUID, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             System.out.print(" toggleStates.bin error");
             e.printStackTrace();
@@ -530,26 +530,27 @@ public class MobHealth extends JavaPlugin {
      * 
      * @param player
      */
-    public static void togglePluginState(Player player) {
+    public static void togglePluginState(Player p) {
+        UUID player = p.getUniqueId();
         if (pluginEnabled.containsKey(player)) {
             if (pluginEnabled.get(player)) {
                 pluginEnabled.put(player, false);
-                player.sendMessage("Notifications disabled.");
+                p.sendMessage("Notifications disabled.");
             } else {
                 pluginEnabled.put(player, true);
-                player.sendMessage("Notifications enabled.");
+                p.sendMessage("Notifications enabled.");
             }
         } else { // use defaultToggle
             // Plugin was enabled by default. - now uses defaultToggle
             pluginEnabled.put(player, !defaultToggle);
             if (defaultToggle) {
-                player.sendMessage("Notifications disabled.");
+                p.sendMessage("Notifications disabled.");
             } else {
-                player.sendMessage("Notifications enabled.");
+                p.sendMessage("Notifications enabled.");
             }
         }
         try {
-            SaveToggle.save((HashMap<Player, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
+            SaveToggle.save((HashMap<UUID, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -564,13 +565,13 @@ public class MobHealth extends JavaPlugin {
      */
     public static Widget getWidget(Player player, int widgetnumber) {
         if (widgetnumber == 3) {
-            return hesGotASideIcon.get(player);
+            return hesGotASideIcon.get(player.getUniqueId());
         } else if (widgetnumber == 2) {
-            return hesGotASideWidget.get(player);
+            return hesGotASideWidget.get(player.getUniqueId());
         } else if (widgetnumber == 1) {
-            return hesGotASideGradient.get(player);
+            return hesGotASideGradient.get(player.getUniqueId());
         } else {
-            return hesGotAWidget.get(player);
+            return hesGotAWidget.get(player.getUniqueId());
         }
     }
     
@@ -582,13 +583,13 @@ public class MobHealth extends JavaPlugin {
      */
     public static void putWidget(Player player, Widget widget, int widgetnumber) {
         if (widgetnumber == 3) {
-            hesGotASideIcon.put(player, widget);
+            hesGotASideIcon.put(player.getUniqueId(), widget);
         } else if (widgetnumber == 2) {
-            hesGotASideWidget.put(player, widget);
+            hesGotASideWidget.put(player.getUniqueId(), widget);
         } else if (widgetnumber == 1) {
-            hesGotASideGradient.put(player, widget);
+            hesGotASideGradient.put(player.getUniqueId(), widget);
         } else {
-            hesGotAWidget.put(player, widget);
+            hesGotAWidget.put(player.getUniqueId(), widget);
         }
     }
     
@@ -599,13 +600,13 @@ public class MobHealth extends JavaPlugin {
      */
     public static void killWidget(Player player, int widgetnumber) {
         if (widgetnumber == 3) {
-            hesGotASideIcon.remove(player);
+            hesGotASideIcon.remove(player.getUniqueId());
         } else if (widgetnumber == 2) {
-            hesGotASideWidget.remove(player);
+            hesGotASideWidget.remove(player.getUniqueId());
         } else if (widgetnumber == 1) {
-            hesGotASideGradient.remove(player);
+            hesGotASideGradient.remove(player.getUniqueId());
         } else {
-            hesGotAWidget.remove(player);
+            hesGotAWidget.remove(player.getUniqueId());
         }
     }
     

@@ -34,12 +34,12 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <scope>provided</scope>
-        </dependency>
+            </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
             <scope>provided</scope>
-        </dependency>
+            </dependency>
         <dependency>
         <groupId>org.spoutcraft</groupId>
         <artifactId>spoutcraftplugin</artifactId>
@@ -139,12 +139,12 @@
     		<dependency>
     			<groupId>org.bukkit</groupId>
     			<artifactId>bukkit</artifactId>
-    			<version>1.7.2-R0.3</version>
+    			<version>1.7.5-R0.1-SNAPSHOT</version>
     		</dependency>
     		<dependency>
     			<groupId>org.bukkit</groupId>
     			<artifactId>craftbukkit</artifactId>
-    			<version>1.7.2-R0.3</version>
+    			<version>1.7.5-R0.1-SNAPSHOT</version>
     		</dependency>
     		<dependency>
     			<groupId>org.getspout</groupId>
