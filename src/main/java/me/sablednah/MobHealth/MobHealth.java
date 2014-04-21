@@ -518,7 +518,8 @@ public class MobHealth extends JavaPlugin {
      * @param player
      * @return Boolean
      */
-    public static Boolean getPluginState(Player player) {
+    public static Boolean getPluginState(Player p) {
+        UUID player = p.getUniqueId();
         if (pluginEnabled.containsKey(player)) {
             return pluginEnabled.get(player);
         }
