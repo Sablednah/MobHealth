@@ -130,6 +130,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+8.1.0:  Switch to UUIDs for persistent data
+
 8.0.1:  Cleanup - remove unused class, update metrics to V7
 
 8.0.0:  Reworked Heroes integration. 1.7.2 compatibility fixes.
