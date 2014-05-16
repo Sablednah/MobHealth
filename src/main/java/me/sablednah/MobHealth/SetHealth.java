@@ -60,13 +60,6 @@ public class SetHealth {
 	}
 
 	public void setPlayer(Player p) {
-
-		/*
-		 * Scoreboard playerboard; name = "hp" + p.getName(); if (name.length() > 16) { name = name.substring(0, 16); }
-		 * if (healthInfo.containsKey(p)) { playerboard = healthInfo.get(p); } else { playerboard =
-		 * manager.getNewScoreboard(); playerboard.registerNewObjective(name, "dummy"); } Objective objective =
-		 * playerboard.getObjective(name); objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-		 */
 		if (p.isOnline()) {
 
 			int maxHealth = API.getMobMaxHealth(p);
@@ -95,12 +88,6 @@ public class SetHealth {
 			}
 
 			score.setScore(value);
-
-			/*
-			 * String headText = ""; if (MobHealth.useBarForPlayer) { headText = MobHealth.barGraph(health, maxHealth,
-			 * 10, "HP", ""); } else { headText = "/ " + maxHealth + " HP"; } objective.setDisplayName(headText);
-			 * p.setScoreboard(playerboard); healthInfo.put(p, playerboard);
-			 */
 		}
 	}
 
