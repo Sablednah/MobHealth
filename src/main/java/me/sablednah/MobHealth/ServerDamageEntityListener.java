@@ -61,7 +61,7 @@ public class ServerDamageEntityListener implements Listener {
                             // now set a timer to put it back.
                             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(le), 5L);
                         } else {
-                        	le.setCustomName(le.getCustomName().substring(0,31));
+                        	le.setCustomName(le.getCustomName().substring(0,32));
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class ServerDamageEntityListener implements Listener {
                         String horsename = MobHealth.cleanName(tm.getCustomName());
                         if (horsename != null) {
                             if (horsename.length() > 32) {
-                                horsename = horsename.substring(0, 31);
+                                horsename = horsename.substring(0, 32);
                             }
                             tm.setCustomName(horsename);
                         }
@@ -253,7 +253,7 @@ public class ServerDamageEntityListener implements Listener {
                 if (tm.getCustomName() != null) {
                     String horsename = MobHealth.cleanName(tm.getCustomName());
                     if (horsename.length() > 32) {
-                        horsename = horsename.substring(0, 31);
+                        horsename = horsename.substring(0, 32);
                     }
                     tm.setCustomName(horsename);
                 }

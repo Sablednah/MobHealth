@@ -37,13 +37,16 @@ import main.java.me.sablednah.MobHealth.Updater.UpdateType;
 import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.ChatColor;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;import org.bukkit.entity.Player;
 
 import org.getspout.spoutapi.gui.Widget;
 
@@ -665,22 +668,53 @@ public class MobHealth extends JavaPlugin {
     }
     
     public static String cleanName(String name) {
+    	System.out.print("cleaning: "+name);
+
+    	String strf = "F";
+    	char f = strf.charAt(0);
+    	
         if (name == null) { return name; }
         String newname = name;
         String searchcode = MobHealth.healthPrefix;
-        if (newname.contains(searchcode)) {
-            int loc = newname.indexOf(searchcode);
-            int start = 0;
-            if (newname.startsWith("Â§f")) {
-                start = 2;
-            }
-            if (loc > -1) {
-                newname = newname.substring(start, loc);
-            }
+        int loc = newname.length();
+        int start = 0;
+        if (newname.startsWith("§f")) {
+            start = 2;
+        } else if (newname.length()>1 && newname.charAt(0) == ChatColor.COLOR_CHAR && newname.toUpperCase().charAt(1) == f) {
+            start = 2;
         }
+        if (newname.contains(searchcode)) {
+            loc = newname.indexOf(searchcode);
+        }
+        newname = newname.substring(start, loc);
         return newname;
     }
 
+    public static String cleanEntityName(Entity e) {
+        if (e == null) { return null; }
+        
+        String meta = getMetaCustomName(e);
+        
+        if (meta!=null && meta != "") {
+        	return meta;
+        }
+        return null;
+    }
+    
+    public static String getMetaCustomName(Metadatable object) {
+		List<MetadataValue> values = object.getMetadata("oldCustom");
+		for (MetadataValue value : values) {
+			if (value.getOwningPlugin() == plugin) {
+				return value.asString();
+			}
+		}
+		return null;
+	}
+    
+    public static void setMetaCustomName(Metadatable object, String name) {
+    	object.setMetadata("oldCustom", new FixedMetadataValue(plugin, name));
+    }
+    
 	public Reader getTextResourcePublic(String string) {
 		return getTextResource(string);
 	}
