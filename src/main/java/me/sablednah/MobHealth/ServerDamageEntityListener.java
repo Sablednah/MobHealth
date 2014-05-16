@@ -59,7 +59,9 @@ public class ServerDamageEntityListener implements Listener {
                         if (customName.contains(MobHealth.healthPrefix)) {  // trim at [ if found (removes health bar)
                             le.setCustomName(MobHealth.cleanName(customName));
                             // now set a timer to put it back.
-                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(le), 2L);
+                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(le), 5L);
+                        } else {
+                        	le.setCustomName(le.getCustomName().substring(0,31));
                         }
                     }
                 }
@@ -121,7 +123,7 @@ public class ServerDamageEntityListener implements Listener {
                         String horsename = MobHealth.cleanName(tm.getCustomName());
                         if (horsename != null) {
                             if (horsename.length() > 32) {
-                                horsename = horsename.substring(0, 32);
+                                horsename = horsename.substring(0, 31);
                             }
                             tm.setCustomName(horsename);
                         }
@@ -197,6 +199,17 @@ public class ServerDamageEntityListener implements Listener {
                         System.out.print("/----");
                     }
                 }
+            } else {
+            	LivingEntity targetMob = null; // (LivingEntity) event.getEntity();
+                if (event.getEntity() instanceof ComplexEntityPart) {
+                    targetMob = ((ComplexEntityPart) event.getEntity()).getParent();
+                } else if (event.getEntity() instanceof LivingEntity) {
+                    targetMob = (LivingEntity) event.getEntity();
+                }
+                
+                if (targetMob != null) {
+                	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new ScheduledshowBar(targetMob), 2L);
+                }
             }
         }
     }
@@ -240,7 +253,7 @@ public class ServerDamageEntityListener implements Listener {
                 if (tm.getCustomName() != null) {
                     String horsename = MobHealth.cleanName(tm.getCustomName());
                     if (horsename.length() > 32) {
-                        horsename = horsename.substring(0, 32);
+                        horsename = horsename.substring(0, 31);
                     }
                     tm.setCustomName(horsename);
                 }

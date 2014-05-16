@@ -27,6 +27,7 @@ package main.java.me.sablednah.MobHealth;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -51,6 +52,7 @@ public class MobHealth extends JavaPlugin {
     public static MobHealth plugin;
     public final ServerDamageEntityListener EntityListener = new ServerDamageEntityListener(this);
     public final HeroesEventListener HeroesDamageEventListener = new HeroesEventListener(this);
+    public SaveToggle toggle = new SaveToggle(this);
     public static Logger logger;
     
     public static Boolean usePermissions;
@@ -381,6 +383,7 @@ public class MobHealth extends JavaPlugin {
         List<String> fbh = (List<String>) getConfig().getList("forceBarHide");
         fbh.add("Horse");
         
+        
         HashSet<String> hs = new HashSet<String>();
         hs.addAll(fbh);
         fbh.clear();
@@ -460,7 +463,8 @@ public class MobHealth extends JavaPlugin {
         }
         saveLangConfig();
         try {
-            pluginEnabled = (Map<UUID, Boolean>) SaveToggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
+        	
+            pluginEnabled = (Map<UUID, Boolean>) toggle.load(plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             System.out.print(" toggleStates.bin error");
             e.printStackTrace();
@@ -487,7 +491,8 @@ public class MobHealth extends JavaPlugin {
         LangConfig.options().copyDefaults(true);
         
         // Look for defaults in the jar
-        InputStream defConfigStream = getResource("lang.yml");
+        //InputStream defConfigStream = getResource("lang.yml");
+        Reader defConfigStream = getTextResource("lang.yml");
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             LangConfig.setDefaults(defConfig);
@@ -531,7 +536,7 @@ public class MobHealth extends JavaPlugin {
      * 
      * @param player
      */
-    public static void togglePluginState(Player p) {
+    public void togglePluginState(Player p) {
         UUID player = p.getUniqueId();
         if (pluginEnabled.containsKey(player)) {
             if (pluginEnabled.get(player)) {
@@ -551,7 +556,8 @@ public class MobHealth extends JavaPlugin {
             }
         }
         try {
-            SaveToggle.save((HashMap<UUID, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
+        	
+            toggle.save((HashMap<UUID, Boolean>) pluginEnabled, plugin.getDataFolder() + File.separator + "toggleStates.bin");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -674,4 +680,8 @@ public class MobHealth extends JavaPlugin {
         }
         return newname;
     }
+
+	public Reader getTextResourcePublic(String string) {
+		return getTextResource(string);
+	}
 }

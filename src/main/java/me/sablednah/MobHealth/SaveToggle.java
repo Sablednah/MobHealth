@@ -20,7 +20,7 @@ package main.java.me.sablednah.MobHealth;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -33,7 +33,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 public class SaveToggle {
-	public static void save(HashMap<UUID, Boolean> pluginEnabled,String path) throws Exception {
+	MobHealth mobhealth;
+	
+	public SaveToggle(MobHealth mh) {
+		this.mobhealth = mh;
+	}
+
+	public void save(HashMap<UUID, Boolean> pluginEnabled,String path) throws Exception {
 
 		for (Entry<UUID, Boolean> entry : pluginEnabled.entrySet()){
 			if (entry.getValue() != null && entry.getKey() != null) {
@@ -44,7 +50,7 @@ public class SaveToggle {
 	}
 
 	@SuppressWarnings("deprecation")
-    public static HashMap<UUID,Boolean> load(String path) throws Exception {
+    public HashMap<UUID,Boolean> load(String path) throws Exception {
 		HashMap<UUID, Boolean> out = new HashMap<UUID, Boolean>();
 		if (getPlayerConfig().getConfigurationSection("players") != null) {
 			for (String key : getPlayerConfig().getConfigurationSection("players").getKeys(false)) {
@@ -60,7 +66,7 @@ public class SaveToggle {
 		}
 	}
 
-	public static void reloadPlayerConfig() {
+	public void reloadPlayerConfig() {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin("MobHealth");
 		if (MobHealth.PlayerConfigurationFile == null) {
 			MobHealth.PlayerConfigurationFile = new File(plugin.getDataFolder(), "players.yml");
@@ -69,14 +75,14 @@ public class SaveToggle {
 		MobHealth.PlayerConfig.options().copyDefaults(true);
 
 		// Look for defaults in the jar
-		InputStream defConfigStream = plugin.getResource("players.yml");
+		Reader defConfigStream = mobhealth.getTextResourcePublic("players.yml");
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration .loadConfiguration(defConfigStream);
 			MobHealth.PlayerConfig.setDefaults(defConfig);
 		}
 	}
 
-	public static FileConfiguration getPlayerConfig() {
+	public FileConfiguration getPlayerConfig() {
 		if (MobHealth.PlayerConfig == null) {
 			reloadPlayerConfig();
 		}

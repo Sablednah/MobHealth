@@ -42,9 +42,10 @@ public class SetHealth {
         manager = plugin.getServer().getScoreboardManager();
         
         globalboard = manager.getNewScoreboard();
-        globalboard.registerNewObjective("mobhealth", "dummy");
+        objective = globalboard.registerNewObjective("mobhealth", "dummy");
         
-        objective = globalboard.getObjective("mobhealth");
+        //objective = globalboard.getObjective("mobhealth");
+        
         objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
         if (MobHealth.usePercentForPlayer) {
             objective.setDisplayName(MobHealth.playerLabelPercent);
@@ -78,7 +79,7 @@ public class SetHealth {
             int maxHealth = API.getMobMaxHealth(p);
             int health = API.getMobHealth(p);
             
-            Score score = objective.getScore(p);
+            Score score = objective.getScore(p.getUniqueId().toString());
             
             int value = health;
             if (MobHealth.usePercentForPlayer) {

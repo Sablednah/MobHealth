@@ -157,12 +157,12 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + args[1] + " is not online!");
 					return true;
 				}
-				MobHealth.togglePluginState(other);
+				plugin.togglePluginState(other);
 				return true;
 			}
 			if (args.length<2) {
 				if(((sender.hasPermission("mobhealth.command.toggle") || sender.hasPermission("mobhealth.commands")) && MobHealth.usePermissions ) || (!MobHealth.usePermissions) ) {
-					MobHealth.togglePluginState((Player) sender);
+					plugin.togglePluginState((Player) sender);
 				} else {
 					sender.sendMessage("You do not have permission to toggle.");
 				}
@@ -174,7 +174,7 @@ public class MobHealthCommandExecutor implements CommandExecutor {
 						sender.sendMessage(ChatColor.RED + args[1] + " is not online!");
 						return true;
 					}
-					MobHealth.togglePluginState(other);
+					plugin.togglePluginState(other);
 				} else {
 					sender.sendMessage("You do not have permission to toggle other players.");
 				}			
