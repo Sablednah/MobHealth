@@ -130,6 +130,8 @@ Give player MobHealth reload command.
 
 
 ### Changelog
+8.2.0:  Filter rogue &f colour code prefix's.  Add scoreboard event (so it can be cancelled to preserve scoreboards).    
+
 8.1.0:  Switch to UUIDs for persistent data
 
 8.0.1:  Cleanup - remove unused class, update metrics to V7
