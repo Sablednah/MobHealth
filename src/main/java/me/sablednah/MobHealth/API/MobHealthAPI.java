@@ -343,7 +343,7 @@ public class MobHealthAPI {
 	public String getMobName(LivingEntity targetMob) {
 		String mobtype;
 		String trackedname = MobHealth.getMetaCustomName(targetMob);
-System.out.print("trackedname: "+trackedname);
+//System.out.print("trackedname: "+trackedname);
 		if (trackedname == null || !trackedname.isEmpty()) {
 			if (targetMob instanceof Player) {
 				mobtype = ((Player) targetMob).getDisplayName();
