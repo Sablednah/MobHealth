@@ -668,7 +668,7 @@ public class MobHealth extends JavaPlugin {
     }
     
     public static String cleanName(String name) {
-    	System.out.print("cleaning: "+name);
+   // 	System.out.print("cleaning: "+name);
 
     	String strf = "F";
     	char f = strf.charAt(0);
