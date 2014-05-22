@@ -33,7 +33,6 @@ public class SetHealth {
 	public MobHealth				plugin;
 	public MobHealthAPI				API			= null;
 	public static ScoreboardManager	manager		= null;
-
 	public static Scoreboard		globalboard	= null;
 	Objective						objective	= null;
 
@@ -41,7 +40,6 @@ public class SetHealth {
 		this.plugin = p;
 		this.API = new MobHealthAPI(plugin);
 		manager = plugin.getServer().getScoreboardManager();
-
 		globalboard = manager.getNewScoreboard();
 		objective = globalboard.registerNewObjective("mobhealth", "dummy");
 
@@ -53,7 +51,6 @@ public class SetHealth {
 		} else {
 			objective.setDisplayName(MobHealth.playerLabel);
 		}
-
 		for (Player online : plugin.getServer().getOnlinePlayers()) {
 			setPlayer(online);
 		}
@@ -61,7 +58,6 @@ public class SetHealth {
 
 	public void setPlayer(Player p) {
 		if (p.isOnline()) {
-
 			int maxHealth = API.getMobMaxHealth(p);
 			int health = API.getMobHealth(p);
 
@@ -69,7 +65,7 @@ public class SetHealth {
 			if (name.length() > 16) {
 				name = name.substring(0, 16);
 			}
-			
+
 			Score score = objective.getScore(name);
 
 			PlayerHealthEvent e = new PlayerHealthEvent(health, maxHealth, globalboard, objective, score);
@@ -86,7 +82,6 @@ public class SetHealth {
 			if (MobHealth.usePercentForPlayer) {
 				value = (int) ((health / (float) maxHealth) * 100);
 			}
-
 			score.setScore(value);
 		}
 	}
