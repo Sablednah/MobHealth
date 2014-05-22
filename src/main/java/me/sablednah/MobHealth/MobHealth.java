@@ -494,10 +494,11 @@ public class MobHealth extends JavaPlugin {
         LangConfig.options().copyDefaults(true);
         
         // Look for defaults in the jar
-        //InputStream defConfigStream = getResource("lang.yml");
-        Reader defConfigStream = getTextResource("lang.yml");
+        InputStream defConfigStream = getResource("lang.yml");
+        //Reader defConfigStream = getTextResource("lang.yml");
         if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            @SuppressWarnings("deprecation")
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             LangConfig.setDefaults(defConfig);
         }
     }

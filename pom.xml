@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>MobHealth</groupId>
     <artifactId>MobHealth</artifactId>
-    <version>8.2.0</version>
+    <version>8.2.1</version>
     <name>MobHealth</name>
     <url>dev.bukkit.org/bukkit-plugins/mobhealth/</url>
     <description>Minecraft Bukkit Sever Plugin to display Mobs health when damaged.</description>
