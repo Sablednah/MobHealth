@@ -27,7 +27,7 @@ package main.java.me.sablednah.MobHealth;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
+//import java.io.Reader;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -716,7 +716,7 @@ public class MobHealth extends JavaPlugin {
     	object.setMetadata("oldCustom", new FixedMetadataValue(plugin, name));
     }
     
-	public Reader getTextResourcePublic(String string) {
-		return getTextResource(string);
+	public InputStream getTextResourcePublic(String string) {
+		return getResource(string);
 	}
 }
