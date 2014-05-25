@@ -56,18 +56,21 @@ public class SetHealth {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setPlayer(Player p) {
 		if (p.isOnline()) {
 			int maxHealth = API.getMobMaxHealth(p);
 			int health = API.getMobHealth(p);
-
-			String name = p.getName();
-			if (name.length() > 16) {
-				name = name.substring(0, 16);
+			Score score = null;
+			try {
+				String name = p.getName();
+				if (name.length() > 16) {
+					name = name.substring(0, 16);
+				}
+				score = objective.getScore(name);
+			} catch (NoSuchMethodError e) {
+				score = objective.getScore(p);
 			}
-
-			Score score = objective.getScore(name);
-
 			PlayerHealthEvent e = new PlayerHealthEvent(health, maxHealth, globalboard, objective, score);
 			plugin.getServer().getPluginManager().callEvent(e);
 			if (e.isCancelled()) {

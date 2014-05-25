@@ -21,6 +21,7 @@ package main.java.me.sablednah.MobHealth;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 //import java.io.Reader;
 
 import java.util.HashMap;
@@ -76,12 +77,19 @@ public class SaveToggle {
 		MobHealth.PlayerConfig.options().copyDefaults(true);
 
 		// Look for defaults in the jar
-		//Reader defConfigStream = mobhealth.getTextResourcePublic("players.yml");
-		InputStream defConfigStream = mobhealth.getTextResourcePublic("players.yml");
-		if (defConfigStream != null) {
-			@SuppressWarnings("deprecation")
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-			MobHealth.PlayerConfig.setDefaults(defConfig);
+		try {
+			Reader defConfigStream = mobhealth.getTextResourcePublic("players.yml");
+			if (defConfigStream != null) {
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				MobHealth.PlayerConfig.setDefaults(defConfig);
+			}
+		} catch (NoSuchMethodError e) {
+			InputStream defConfigStream = mobhealth.getResourcePublic("players.yml");
+			if (defConfigStream != null) {
+				@SuppressWarnings("deprecation")
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				MobHealth.PlayerConfig.setDefaults(defConfig);
+			}
 		}
 	}
 
