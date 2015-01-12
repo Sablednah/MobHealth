@@ -132,8 +132,8 @@ public class MobHealth extends JavaPlugin {
 	public static Map<UUID, Widget>			hesGotASideGradient			= new HashMap<UUID, Widget>();
 	public static Map<UUID, Widget>			hesGotASideIcon				= new HashMap<UUID, Widget>();
 
-	public static String[]					animalList					= { "Donkey", "Mule", "Horse", "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
-	public static String[]					monsterList					= { "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither", "Spider", "Ghast", "MagmaCube", "Slime",
+	public static String[]					animalList					= { "Rabbit", "Donkey", "Mule", "Horse", "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
+	public static String[]					monsterList					= { "Endermite", "Guardian", "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither", "Spider", "Ghast", "MagmaCube", "Slime",
 			"CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie", "Silverfish", "Spider" };
 
 	public String[]							entityList					= concat(animalList, monsterList);
