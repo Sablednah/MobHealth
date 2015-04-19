@@ -35,6 +35,9 @@ import java.util.logging.Logger;
 
 import main.java.me.sablednah.MobHealth.Metrics.Graph;
 import main.java.me.sablednah.MobHealth.Updater.UpdateType;
+import main.java.me.sablednah.MobHealth.API.ActionBar;
+import main.java.me.sablednah.MobHealth.API.ActionBar_1_8_1;
+import main.java.me.sablednah.MobHealth.API.ActionBar_1_8_3;
 import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.ChatColor;
@@ -133,8 +136,8 @@ public class MobHealth extends JavaPlugin {
 	public static Map<UUID, Widget>			hesGotASideIcon				= new HashMap<UUID, Widget>();
 
 	public static String[]					animalList					= { "Rabbit", "Donkey", "Mule", "Horse", "Bat", "Pig", "Sheep", "Cow", "Chicken", "MushroomCow", "Golem", "IronGolem", "Snowman", "Squid", "Villager", "Wolf", "Ocelot" };
-	public static String[]					monsterList					= { "Endermite", "Guardian", "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither", "Spider", "Ghast", "MagmaCube", "Slime",
-			"CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie", "Silverfish", "Spider" };
+	public static String[]					monsterList					= { "Endermite", "Guardian", "Witch", "Wither", "Blaze", "Zombie", "ZombieVillagerBaby", "ZombieVillager", "ZombieBaby", "Creeper", "Skeleton", "SkeletonWither", "Spider", "Ghast",
+			"MagmaCube", "Slime", "CaveSpider", "EnderDragon", "Enderman", "Giant", "PigZombie", "Silverfish", "Spider" };
 
 	public String[]							entityList					= concat(animalList, monsterList);
 
@@ -151,6 +154,9 @@ public class MobHealth extends JavaPlugin {
 	public static int						notifications				= 0;
 
 	public static SetHealth					setHealths					= null;
+
+	public static Boolean					useActionBar				= true;
+	public ActionBar						actionBar					= null;
 
 	@Override
 	public void onDisable() {
@@ -262,6 +268,11 @@ public class MobHealth extends JavaPlugin {
 				showPlayerHeadHealth = false;
 				showMobHeadHealth = false;
 			}
+		}
+		if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R2")) {
+			actionBar = new ActionBar_1_8_3();
+		} else if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R1")) {
+			actionBar = new ActionBar_1_8_1();
 		}
 
 		// Enable Metrics
@@ -416,6 +427,8 @@ public class MobHealth extends JavaPlugin {
 		doUpdate = getConfig().getBoolean("doUpdate", true);
 
 		debugMode = getConfig().getBoolean("debugMode");
+
+		useActionBar = getConfig().getBoolean("useActionBar");
 
 		saveConfig();
 
@@ -730,6 +743,7 @@ public class MobHealth extends JavaPlugin {
 	public InputStream getResourcePublic(String string) {
 		return getResource(string);
 	}
+
 	public Reader getTextResourcePublic(String string) {
 		return getTextResource(string);
 	}

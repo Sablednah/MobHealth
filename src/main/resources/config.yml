@@ -60,3 +60,4 @@ updateCheck: true
 doUpdate: true
 debugMode: false
 
+useActionBar: true

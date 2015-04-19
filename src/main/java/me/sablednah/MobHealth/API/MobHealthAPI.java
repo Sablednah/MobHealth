@@ -207,45 +207,49 @@ public class MobHealthAPI {
 		if (spoutUsed) {
 			MobHealth.notifications++;
 		}
-
+		
 		boolean useSimpleNotice = player.getListeningPluginChannels().contains("SimpleNotice");
-		if (!spoutUsed && (!MobHealth.disableChat || useSimpleNotice)) {
-			String ChatMessage;
+		if (!spoutUsed && (!MobHealth.disableChat || useSimpleNotice || MobHealth.useActionBar)) {
+			String chatMessage;
 			if (damagerMob instanceof Egg && (!(MobHealth.chatMessageEgg == null))) {
-				ChatMessage = MobHealth.chatMessageEgg;
+				chatMessage = MobHealth.chatMessageEgg;
 			} else if (damagerMob instanceof Snowball && (!(MobHealth.chatMessageSnowball == null))) {
-				ChatMessage = MobHealth.chatMessageSnowball;
+				chatMessage = MobHealth.chatMessageSnowball;
 			} else {
 				if (mobsHealth < 1) { // was "targetMob.isDead()"
 					if (skillName == null) {
-						ChatMessage = MobHealth.chatKilledMessage;
+						chatMessage = MobHealth.chatKilledMessage;
 					} else {
-						ChatMessage = MobHealth.heroesSkillChatKilledMessage;
-						ChatMessage = ChatMessage.replaceAll("%S", skillName);
+						chatMessage = MobHealth.heroesSkillChatKilledMessage;
+						chatMessage = chatMessage.replaceAll("%S", skillName);
 					}
 				} else {
 					if (skillName == null) {
-						ChatMessage = MobHealth.chatMessage;
+						chatMessage = MobHealth.chatMessage;
 					} else {
-						ChatMessage = MobHealth.heroesSkillChatMessage;
-						ChatMessage = ChatMessage.replaceAll("%S", skillName);
+						chatMessage = MobHealth.heroesSkillChatMessage;
+						chatMessage = chatMessage.replaceAll("%S", skillName);
 					}
 					if ((mobsHealth < 2) || (mobsHealth <= (mobsMaxHealth / 4))) {
-						ChatMessage = ChatMessage.replaceAll("%H", (ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
+						chatMessage = chatMessage.replaceAll("%H", (ChatColor.DARK_RED) + Integer.toString(mobsHealth) + (ChatColor.WHITE));
 					} else {
-						ChatMessage = ChatMessage.replaceAll("%H", Integer.toString(mobsHealth));
+						chatMessage = chatMessage.replaceAll("%H", Integer.toString(mobsHealth));
 					}
 				}
 			}
-			ChatMessage = ChatMessage.replaceAll("%D", damageOutput);
-			ChatMessage = ChatMessage.replaceAll("%N", mobtype);
-			ChatMessage = ChatMessage.replaceAll("%M", Integer.toString(mobsMaxHealth));
-			ChatMessage = ChatColor.translateAlternateColorCodes('&', ChatMessage);
+			chatMessage = chatMessage.replaceAll("%D", damageOutput);
+			chatMessage = chatMessage.replaceAll("%N", mobtype);
+			chatMessage = chatMessage.replaceAll("%M", Integer.toString(mobsMaxHealth));
+			chatMessage = ChatColor.translateAlternateColorCodes('&', chatMessage);
 
 			if (useSimpleNotice) {
-				player.sendPluginMessage(plugin, "SimpleNotice", ChatMessage.getBytes(java.nio.charset.Charset.forName("UTF-8")));
+				player.sendPluginMessage(plugin, "SimpleNotice", chatMessage.getBytes(java.nio.charset.Charset.forName("UTF-8")));
 			} else {
-				player.sendMessage(ChatMessage);
+				if (MobHealth.useActionBar && plugin.actionBar!= null) {
+					plugin.actionBar.sendActionBar(chatMessage, player);
+				} else {
+					player.sendMessage(chatMessage);
+				}
 			}
 			MobHealth.notifications++;
 		}
