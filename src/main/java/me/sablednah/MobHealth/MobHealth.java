@@ -38,6 +38,7 @@ import main.java.me.sablednah.MobHealth.Updater.UpdateType;
 import main.java.me.sablednah.MobHealth.API.ActionBar;
 import main.java.me.sablednah.MobHealth.API.ActionBar_1_8_1;
 import main.java.me.sablednah.MobHealth.API.ActionBar_1_8_3;
+import main.java.me.sablednah.MobHealth.API.ActionBar_1_8_4;
 import main.java.me.sablednah.MobHealth.API.MobHealthAPI;
 
 import org.bukkit.ChatColor;
@@ -269,7 +270,9 @@ public class MobHealth extends JavaPlugin {
 				showMobHeadHealth = false;
 			}
 		}
-		if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R2")) {
+		if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R3")) {
+			actionBar = new ActionBar_1_8_4();
+		} else if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R2")) {
 			actionBar = new ActionBar_1_8_3();
 		} else if (plugin.getServer().getClass().getPackage().getName().substring(23).equalsIgnoreCase("v1_8_R1")) {
 			actionBar = new ActionBar_1_8_1();
