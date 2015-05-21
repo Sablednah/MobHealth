@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>MobHealth</groupId>
     <artifactId>MobHealth</artifactId>
-    <version>9.0.0</version>
+    <version>9.1.0</version>
     <name>MobHealth</name>
     <url>dev.bukkit.org/bukkit-plugins/mobhealth/</url>
     <description>Minecraft Bukkit Sever Plugin to display Mobs health when damaged.</description>
@@ -33,17 +33,23 @@
     </repositories>
     <dependencies>
 
-<!--Spigot-API- - >
+<!--Spigot- -->
 <dependency>
           <groupId>org.spigotmc</groupId>
-          <artifactId>spigot-api</artifactId>
-          <version>1.8-R0.1-SNAPSHOT</version>
-</dependency> -->
+          <artifactId>spigot</artifactId>
+          <version>1.8.3-R0.1-SNAPSHOT</version>
+</dependency>
 <!--Bukkit API-->
 		<dependency>
 		  <groupId>org.bukkit</groupId>
 		  <artifactId>craftbukkit</artifactId>
 		  <version>1.8.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.bukkit</groupId>
+		  <artifactId>craftbukkit</artifactId>
+		  <version>1.8.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
 		</dependency>
         <dependency>
