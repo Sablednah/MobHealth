@@ -70,7 +70,7 @@ public class Compat1194 extends Compat118 {
     /**
      * The bar is a text display riding the mob: it follows without the plugin moving it, and the
      * server already hides passengers' text when the mob is out of view. Shifted up by the mob's
-     * height plus the configured offset, since a passenger sits roughly at the mob's shoulders.
+     * configured offset: a passenger already sits at the top of the mob.
      */
     @Override
     public AttachedBar attachBar(LivingEntity mob, String legacyText, double offset, Collection<? extends Player> viewers) {
@@ -81,7 +81,7 @@ public class Compat1194 extends Compat118 {
         text.setShadowed(true);
         text.setDefaultBackground(false);
         text.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
-        float lift = (float) (mob.getHeight() * 0.35D + offset);
+        float lift = (float) offset;
         text.setTransformation(new Transformation(new Vector3f(0, lift, 0), new AxisAngle4f(), new Vector3f(1, 1, 1), new AxisAngle4f()));
         mob.addPassenger(text);
         restrictViewers(text, viewers);
