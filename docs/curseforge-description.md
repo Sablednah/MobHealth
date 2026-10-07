@@ -5,7 +5,7 @@ how much health it has left: in chat, on the action bar, on the mob's name tag, 
 a floating damage number, or as a health bar hovering over the mob. Any combination, and nothing
 for players to install.
 
-MobHealth 10 is the classic plugin rebuilt around the NeoForge version's feature set, and it runs
+MobHealth 11 is the classic plugin rebuilt around the NeoForge version's feature set, and it runs
 on **every server line from Beta 1.7.3 to 26.3**. Pick the file for your server:
 
 - **`+bukkit1.13-26.3`**: Spigot and Paper, 1.13 through 26.3

@@ -9,10 +9,10 @@
 #
 # Which Bukkit versions a jar is tagged with comes from its filename, which is why the "+" suffix
 # is load-bearing:
-#   mobhealth-10.0.0+bukkit1.13-26.3.jar   every numeric version from 1.13 to 26.3 inclusive
-#   mobhealth-10.0.0+bukkit1.8-1.12.jar    every numeric version from 1.8 to 1.12 inclusive
-#   mobhealth-10.0.0+bukkit1.7.jar         1.7.2, 1.7.4 and the CB 1.7.x-R0.x names
-#   mobhealth-10.0.0+beta1.7.3.jar         "Beta 1.7.3" and "CB 1060"
+#   mobhealth-11.0.0+bukkit1.13-26.3.jar   every numeric version from 1.13 to 26.3 inclusive
+#   mobhealth-11.0.0+bukkit1.8-1.12.jar    every numeric version from 1.8 to 1.12 inclusive
+#   mobhealth-11.0.0+bukkit1.7.jar         1.7.2, 1.7.4 and the CB 1.7.x-R0.x names
+#   mobhealth-11.0.0+beta1.7.3.jar         "Beta 1.7.3" and "CB 1060"
 #
 # Bukkit plugins have their OWN game-version list on CurseForge, separate from the mods one: no
 # modloader, Client/Server or Java tags, and patch releases are often collapsed (there is a "1.12"

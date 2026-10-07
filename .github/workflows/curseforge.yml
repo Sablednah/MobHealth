@@ -2,7 +2,7 @@ name: Publish to CurseForge
 
 # Publishing a GitHub release publishes to CurseForge (dev.bukkit.org) too. Every jar attached to
 # the release is uploaded, with its Bukkit game versions read from the filename
-# (mobhealth-10.0.0+bukkit1.13-26.3.jar covers every list version from 1.13 to 26.3) and the
+# (mobhealth-11.0.0+bukkit1.13-26.3.jar covers every list version from 1.13 to 26.3) and the
 # release body used as the changelog.
 #
 # Setup, once:
@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Release tag to upload (e.g. v10.0.0)
+        description: Release tag to upload (e.g. v11.0.0)
         required: true
       release_type:
         description: CurseForge release type

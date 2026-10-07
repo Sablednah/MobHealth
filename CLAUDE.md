@@ -28,8 +28,8 @@ the version knowledge lives in `bukkit/.../compat/`. `master` is the 9.x plugin,
 
 ## Versioning
 
-`plugin_version` in `gradle.properties` is the one version (continues the Bukkit line: 9.1.0 →
-10.0.0). A jar is `mobhealth-<version>+<suffix>.jar` and **the `+suffix` is load-bearing**:
+`plugin_version` in `gradle.properties` is the one version (one above the last archived Bukkit release, 10.0.1:
+11.0.0). A jar is `mobhealth-<version>+<suffix>.jar` and **the `+suffix` is load-bearing**:
 `scripts/curseforge-upload.sh` maps `bukkit<lo>-<hi>`, `bukkit1.7` and `beta1.7.3` to the Bukkit
 game versions on CurseForge, which has its own list (no `1.8.8`, no `1.12.2`; `CB 1.7.9-R0.2`,
 `Beta 1.7.3`).
@@ -38,7 +38,7 @@ game versions on CurseForge, which has its own list (no `1.8.8`, no `1.12.2`; `C
 
 Same format as every Sablednah mod: `/mobhealth/build.properties` in the jar, `Build-Commit` /
 `Build-Branch` / `Build-Time` on the manifest, and a startup line
-`MobHealth 10.0.0 (build a1b2c3d4 on main, 2026-…)`. The time is the **commit's** time, never the
+`MobHealth 11.0.0 (build a1b2c3d4 on main, 2026-…)`. The time is the **commit's** time, never the
 wall clock. Change the format everywhere or nowhere.
 
 ## Testing
@@ -65,7 +65,7 @@ A published GitHub release fans its jars out to dev.bukkit.org (project 35545) v
 Attach **all four jars**. Never read or echo the token. `docs/curseforge-description.md` is the
 store page, pasted in by hand.
 
-Two things the first upload (v10.0.0-beta.1, 2026-10-07) taught:
+Two things the first trial upload (2026-10-07, since retracted as mis-numbered) taught:
 
 - dev.bukkit.org's `/api/game/versions` returns the **whole** CurseForge catalogue (7,500 entries:
   Java, Forge, NeoForge builds), and naming one of those in an upload is refused as "belongs to an
