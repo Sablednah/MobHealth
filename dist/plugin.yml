@@ -1,0 +1,35 @@
+name: ${plugin_name}
+version: ${plugin_version}
+main: ${main_class}
+${api_version_line}
+author: ${plugin_authors}
+description: ${plugin_description}
+website: https://github.com/Sablednah/MobHealth
+
+commands:
+  mobhealth:
+    description: MobHealth commands.
+    usage: /<command> [reload|toggle [on|off] [player]]
+    aliases: [mh, mobh, mhealth]
+
+permissions:
+  mobhealth.*:
+    description: Everything MobHealth can do.
+    default: op
+    children:
+      mobhealth.see: true
+      mobhealth.toggle: true
+      mobhealth.toggle.others: true
+      mobhealth.reload: true
+  mobhealth.see:
+    description: Receive MobHealth displays. Deny it to hide MobHealth from a rank.
+    default: true
+  mobhealth.toggle:
+    description: Switch your own displays on and off with /mobhealth toggle.
+    default: true
+  mobhealth.toggle.others:
+    description: Switch another player's displays with /mobhealth toggle <on|off> <player>.
+    default: op
+  mobhealth.reload:
+    description: Reload the configuration with /mobhealth reload.
+    default: op

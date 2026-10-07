@@ -1,0 +1,162 @@
+// MobHealth for Bukkit: one plugin, four jars, Beta 1.7.3 to 26.3.
+//
+// The shape: `core` is the loader-agnostic logic mirrored from MobHealth-Forge, `bukkit` is the
+// plugin compiled against the OLDEST API it runs on (Bukkit 1.7.2-R0.3), and each `compat-*` module
+// is a capability adapter compiled against the API step that introduced it. The range jars below
+// pack whichever adapters a server line can use; an adapter is only class-loaded after the running
+// server's version says it may be, so a 1.19 adapter sitting in a jar on a 1.13 server is inert.
+
+plugins {
+    id 'base'
+}
+
+allprojects {
+    group = plugin_group_id
+    version = plugin_version
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        // Spigot's nexus: spigot-api 1.8 -> 26.3, and the bungeecord-chat it depends on.
+        maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+        // JitPack builds the public github.com/Bukkit/Bukkit tags on demand. It is the only place
+        // left that serves a pre-1.8 Bukkit API (1.7.2-R0.3, 1.7.9-R0.2, Beta 1.7.3-R3).
+        maven { url = 'https://jitpack.io' }
+        mavenCentral()
+    }
+
+    // Java 8 bytecode everywhere: 1.8-1.16 servers still run Java 8, and a newer JVM runs it fine.
+    // Compiled with whatever JDK runs Gradle, which must be 25+ to READ the 26.x API class files.
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 8
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-Xlint:-options' // "source value 8 is obsolete": known, accepted
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Build stamp. A version number answers "which release"; during development that is a different
+// question from "which bytes". So every jar records the commit it came from, and says so in the
+// log at startup. Same format as every Sablednah mod: /mobhealth/build.properties inside the jar
+// (read by BuildInfo) and Build-Commit / Build-Branch / Build-Time on the manifest (for inspecting
+// a jar from a shell without loading it).
+//
+// Resolved at configure time and tolerant of git being absent: an unknown stamp must never fail
+// a build.
+static String gitOut(File dir, String... args) {
+    try {
+        def proc = new ProcessBuilder(args).directory(dir).redirectErrorStream(true).start()
+        def out = proc.inputStream.text.trim()
+        return proc.waitFor() == 0 && !out.isEmpty() ? out : null
+    } catch (Exception ignored) {
+        return null
+    }
+}
+ext.buildCommit = gitOut(projectDir, 'git', 'rev-parse', '--short=8', 'HEAD') ?: 'unknown'
+ext.buildBranch = gitOut(projectDir, 'git', 'rev-parse', '--abbrev-ref', 'HEAD') ?: 'unknown'
+def buildDirty = gitOut(projectDir, 'git', 'status', '--porcelain')
+if (buildDirty) ext.buildCommit += '-dirty'
+// The COMMIT's time, not the wall clock: a wall-clock stamp changes on every invocation and costs
+// the build its up-to-date checks. %ct (epoch), not %cI, so one commit stamps identically on two
+// machines.
+def commitEpoch = gitOut(projectDir, 'git', 'show', '-s', '--format=%ct', 'HEAD')
+ext.buildTime = commitEpoch
+        ? new Date(commitEpoch.toLong() * 1000L).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone('UTC'))
+        : 'unknown'
+logger.lifecycle("Build stamp: ${buildCommit} on ${buildBranch} at ${buildTime}")
+
+ext.stampDir = layout.buildDirectory.dir('generated/stamp')
+ext.generateBuildStamp = tasks.register('generateBuildStamp') {
+    def props = [commit: buildCommit, branch: buildBranch, time: buildTime, version: plugin_version]
+    inputs.properties props
+    outputs.dir stampDir
+    doLast {
+        def f = stampDir.get().file("${plugin_id}/build.properties").asFile
+        f.parentFile.mkdirs()
+        f.text = props.collect { k, v -> "${k}=${v}" }.join('\n') + '\n'
+    }
+}
+
+// ---------------------------------------------------------------------------
+// The range jars. Each is the plugin body plus the adapters its servers can use, with a plugin.yml
+// of its own: api-version is per jar, and declaring 1.13 on a jar that must also load on 1.8 would
+// stop it loading there.
+//
+//   suffix    the "+..." in the filename. Load-bearing: the publish script parses it to tag the
+//             CurseForge file with the right Bukkit game versions.
+//   modules   which subprojects' classes go in
+//   apiVersion  plugin.yml api-version, or null for a legacy (pre-1.13) jar
+def rangeJar(String taskName, String suffix, List<String> modules, String apiVersion, String mainClass) {
+    def jarTask = tasks.register(taskName, Jar) {
+        group = 'build'
+        description = "Assembles mobhealth-${plugin_version}+${suffix}.jar"
+        archiveBaseName = plugin_id
+        archiveVersion = plugin_version
+        archiveClassifier = ''
+        // Gradle would turn "+" into part of the version; name the file outright instead.
+        archiveFileName = "${plugin_id}-${plugin_version}+${suffix}.jar"
+        destinationDirectory = layout.buildDirectory.dir('libs')
+        duplicatesStrategy = DuplicatesStrategy.FAIL
+
+        modules.each { m ->
+            def sub = project(m)
+            dependsOn sub.tasks.named('classes')
+            from(sub.sourceSets.main.output) {
+                exclude 'plugin.yml' // every jar writes its own, below
+            }
+        }
+        dependsOn generateBuildStamp
+        from(stampDir)
+
+        def props = [
+                plugin_name       : plugin_name,
+                plugin_version    : plugin_version,
+                plugin_authors    : plugin_authors,
+                plugin_description: plugin_description,
+                main_class        : mainClass,
+                api_version_line  : apiVersion ? "api-version: '${apiVersion}'" : '',
+        ]
+        inputs.properties props
+        from('dist/plugin.yml') {
+            expand props
+        }
+
+        manifest {
+            attributes([
+                    'Implementation-Title'  : plugin_name,
+                    'Implementation-Version': plugin_version,
+                    'Build-Commit'          : buildCommit,
+                    'Build-Branch'          : buildBranch,
+                    'Build-Time'            : buildTime,
+            ])
+        }
+    }
+    tasks.named('assemble').configure { dependsOn jarTask }
+    return jarTask
+}
+
+def PLUGIN_MAIN = 'com.sablednah.mobhealth.bukkit.MobHealthPlugin'
+
+// 1.13 -> 26.3: every adapter. Spigot and Paper alike.
+rangeJar('jarModern', 'bukkit1.13-26.3',
+        [':core', ':bukkit', ':compat-1.8', ':compat-1.9', ':compat-1.14', ':compat-1.18', ':compat-1.19'],
+        '1.13', PLUGIN_MAIN)
+
+// 1.8 -> 1.12.2: a legacy jar (no api-version) so 1.8-1.12 servers load it as the plugins of their
+// day. The NMS action bar lives in compat-1.8 and is the only version-specific code in the family.
+rangeJar('jarLegacy', 'bukkit1.8-1.12',
+        [':core', ':bukkit', ':compat-1.8', ':compat-1.9'],
+        null, PLUGIN_MAIN)
+
+// 1.7.2-R0.3 -> 1.7.10: the plugin body alone. Chat and nameplates; no action bar, no boss bar.
+rangeJar('jar17', 'bukkit1.7',
+        [':core', ':bukkit'],
+        null, PLUGIN_MAIN)
+
+// Beta 1.7.3 (CraftBukkit #1060 and its forks): its own tiny plugin against the API of 2011.
+rangeJar('jarBeta', 'beta1.7.3',
+        [':core', ':legacy-beta'],
+        null, 'com.sablednah.mobhealth.beta.MobHealthBeta')

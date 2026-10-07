@@ -1,7 +1,27 @@
-# Eclipse stuff
-/.classpath
-/.project
-/.settings
+### Gradle ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
 
-# maven
-/target
+### IDEs ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.classpath
+.project
+.settings/
+bin/
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### MobHealth: local tooling & test servers (machine-specific, not source) ###
+/tools/
+/servers/
+!/servers/README.md
+
+### Local editor/agent settings ###
+/.claude/settings.local.json

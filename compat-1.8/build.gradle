@@ -1,0 +1,6 @@
+// 1.8: armour stands (floating damage numbers) and the pre-1.11 action bar, which has no API and
+// is sent as a reflected NMS packet.
+dependencies {
+    compileOnly project(':bukkit')
+    compileOnly "org.spigotmc:spigot-api:${spigot_api_1_8}"
+}

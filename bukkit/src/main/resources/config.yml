@@ -1,0 +1,110 @@
+# MobHealth configuration.
+#
+# The same sections and keys as the NeoForge mod's mobhealth-common.toml, so the one set of docs
+# serves both: https://github.com/Sablednah/MobHealth-Forge#configuration
+#
+# Not every mode exists on every server. MobHealth says at startup which enabled modes this
+# server cannot show:
+#   action bar         1.8+
+#   boss bar           1.9+
+#   damage indicators  1.8+ (per-viewer from 1.18; everyone nearby before that)
+#   nameplate, chat    everywhere
+# Edit, then /mobhealth reload.
+
+# The master on/off switch for each display mode. Enable any combination.
+display:
+  # Message the viewer with damage dealt and health remaining.
+  chat: true
+  # The readout on the text line above the hotbar.
+  actionBar: true
+  # A health bar on the mob's name tag. Shared: everyone nearby sees it.
+  nameplate: false
+  # The boss-bar widget at the top of the screen.
+  bossBar: false
+  # A red damage number that pops off the mob on each hit, rises and vanishes.
+  damageIndicators: true
+
+# Who receives the per-viewer displays (chat, action bar, boss bar, damage numbers).
+# The nameplate is a shared name tag and is always visible to everyone nearby.
+audience:
+  # ATTACKER = only the player who hit the mob; NEARBY = everyone within nearbyRadius.
+  audience: ATTACKER
+  # Radius in blocks for NEARBY. 4-128.
+  nearbyRadius: 32
+
+# Which entities MobHealth reacts to. overrides beat the groups.
+targets:
+  # Hostile monsters (zombies, skeletons, creepers, ...).
+  hostile: true
+  # Neutral mobs, hostile only when provoked (endermen, wolves, bees, ...).
+  neutral: true
+  # Passive animals (cows, sheep, chickens, ...).
+  passive: true
+  # Other players (PvP).
+  players: false
+  # Boss entities (Ender Dragon, Wither).
+  bosses: true
+  # Only show once the mob is below full health.
+  hideUntilDamaged: true
+  # Force specific entities on or off regardless of group. Format "namespace:id=true|false".
+  # On 1.14+ the id is the entity's registry key (minecraft:zombified_piglin). Before 1.14 it is
+  # the EntityType constant in lower case (minecraft:pig_zombie); /mobhealth has no list command,
+  # so check the Bukkit EntityType javadoc for your version.
+  overrides:
+    - "minecraft:armor_stand=false"
+
+chat:
+  # What the chat message shows: BAR, NUMBERS or BOTH.
+  chatContent: BOTH
+
+actionbar:
+  # What the action bar shows: BAR, NUMBERS or BOTH.
+  actionBarContent: BOTH
+
+nameplate:
+  # ON_DAMAGE: show a bar briefly after each hit, then restore the mob's name.
+  # NAMED_ONLY: only decorate mobs that already have a name tag; restore after the timeout.
+  # ALWAYS: show after a hit and keep it, updated on each hit.
+  mode: ON_DAMAGE
+  # What the nameplate shows: BAR, NUMBERS or BOTH.
+  content: BOTH
+
+bossbar:
+  # PINK, BLUE, RED, GREEN, YELLOW, PURPLE or WHITE.
+  color: RED
+
+# Floating damage numbers. (On Forge these are drawn by the client; here they are a tiny entity
+# the server moves, so the look is set here too.)
+damageindicators:
+  # Don't show a number for hits below this much damage (health points; 2 = one heart).
+  minDamage: 0.0
+  # Draw the killing blow bold and amber.
+  markKillingBlow: true
+  # How long each number lives, in ticks (20 = 1 second). 4-100.
+  durationTicks: 24
+  # How far the number rises over its life, in blocks. 0-6.
+  rise: 1.0
+
+# Appearance of the TEXT bar used by chat, the action bar, the nameplate and the boss-bar title.
+bar:
+  # Number of segments in the bar. 1-100.
+  segments: 20
+  # Glyph for a filled segment.
+  filledChar: "|"
+  # Glyph for a depleted segment. Keep it the SAME as filledChar for a constant-width bar
+  # (depleted segments are dimmed). A space gives the classic [|||   ] look, but the bar changes
+  # width as health changes because Minecraft's font is proportional.
+  emptyChar: "|"
+  # Numeric readout: NONE, CURRENT_MAX (14/20) or PERCENT (70%).
+  valueStyle: CURRENT_MAX
+
+# How long bars linger, in ticks (20 = 1 second).
+timing:
+  # Lifetime after the last hit. 20-1200.
+  displayTicks: 100
+  # Per-group overrides; -1 = use displayTicks.
+  displayTicksHostile: -1
+  displayTicksNeutral: -1
+  displayTicksPassive: -1
+  # How long a bar lingers after the mob DIES. 0-600.
+  deathTicks: 20

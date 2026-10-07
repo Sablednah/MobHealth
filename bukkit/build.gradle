@@ -1,0 +1,36 @@
+// The plugin body. Compiled against the OLDEST API it runs on so that the one set of classes serves
+// every jar from 1.7.2 up; anything newer goes through a compat adapter.
+dependencies {
+    api project(':core')
+    compileOnly "com.github.Bukkit:Bukkit:${bukkit_api_floor}"
+}
+
+// Re-compile these sources against each newer API line in turn. A method the 1.7.2 API had and a
+// later one removed is a compile error here, not a NoSuchMethodError on a server.
+def checkTasks = []
+api_check_versions.split(',').each { String v ->
+    def tag = v.replace('-R0.1-SNAPSHOT', '').replace('.', '_')
+    def conf = configurations.create("apiCheck_${tag}") {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+    dependencies.add(conf.name, "org.spigotmc:spigot-api:${v}")
+    def t = tasks.register("apiCheck_${tag}", JavaCompile) {
+        group = 'verification'
+        description = "Compiles the plugin against spigot-api ${v}"
+        source = sourceSets.main.java
+        classpath = conf + files(project(':core').sourceSets.main.output)
+        dependsOn project(':core').tasks.named('classes')
+        destinationDirectory = layout.buildDirectory.dir("apiCheck/${tag}")
+        options.release = 8
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-Xlint:-options'
+    }
+    checkTasks << t
+}
+tasks.register('apiCheck') {
+    group = 'verification'
+    description = 'Compiles the plugin against every API line in api_check_versions'
+    dependsOn checkTasks
+}
+tasks.named('check').configure { dependsOn 'apiCheck' }

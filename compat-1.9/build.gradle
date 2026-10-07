@@ -1,0 +1,7 @@
+// 1.9 boss bars and the 1.11 Spigot action bar. Compiled against 1.12.2 (bungeecord-chat for the
+// action bar); the boss-bar class only touches 1.9 API and is gated separately at runtime.
+dependencies {
+    compileOnly project(':bukkit')
+    compileOnly project(':compat-1.8')
+    compileOnly "org.spigotmc:spigot-api:${spigot_api_1_12}"
+}

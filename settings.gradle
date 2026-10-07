@@ -1,0 +1,12 @@
+rootProject.name = 'mobhealth'
+
+// One plugin body, compiled against the oldest API it runs on, plus a capability adapter per API
+// step. The range jars at the root assemble whichever of these a server line can use.
+include 'core'          // loader-agnostic logic, mirrored verbatim from MobHealth-Forge
+include 'bukkit'        // the plugin, compiled against Bukkit 1.7.2-R0.3
+include 'compat-1.8'    // armour-stand floating numbers, reflected NMS action bar (1.8-1.10)
+include 'compat-1.9'    // boss bars (1.9), Spigot action bar (1.11)
+include 'compat-1.14'   // namespaced entity ids, persistent data containers
+include 'compat-1.18'   // per-viewer entity visibility
+include 'compat-1.19'   // text display entities (1.19.4)
+include 'legacy-beta'   // Beta 1.7.3: its own tiny plugin against the CB#1060 API

@@ -1,0 +1,7 @@
+// 1.14: namespaced entity keys ("minecraft:zombie") and persistent data containers.
+dependencies {
+    compileOnly project(':bukkit')
+    compileOnly project(':compat-1.8')
+    compileOnly project(':compat-1.9')
+    compileOnly "org.spigotmc:spigot-api:${spigot_api_1_14}"
+}

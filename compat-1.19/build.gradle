@@ -1,0 +1,9 @@
+// 1.19.4: text display entities, a far better floating number than a named armour stand.
+dependencies {
+    compileOnly project(':bukkit')
+    compileOnly project(':compat-1.8')
+    compileOnly project(':compat-1.9')
+    compileOnly project(':compat-1.14')
+    compileOnly project(':compat-1.18')
+    compileOnly "org.spigotmc:spigot-api:${spigot_api_1_19}"
+}
