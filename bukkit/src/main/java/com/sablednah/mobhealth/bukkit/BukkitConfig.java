@@ -26,7 +26,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public final class BukkitConfig {
 
     // display
-    public boolean chat, actionBar, nameplate, bossBar, damageIndicators;
+    public boolean chat, actionBar, nameplate, bossBar, damageIndicators, graphical;
     // audience
     public Audience audience;
     public int nearbyRadius;
@@ -34,7 +34,8 @@ public final class BukkitConfig {
     public boolean hostile, neutral, passive, players, bosses, hideUntilDamaged;
     private Map<String, Boolean> overrides = Collections.emptyMap();
     // chat / action bar / nameplate / boss bar
-    public BarContent chatContent, actionBarContent, nameplateContent;
+    public BarContent chatContent, actionBarContent, nameplateContent, graphicalContent;
+    public double graphicalOffset;
     public NameplateMode nameplateMode;
     public String bossBarColor;
     // damage indicators
@@ -55,6 +56,7 @@ public final class BukkitConfig {
         nameplate = c.getBoolean("display.nameplate", false);
         bossBar = c.getBoolean("display.bossBar", false);
         damageIndicators = c.getBoolean("display.damageIndicators", true);
+        graphical = c.getBoolean("display.graphical", true);
 
         audience = enumOr(c.getString("audience.audience"), Audience.ATTACKER, log, "audience.audience");
         nearbyRadius = clamp(c.getInt("audience.nearbyRadius", 32), 4, 128);
@@ -72,6 +74,8 @@ public final class BukkitConfig {
         nameplateMode = enumOr(c.getString("nameplate.mode"), NameplateMode.ON_DAMAGE, log, "nameplate.mode");
         nameplateContent = enumOr(c.getString("nameplate.content"), BarContent.BOTH, log, "nameplate.content");
         bossBarColor = c.getString("bossbar.color", "RED");
+        graphicalContent = enumOr(c.getString("graphical.content"), BarContent.BOTH, log, "graphical.content");
+        graphicalOffset = clamp(c.getDouble("graphical.verticalOffset", 0.5D), -2.0D, 6.0D);
 
         indicatorMinDamage = clamp(c.getDouble("damageindicators.minDamage", 0.0D), 0.0D, 100.0D);
         indicatorMarkKill = c.getBoolean("damageindicators.markKillingBlow", true);

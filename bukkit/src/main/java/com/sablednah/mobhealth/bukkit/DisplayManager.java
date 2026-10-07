@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.sablednah.mobhealth.bukkit.compat.AttachedBar;
 import com.sablednah.mobhealth.bukkit.compat.BossBarHandle;
 import com.sablednah.mobhealth.bukkit.compat.Compat;
 import com.sablednah.mobhealth.bukkit.compat.FloatingText;
@@ -39,6 +40,7 @@ public final class DisplayManager {
     private long serverTick;
     private final Map<UUID, NameEntry> nameplates = new HashMap<UUID, NameEntry>();
     private final Map<UUID, BossEntry> bossBars = new HashMap<UUID, BossEntry>();
+    private final Map<UUID, BarEntry> bars = new HashMap<UUID, BarEntry>();
     private final List<NumberEntry> numbers = new ArrayList<NumberEntry>();
 
     public DisplayManager(BukkitConfig cfg, Compat compat, PlayerState players) {
@@ -81,6 +83,9 @@ public final class DisplayManager {
         }
         if (cfg.bossBar && compat.supportsBossBar()) {
             updateBossBar(victim, viewers, current, max, category);
+        }
+        if (cfg.graphical && compat.supportsAttachedBar()) {
+            updateBar(victim, viewers, current, max, category);
         }
     }
 
@@ -220,6 +225,33 @@ public final class DisplayManager {
         entry.expiry = serverTick + cfg.displayTicks(category);
     }
 
+    // ================================================================= floating bar
+
+    /** The Forge mod's graphical bar, as the server can manage it: text riding the mob. */
+    private void updateBar(LivingEntity victim, List<Player> viewers, double current, double max, MobCategory category) {
+        if (viewers.isEmpty()) {
+            return;
+        }
+        UUID id = victim.getUniqueId();
+        BarEntry entry = bars.get(id);
+        String text = BarText.content(cfg, current, max, cfg.graphicalContent);
+        if (entry == null || !entry.bar.isValid()) {
+            if (entry != null) {
+                entry.bar.remove();
+            }
+            AttachedBar bar = compat.attachBar(victim, text, cfg.graphicalOffset, viewers);
+            if (bar == null) {
+                return;
+            }
+            entry = new BarEntry(bar);
+            bars.put(id, entry);
+        } else {
+            entry.bar.setText(text);
+            entry.bar.setViewers(viewers);
+        }
+        entry.expiry = serverTick + cfg.displayTicks(category);
+    }
+
     // ================================================================= death
 
     /** A tracked mob died: cut its remaining display time to the short death timeout. */
@@ -234,6 +266,10 @@ public final class DisplayManager {
         NameEntry name = nameplates.get(id);
         if (name != null) {
             name.expiry = Math.min(name.expiry, deathExpiry);
+        }
+        BarEntry bar = bars.get(id);
+        if (bar != null) {
+            bar.expiry = Math.min(bar.expiry, deathExpiry);
         }
     }
 
@@ -258,6 +294,14 @@ public final class DisplayManager {
         for (Iterator<Map.Entry<UUID, BossEntry>> it = bossBars.entrySet().iterator(); it.hasNext();) {
             BossEntry entry = it.next().getValue();
             if (serverTick >= entry.expiry) {
+                entry.bar.remove();
+                it.remove();
+            }
+        }
+
+        for (Iterator<Map.Entry<UUID, BarEntry>> it = bars.entrySet().iterator(); it.hasNext();) {
+            BarEntry entry = it.next().getValue();
+            if (serverTick >= entry.expiry || !entry.bar.isValid()) {
                 entry.bar.remove();
                 it.remove();
             }
@@ -291,6 +335,10 @@ public final class DisplayManager {
             entry.text.remove();
         }
         numbers.clear();
+        for (BarEntry entry : bars.values()) {
+            entry.bar.remove();
+        }
+        bars.clear();
     }
 
     private void revert(NameEntry entry) {
@@ -321,6 +369,15 @@ public final class DisplayManager {
         private long expiry;
 
         private BossEntry(BossBarHandle bar) {
+            this.bar = bar;
+        }
+    }
+
+    private static final class BarEntry {
+        private final AttachedBar bar;
+        private long expiry;
+
+        private BarEntry(AttachedBar bar) {
             this.bar = bar;
         }
     }

@@ -3,7 +3,7 @@ version: ${plugin_version}
 main: ${main_class}
 ${api_version_line}
 author: ${plugin_authors}
-description: ${plugin_description}
+description: "${plugin_description}"
 website: https://github.com/Sablednah/MobHealth
 
 commands:

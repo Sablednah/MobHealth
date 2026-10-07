@@ -1,0 +1,104 @@
+name: Publish to CurseForge
+
+# Publishing a GitHub release publishes to CurseForge (dev.bukkit.org) too. Every jar attached to
+# the release is uploaded, with its Bukkit game versions read from the filename
+# (mobhealth-10.0.0+bukkit1.13-26.3.jar covers every list version from 1.13 to 26.3) and the
+# release body used as the changelog.
+#
+# Setup, once:
+#   1. Create an API token at https://legacy.curseforge.com/account/api-tokens
+#   2. Add it as the repository secret CURSEFORGE_TOKEN
+#   3. Add the numeric project ID (35545 for MobHealth) as the repository variable
+#      CURSEFORGE_PROJECT_ID
+#
+# Until the secret exists this workflow skips rather than fails, so it will not redden the release.
+
+on:
+  release:
+    types: [published]
+  # Re-upload an existing release by hand, e.g. after fixing a changelog.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to upload (e.g. v10.0.0)
+        required: true
+      release_type:
+        description: CurseForge release type
+        required: false
+        default: release
+        type: choice
+        options: [release, beta, alpha]
+      debug:
+        description: Print the upload metadata (contains no credentials)
+        required: false
+        default: false
+        type: boolean
+      only:
+        description: Upload only jars whose name contains this (e.g. bukkit1.13) — for testing
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the CurseForge token is configured
+        id: guard
+        env:
+          TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$PROJECT_ID" ]; then
+            echo "CURSEFORGE_TOKEN secret or CURSEFORGE_PROJECT_ID variable not set — skipping."
+            echo "See the comments at the top of .github/workflows/curseforge.yml for setup."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.guard.outputs.configured == 'true'
+
+      - name: Download the release jars and changelog
+        if: steps.guard.outputs.configured == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          mkdir -p dist
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.jar' --dir dist
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq '.body' > dist/changelog.md
+          ls -la dist
+
+      - name: Upload each jar
+        if: steps.guard.outputs.configured == 'true'
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          RELEASE_TYPE: ${{ inputs.release_type || 'release' }}
+          CURSEFORGE_DEBUG: ${{ inputs.debug && '1' || '' }}
+          ONLY: ${{ inputs.only }}
+        run: |
+          shopt -s nullglob
+          jars=(dist/*.jar)
+          if [ ${#jars[@]} -eq 0 ]; then
+            echo "::error::No jars attached to the release — nothing to upload."
+            exit 1
+          fi
+          failed=0
+          for jar in "${jars[@]}"; do
+            if [ -n "$ONLY" ] && [[ "$(basename "$jar")" != *"$ONLY"* ]]; then
+              echo "Skipping $(basename "$jar") — does not match '$ONLY'."
+              continue
+            fi
+            echo "::group::$(basename "$jar")"
+            # Keep going if one jar fails, so a single bad upload does not strand the others, then
+            # fail the job at the end so the failure is not silent. Invoked via bash rather than as
+            # ./script: this repo lives on an NTFS drive where exec bits are easily lost.
+            bash scripts/curseforge-upload.sh "$jar" dist/changelog.md "$RELEASE_TYPE" || failed=1
+            echo "::endgroup::"
+          done
+          [ "$failed" -eq 0 ] || { echo "::error::At least one upload failed."; exit 1; }

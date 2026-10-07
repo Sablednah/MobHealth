@@ -8,6 +8,7 @@
 #   action bar         1.8+
 #   boss bar           1.9+
 #   damage indicators  1.8+ (per-viewer from 1.18; everyone nearby before that)
+#   graphical bar      1.19.4+
 #   nameplate, chat    everywhere
 # Edit, then /mobhealth reload.
 
@@ -23,6 +24,9 @@ display:
   bossBar: false
   # A red damage number that pops off the mob on each hit, rises and vanishes.
   damageIndicators: true
+  # A floating health bar riding above the mob (1.19.4+). The nearest a server can get to the
+  # Forge mod's client-drawn graphical bar; the nameplate does the same job on older servers.
+  graphical: true
 
 # Who receives the per-viewer displays (chat, action bar, boss bar, damage numbers).
 # The nameplate is a shared name tag and is always visible to everyone nearby.
@@ -72,6 +76,12 @@ nameplate:
 bossbar:
   # PINK, BLUE, RED, GREEN, YELLOW, PURPLE or WHITE.
   color: RED
+
+graphical:
+  # What the floating bar shows: BAR, NUMBERS or BOTH.
+  content: BOTH
+  # Extra height above the mob's head, in blocks. -2 to 6.
+  verticalOffset: 0.5
 
 # Floating damage numbers. (On Forge these are drawn by the client; here they are a tiny entity
 # the server moves, so the look is set here too.)

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 /**
@@ -53,6 +54,19 @@ public interface Compat {
 
     /** Whether spawned entities can be shown to some players and hidden from the rest. */
     boolean perViewerEntities();
+
+    // ------------------------------------------------------------------ attached bar
+
+    /** Whether a bar can ride on a mob as a free-floating piece of text (1.19.4+ display entities). */
+    boolean supportsAttachedBar();
+
+    /**
+     * Put a piece of text above a mob, riding it, so it follows the mob around. The Bukkit stand-in
+     * for the Forge mod's client-drawn graphical bar.
+     *
+     * @param offset extra height above the mob's head, in blocks
+     */
+    AttachedBar attachBar(LivingEntity mob, String legacyText, double offset, Collection<? extends Player> viewers);
 
     // ------------------------------------------------------------------ entities
 

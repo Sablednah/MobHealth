@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -63,6 +64,16 @@ public class Compat17 implements Compat {
     @Override
     public boolean perViewerEntities() {
         return false;
+    }
+
+    @Override
+    public boolean supportsAttachedBar() {
+        return false;
+    }
+
+    @Override
+    public AttachedBar attachBar(LivingEntity mob, String legacyText, double offset, Collection<? extends Player> viewers) {
+        return null;
     }
 
     @Override

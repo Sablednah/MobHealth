@@ -76,6 +76,9 @@ public final class MobHealthPlugin extends JavaPlugin {
         if (cfg.bossBar && !compat.supportsBossBar()) {
             getLogger().info("display.bossBar is on, but this server has no boss bar API (needs 1.9+); skipping it.");
         }
+        if (cfg.graphical && !compat.supportsAttachedBar()) {
+            getLogger().info("display.graphical is on, but this server has no display entities (needs 1.19.4+); the nameplate is the bar here.");
+        }
         if (cfg.damageIndicators && !compat.supportsFloatingText()) {
             getLogger().info("display.damageIndicators is on, but this server cannot float text (needs 1.8+); skipping it.");
         }
