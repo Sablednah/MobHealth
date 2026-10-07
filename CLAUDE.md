@@ -61,5 +61,14 @@ types into the server; `stop.sh`.
 ## Publishing
 
 A published GitHub release fans its jars out to dev.bukkit.org (project 35545) via
-`.github/workflows/curseforge.yml`. Attach **all four jars**. Never read or echo the token.
-`docs/curseforge-description.md` is the store page, pasted in by hand.
+`.github/workflows/curseforge.yml`; a GitHub **pre-release** goes up as a CurseForge **beta**.
+Attach **all four jars**. Never read or echo the token. `docs/curseforge-description.md` is the
+store page, pasted in by hand.
+
+Two things the first upload (v10.0.0-beta.1, 2026-10-07) taught:
+
+- dev.bukkit.org's `/api/game/versions` returns the **whole** CurseForge catalogue (7,500 entries:
+  Java, Forge, NeoForge builds), and naming one of those in an upload is refused as "belongs to an
+  invalid dependency". The script keeps only `gameVersionTypeID` 1, "Bukkit" (125 entries).
+- `workflow_dispatch` with `only=<substring>` re-uploads one jar; CurseForge rejects a re-upload
+  of a jar it already has, so after a partial failure use `only`, never the whole tag.
