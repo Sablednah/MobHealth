@@ -78,7 +78,8 @@ jobs:
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
-          RELEASE_TYPE: ${{ inputs.release_type || 'release' }}
+          # A GitHub pre-release goes up as a CurseForge beta, so a trial tag never reads as a release.
+          RELEASE_TYPE: ${{ inputs.release_type || (github.event.release.prerelease && 'beta' || 'release') }}
           CURSEFORGE_DEBUG: ${{ inputs.debug && '1' || '' }}
           ONLY: ${{ inputs.only }}
         run: |
