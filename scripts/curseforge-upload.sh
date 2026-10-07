@@ -45,12 +45,34 @@ fi
 api() { curl -sS --max-time 120 -H "X-Api-Token: $CURSEFORGE_TOKEN" "$@"; }
 
 echo ">> Resolving CurseForge Bukkit version IDs for $SUFFIX"
-VERSIONS_JSON="$(api "$BASE/api/game/versions")"
-if ! jq -e 'type == "array"' >/dev/null 2>&1 <<<"$VERSIONS_JSON"; then
-    echo "!! Unexpected response from $BASE/api/game/versions — is the token valid?" >&2
-    head -c 400 <<<"$VERSIONS_JSON" >&2; echo >&2
+# The versions endpoint answers with the WHOLE CurseForge catalogue -- Java, Forge, NeoForge and
+# Fabric builds among them, hundreds of "21.1.x" entries that look like Minecraft versions and are
+# not -- and an upload naming one of those is refused ("belongs to an invalid dependency"). Each
+# entry carries a gameVersionTypeID; the version-types endpoint says which of those is Bukkit's.
+TYPES_JSON="$(api "$BASE/api/game/version-types")"
+if ! jq -e 'type == "array"' >/dev/null 2>&1 <<<"$TYPES_JSON"; then
+    echo "!! Unexpected response from $BASE/api/game/version-types — is the token valid?" >&2
+    head -c 400 <<<"$TYPES_JSON" >&2; echo >&2
     exit 1
 fi
+BUKKIT_TYPES="$(jq -c 'map(select(.name | test("bukkit"; "i"))) | map(.id)' <<<"$TYPES_JSON")"
+if [ "$BUKKIT_TYPES" = "[]" ]; then
+    echo "!! No version type called Bukkit. The types CurseForge lists:" >&2
+    jq -r '.[] | "     \(.id)  \(.name)"' <<<"$TYPES_JSON" >&2
+    exit 1
+fi
+if [ -n "${CURSEFORGE_DEBUG:-}" ]; then
+    echo ">> version types (Bukkit = $BUKKIT_TYPES):"
+    jq -r '.[] | "     \(.id)  \(.name)"' <<<"$TYPES_JSON"
+fi
+ALL_VERSIONS_JSON="$(api "$BASE/api/game/versions")"
+if ! jq -e 'type == "array"' >/dev/null 2>&1 <<<"$ALL_VERSIONS_JSON"; then
+    echo "!! Unexpected response from $BASE/api/game/versions — is the token valid?" >&2
+    head -c 400 <<<"$ALL_VERSIONS_JSON" >&2; echo >&2
+    exit 1
+fi
+VERSIONS_JSON="$(jq -c --argjson t "$BUKKIT_TYPES" 'map(select(.gameVersionTypeID as $x | $t | index($x)))' <<<"$ALL_VERSIONS_JSON")"
+echo "   $(jq length <<<"$VERSIONS_JSON") Bukkit versions of $(jq length <<<"$ALL_VERSIONS_JSON") in the catalogue"
 
 # Compare dotted versions numerically: "1.8.3" < "1.12" < "26.1".
 vernum() { awk -F. '{ printf "%d%03d%03d\n", $1, $2, $3 }' <<<"$1"; }
@@ -61,7 +83,7 @@ case "$SUFFIX" in
         LABEL="Bukkit $LO – $HI"
         # Every plain numeric name in [LO, HI]. Names like "CB 1.7.9-R0.2" and "Beta 1.7.3" are not
         # numeric and are not in a range jar's remit.
-        NAMES="$(jq -r '.[].name' <<<"$VERSIONS_JSON" | grep -E '^[0-9]+(\.[0-9]+){1,2}$' | while read -r v; do
+        NAMES="$(jq -r '.[].name' <<<"$VERSIONS_JSON" | grep -E '^[0-9]+(\.[0-9]+){1,2}$' | sort -uV | while read -r v; do
             n="$(vernum "$v")"
             [ "$n" -ge "$(vernum "$LO")" ] && [ "$n" -le "$(vernum "$HI")" ] && echo "$v"
         done)"
