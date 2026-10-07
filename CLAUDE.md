@@ -45,9 +45,12 @@ wall clock. Change the format everywhere or nowhere.
 
 `tools/bot/` is a player: `mobhealth-bot.js` (mineflayer, 1.8.8 → 26.1) and `mobhealth-bot-17.js`
 (raw protocol, 1.7.10). `tools/vivo/` are the test-server scripts that live in
-`~/mc/mobhealth-bukkit/` on the Vivo box (`192.168.7.246`, port 25588, one server at a time,
-display `:4` for the vanilla client). `run.sh <version>` picks the JDK and the jar; `console.sh`
-types into the server; `stop.sh`.
+`~/mc/mobhealth-bukkit/` on the Vivo box (`192.168.7.246`): one folder per version, **one port
+per version** (25601 Beta 1.7.3, 25602 1.7.10, 25603 1.10.2, 25604 1.12.2, 25605 1.13.2,
+25606 1.20.1, 25607 1.21.1, 25608 1.21.11, 25609 26.1.2, 25610 26.2, 25611 26.3; RCON is
+port+100), display `:4` for the vanilla client. `run.sh <version>` picks the JDK and the jar;
+`start.sh [versions]` starts several and waits; `console.sh <version> "<cmd>"` types into one;
+`status.sh`; `stop.sh <version|all>`. The bot scripts take the port as an argument.
 
 - Servers are started with stdin on a FIFO. An old server reading EOF spins its console thread
   printing "Unknown command" and starves the login handler; this cost an hour.
