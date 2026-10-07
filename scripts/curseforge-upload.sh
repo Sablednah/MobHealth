@@ -85,7 +85,9 @@ case "$SUFFIX" in
         # numeric and are not in a range jar's remit.
         NAMES="$(jq -r '.[].name' <<<"$VERSIONS_JSON" | grep -E '^[0-9]+(\.[0-9]+){1,2}$' | sort -uV | while read -r v; do
             n="$(vernum "$v")"
-            [ "$n" -ge "$(vernum "$LO")" ] && [ "$n" -le "$(vernum "$HI")" ] && echo "$v"
+            # An if, not a && chain: the loop's status is its last test, and a last version above
+            # the range would fail it and, under set -e, abort the whole script without a word.
+            if [ "$n" -ge "$(vernum "$LO")" ] && [ "$n" -le "$(vernum "$HI")" ]; then echo "$v"; fi
         done)"
         ;;
     bukkit1.7)
