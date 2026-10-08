@@ -71,11 +71,11 @@ Vivo box:
 | 1.12.2 (Java 8) | 1.8-1.12 | ✔ | ✔ | ✔ | ✔ armour stand | ✔ | — |
 | 1.8.8 (Java 8) | 1.8-1.12 | ✔ | ✔ NMS packet | — (logged) | ✔ armour stand | ✔ | — |
 | 1.7.10 (Java 8) | 1.7 | ✔ | — (logged) | — (logged) | — (logged) | ✔ | — |
-| Beta 1.7.3 (Poseidon 1.1.8) | beta1.7.3 | loads; not yet hit-tested | | | | | |
+| Beta 1.7.3 (Poseidon 1.1.8, real client 2026-10-08) | beta1.7.3 | ✔ | — | — | — | — | — |
 
 "— (logged)" means the startup log said the mode was on but the server could not show it, which
-is the behaviour wanted. Beta 1.7.3 needs a Beta-protocol client to hit anything; the plugin
-enables and the chat path is the same formatter, but it has not been watched working.
+is the behaviour wanted. Beta 1.7.3 has no bot (nothing speaks its protocol any more), so it was
+played by hand with a Beta client on 2026-10-08: chat lines with the right damage and health.
 
 The 26.3 client is a vanilla one on the Vivo box's display `:4`
 (`~/mc/mobhealth-bukkit/client.sh`), driven with xdotool. Paper 26.3 has its whitelist **on by
@@ -110,7 +110,6 @@ every numeric name between its bounds and the two legacy jars with the fixed nam
 
 ## Not yet done
 
-- A Beta 1.7.3 client to hit something with, so the beta jar is watched rather than trusted.
 - 26.2 has not been run; 26.1.2 and 26.3 have, and the API between them is byte-identical for
   everything this plugin touches (see the Forge repo's VERSIONS.md for that diff).
 - Toasts: possible on 1.12+ by loading a throwaway advancement per hit, but that reloads the
